@@ -1,0 +1,32 @@
+# This is an identification file for connection to a Moodle platform.
+# It is used for platform authentification.
+
+# Type here your Moodle server IP
+# Accept several sites, but no wildcard.
+ident_site=127.0.0.1
+
+# A Short description for your Moodle Server
+ident_desc=Moodle Dev Wims Intances
+
+# User agent of the connecting platform must identify itself as such.
+ident_agent=Moodle
+
+# http or https
+ident_protocol=http
+
+# password must be a word composed of alpha-numeric characters.
+# This identification is disabled by the * in the password definition.
+ident_password=password
+
+# type of remote platform.
+# available types: wims, json.
+ident_type=wims
+
+# The address and identifier/password pair for calling back.
+back_url=http://localhost/wims/wims.cgi
+back_ident=myself
+back_password=ABCD123
+
+# allowed or disabled requests. At most one of the two should be active.
+# ident_allow=
+ident_deny=deluser delclass

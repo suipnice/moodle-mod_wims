@@ -51,7 +51,7 @@ class mod_wims_mod_form extends moodleform_mod {
             $mform->setDefault($fieldname, $defaultvalue);
         }
     }
-    
+
     private function addtextareafield($fieldnamebase,$defaultvalue=null,$fieldsuffix=''){
         $mform = $this->_form;
         $fieldname=$fieldnamebase.$fieldsuffix;
@@ -86,18 +86,18 @@ class mod_wims_mod_form extends moodleform_mod {
         $this->addtextfield('useremail',255);
         $this->addtextfield('userinstitution',127);
     }
-    
+
     function definition_after_data(){
         $mform = $this->_form;
 
         //-------------------------------------------------------
         // if we have data from wims then use it
         if (property_exists($this,'configfromwims')===true){
-        
+
             // treat all of the worksheets and then all of the exams
             foreach (array("worksheets","exams") as $sheettype){
                 $sheettypestr=get_string('sheettype'.$sheettype,'wims');
-                
+
                 // for each sheet (whether worksheet or exam)
                 foreach ($this->configfromwims[$sheettype] as $sheetidx => $sheetprops){
                     // work out the sheet status
@@ -118,17 +118,17 @@ class mod_wims_mod_form extends moodleform_mod {
                         $title=$fulltitle;
                         $graded='0';
                     }
-                    
+
                     // open a dedicated section for each sheet
                     $headerstr=$sheettypestr.$title.$statusstr;
                     $mform->addElement('header', 'sheetheader'.$sheettype.$sheetidx, $headerstr);
-                    
+
                     // add title and 'graded' checkbox
                     $this->addtextfield('sheettitle',255,$title,$sheettype.$sheetidx);
                     if ($sheettype!='exams'){
                         $this->addcheckbox('sheetgraded',$graded,$sheettype.$sheetidx);
                     }
-                    
+
                     // add an expiry date field
                     $datestr=$sheetprops['expiration'];
                     $dateobj=new DateTime($datestr,new DateTimeZone('UTC'));
@@ -139,7 +139,7 @@ class mod_wims_mod_form extends moodleform_mod {
                 }
             }
         }
-        
+
         //-------------------------------------------------------
         $this->standard_coursemodule_elements();
 
@@ -206,7 +206,7 @@ class mod_wims_mod_form extends moodleform_mod {
                 "lastname"    => $data["userlastname"],
                 "firstname"   => $data["userfirstname"],
             );
-            
+
             // copy out any data values that have changed into to the 'changed data' array
             $changeddata=array();
             foreach ($wimsdata as $key=> $val ){
@@ -214,7 +214,7 @@ class mod_wims_mod_form extends moodleform_mod {
                     $changeddata[$key]=$val;
                 }
             }
-            
+
             // iterate over worksheets and exams
             if (property_exists($this,'configfromwims')===true){
                 foreach (array("worksheets","exams") as $sheettype){

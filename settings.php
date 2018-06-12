@@ -47,8 +47,8 @@ if ($ADMIN->fulltree) {
     addwimsadminsetting($settings,"usegradepage",0,ADMIN_SETTING_TYPE_CHECKBOX);
     // Debugging options
     addwimsadminheading($settings,"wimsdebugsettings");
-    addwimsadminsetting($settings,"debugviewpage",0,ADMIN_SETTING_TYPE_CHECKBOX);    
-    addwimsadminsetting($settings,"debugcron",0,ADMIN_SETTING_TYPE_CHECKBOX);    
-    addwimsadminsetting($settings,"debugsettings",0,ADMIN_SETTING_TYPE_CHECKBOX);    
+    addwimsadminsetting($settings,"debugviewpage",0,ADMIN_SETTING_TYPE_CHECKBOX);
+    addwimsadminsetting($settings,"debugcron",0,ADMIN_SETTING_TYPE_CHECKBOX);
+    addwimsadminsetting($settings,"debugsettings",0,ADMIN_SETTING_TYPE_CHECKBOX);
 }
 

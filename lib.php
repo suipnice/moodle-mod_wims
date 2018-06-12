@@ -22,7 +22,7 @@
  * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 // this is lib.php - add code here for interfacing this module to Moodle internals
 
 defined('MOODLE_INTERNAL') || die;
@@ -210,7 +210,7 @@ function wims_export_contents($cm, $baseurl) {
  */
 function wims_cron($forceupdate=null){
     global $CFG, $DB;
-    
+
     require_once($CFG->libdir.'/gradelib.php');
 
     // if the cron has never been run before then prime the system with a dummy 'last run' date
@@ -245,7 +245,7 @@ function wims_cron($forceupdate=null){
     $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
     foreach($coursemodules as $cm){
         mtrace('- PROCESSING: course='.$cm->course.' section='.$cm->section.' cm='.$cm->id.' instance='.$cm->instance );
-        
+
         // make sure the course is correctly accessible
         $isaccessible=$wims->verifyclassaccessible($cm);
         if (!$isaccessible){
@@ -259,7 +259,7 @@ function wims_cron($forceupdate=null){
             mtrace('  ERROR: Failed to fetch sheet index for WIMS course: cm='.$cm->id );
             continue;
         }
-        
+
         // iterate over the contents of the sheet index, storing pertinent entries in the 'required sheets' array
         $requiredsheets=array();
         $sheettitles=array();
@@ -289,7 +289,7 @@ function wims_cron($forceupdate=null){
                 $sheettitles[$sheettype][$sheetid]=$title;
             }
         }
-        
+
         // fetch the scores for the required sheets
         $sheetscores=$wims->getsheetscores($cm,$requiredsheets);
         if ($sheetscores==null){
@@ -299,14 +299,14 @@ function wims_cron($forceupdate=null){
 
         // fetch the complete user list from moodle (and hope that we don't run out of RAM)
         $userrecords=$DB->get_records('user',null,'','id,firstname,lastname');
-        
+
         // build a lookup table to get from user names to Moodle user ids
         $userlookup=array();
         foreach($userrecords as $userinfo){
             $wimslogin=$wims->generatewimslogin($userinfo);
             $userlookup[$wimslogin]=$userinfo->id;
         }
-        
+
         // We have an identifier problem: Exams and worksheets are both numbered from 1 up
         // and for scoring we need to have a unique identifier for each scoring column
         // so we're going to use an offset for worksheets

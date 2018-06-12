@@ -225,7 +225,7 @@ class wims_interface{
             default: throw new Exception('BUG: Bad urltype parameter '.$urltype);
         }
     }
-    
+
     /**
      * Create a WIMS supervisor session for this course and return an access url
      * @param string $currentlang current language (to force the wims site language to match the moodle language)

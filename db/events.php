@@ -31,7 +31,3 @@ $observers = array(
         'includefile' => '/mod/wims/event_handlers.php'
     ),
 );
-
-
-
-

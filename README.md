@@ -21,6 +21,41 @@ The files are called:
 
 In these files, one needs to specify a number of parameters by hand including:
 
-*     **ident_site** => which must include the ip address that the Moodle server connects from
-*     **ident_password** => which should be a real password and will need to be provided as a parameter to the moodle plugin
+* **ident_site** => which must include the ip address that the Moodle server connects from
+* **ident_password** => which should be a real password and will need to be provided as a parameter to the moodle plugin
 
+
+MOODLE Configuration
+--------------------
+
+1. Login as administration to install the plugin.
+2. Go to: Site administration → Plugins → Install plugins
+3. Install plugin from ZIP file by dropping the zip file `moodle-mod_wims-master.zip`
+4. Click `continue` in the verification window
+5. Click `upgrade Moodle database now` to finish the process.
+6. Confirm the upgrade procedure by click in `Continue`
+
+Now, some plugin parameters need to be changed to indicate the associated WIMS server.
+
+1. Go to: Site administration → Plugins → Plugins overview
+2. find the `WIMS` plugin and click on `Settings`
+
+In the settings window, modify the following parameters:
+
+* **WIMS Server URL**: put your WIMS server URL (example: `wims-deq.urv.cat/wims/wims.cgi`)
+* **WIMS Server connection password**: the password you decide (the same you put in **ident_password** in WIMS config files
+
+Now the administrator tasks are finished.
+
+How works the plugin:
+---------------------
+
+You must know that the WIMS classroom is created and maintained from the Moodle server. If you log in Moodle as teacher, then you will have teacher permisions in the WIMS classroom. In the same way, if you are student in Moodle, you will connect in the WIMS classroom as student.
+
+Add an activity and choose `WIMS Course`. Then choose the value for the **Activity Name** and this will be the name of the new classroom created in WIMS.
+
+If you create an exam in your WIMS classroom, the marks will be imported automaticaly by the Moodle server.
+
+If you want also the sheets marks to be exported, you have to select the specific sheets in the activity parameters in Moodle.
+
+All marks (exams + selected sheets) will automatically be imported in Moodle every nights.

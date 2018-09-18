@@ -253,6 +253,7 @@ class mod_wims_mod_form extends moodleform_mod {
             $wims->updateclassconfigformodule($this->cm,$changeddata);
         }
         // delegate to parent class
+        $data['instance'] = (int)$data['instance'];
         $errors = parent::validation($data, $files);
         return $errors;
     }

@@ -50,7 +50,7 @@ $string['admindescqcloffset']          = 'Doit être entre 11111 et 10^9';
 // Administration du module Wims - Réglages du serveur Wims
 $string['wimssettings']                = 'Réglages de l&rsquo;interface Moodle-Wims';
 $string['adminnamelang']               = 'Langue des classes';
-$string['admindesclang']               = 'La langue par défaut des classes WIMS qui seront créées.';
+$string['admindesclang']               = 'Code de langue par défaut des classes WIMS qui seront créées. (valeurs possibles : ca, cn, en, es, fr, it, nl, si, tw, de)';
 
 $string['adminnamedefaultinstitution'] = 'Institution';
 $string['admindescdefaultinstitution'] = 'L&rsquo;établissemnt affiché dans les classes WIMS';

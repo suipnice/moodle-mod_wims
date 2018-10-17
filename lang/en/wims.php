@@ -50,7 +50,7 @@ $string['admindescqcloffset']          = 'Between 11111 and 10^9';
 // admin settings - Interface Settings
 $string['wimssettings']                = 'Moodle-Wims Interface Settings';
 $string['adminnamelang']               = 'Course Language (default value)';
-$string['admindesclang']               = '';
+$string['admindesclang']               = 'Must be one of ca, cn, en, es, fr, it, nl, si, tw, de';
 
 $string['adminnamedefaultinstitution'] = 'Institution Name (default value)';
 $string['admindescdefaultinstitution'] = '';

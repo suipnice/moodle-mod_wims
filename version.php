@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->version   = 2016010103;    // The current module version (Date: YYYYMMDDXX)
+$plugin->version   = 2018101700;    // The current module version (Date: YYYYMMDDXX)
 $plugin->requires  = 2014050800;    // Requires this Moodle version
 $plugin->component = 'mod_wims';    // Full name of the plugin (used for diagnostics)
 $plugin->cron      = 1;             // Don't limit the frequency at which the CRON gets called (it will look after it for itself)

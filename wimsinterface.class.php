@@ -86,7 +86,7 @@ class wims_interface{
      * @return true on success, null if one failed
      */
     function selectclassformodule($course,$cm){
-        // start by determining the identifiers for the class 
+        // start by determining the identifiers for the class
         $this->initforcm($cm);
 
         // work out what language to use

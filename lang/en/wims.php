@@ -27,7 +27,7 @@
 // general strings - for use selecting a module type, or listing module types, etc
 $string['modulename']                  = 'WIMS Course';
 $string['modulenameplural']            = 'WIMS courses';
-$string['modulename_help']             = 'Integrate WIMS content into your course';
+$string['modulename_help']             = 'Integrate a WIMS virtual classroom into your course';
 
 // plugin administration strings
 $string['pluginadministration']        = 'WIMS module administration';
@@ -36,18 +36,41 @@ $string['pluginname']                  = 'WIMS';
 // admin settings - server configuration
 $string['serversettings']              = 'WIMS Server Settings';
 $string['adminnameserverurl']          = 'WIMS Server URL';
+$string['admindescserverurl']          = '';
+
 $string['adminnameallowselfsigcerts']  = 'Allow self-signed certificates';
+$string['admindescallowselfsigcerts']  = '';
+
 $string['adminnameserverpassword']     = 'WIMS Server connection password';
+$string['admindescserverpassword']     = 'The one you\'ve defined in the files in ".connexions" directory on WIMS server.';
+
 $string['adminnameqcloffset']          = 'WIMS Course Numbering Offset';
+$string['admindescqcloffset']          = 'Between 11111 and 10^9';
+
+// admin settings - Interface Settings
 $string['wimssettings']                = 'Moodle-Wims Interface Settings';
 $string['adminnamelang']               = 'Course Language (default value)';
+$string['admindesclang']               = '';
+
 $string['adminnamedefaultinstitution'] = 'Institution Name (default value)';
+$string['admindescdefaultinstitution'] = '';
+
 $string['adminnameusenameinlogin']     = 'Include user name in WIMS login';
+$string['admindescusenameinlogin']     = '';
+
 $string['adminnameusegradepage']       = 'Redirect Moodle Gradebook links to WIMS grade page';
+$string['admindescusegradepage']       = '';
+
+// admin settings - Debug Settings
 $string['wimsdebugsettings']           = 'WIMS interface debug settings';
 $string['adminnamedebugviewpage']      = 'VIEW debug output';
+$string['admindescdebugviewpage']      = '';
+
 $string['adminnamedebugcron']          = 'CRON debug output';
+$string['admindescdebugcron']          = '';
+
 $string['adminnamedebugsettings']      = 'SETTINGS debug output';
+$string['admindescdebugsettings']      = '';
 
 // instance settings
 $string['name']                        = 'Activity Name';

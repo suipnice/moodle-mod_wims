@@ -39,12 +39,14 @@ if ($ADMIN->fulltree) {
     addwimsadminsetting($settings,"allowselfsigcerts",0,ADMIN_SETTING_TYPE_CHECKBOX);
     addwimsadminsetting($settings,"serverpassword","password");
     addwimsadminsetting($settings,"qcloffset","100000");
+
     // WIMS interaction configuration
     addwimsadminheading($settings,"wimssettings");
     addwimsadminsetting($settings,"lang",current_language());
     addwimsadminsetting($settings,"defaultinstitution","Moodle/WIMS");
     addwimsadminsetting($settings,"usenameinlogin",0,ADMIN_SETTING_TYPE_CHECKBOX);
     addwimsadminsetting($settings,"usegradepage",0,ADMIN_SETTING_TYPE_CHECKBOX);
+
     // Debugging options
     addwimsadminheading($settings,"wimsdebugsettings");
     addwimsadminsetting($settings,"debugviewpage",0,ADMIN_SETTING_TYPE_CHECKBOX);

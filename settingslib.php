@@ -42,7 +42,7 @@ function addwimsadminheading($settings,$name){
 function addwimsadminsetting($settings,$name,$defaultvalue,$settingtype=ADMIN_SETTING_TYPE_TEXT,$data=null){
     $uniquename  = "wims/".$name;
     $displayname = get_string("adminname".$name, "wims");
-    $displayinfo = /*get_string("admindesc".$name, "wims")*/ "";
+    $displayinfo = get_string("admindesc".$name, "wims");
     switch ($settingtype){
 
         case ADMIN_SETTING_TYPE_CHECKBOX:

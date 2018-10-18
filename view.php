@@ -28,7 +28,7 @@
 ////////////
 // includes
 
-require(__DIR__.'../../config.php');
+require(__DIR__.'/../../config.php');
 require_once(dirname(__FILE__).'/wimsinterface.class.php');
 require_once($CFG->libdir . '/completionlib.php');
 
@@ -71,9 +71,15 @@ $event->add_record_snapshot('wims', $instance);
 $event->trigger();
 
 
-///////////////////////////////////////////////////////////////////////////
+/////////////
 // Work Code
 
+/**
+* raise wims error
+*
+* @param string $mainmsg
+* @param array $errormsgs
+*/
 function raisewimserror($mainmsg,$errormsgs){
     echo "<h1>".$mainmsg."</h1>";
     foreach ($errormsgs as $msg){

@@ -17,10 +17,11 @@
 /**
  * wims module admin settings and defaults
  *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_wims
+ * @category    admin
+ * @copyright   2015 Edunao SAS (contact@edunao.com)
+ * @author      Sadge (daniel@edunao.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // this is settings.php - add code here to handle administration options for the module
@@ -30,6 +31,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once(dirname(__FILE__)."/settingslib.php");
 
 if ($ADMIN->fulltree) {
+    // See https://docs.moodle.org/dev/Admin_settings
     require_once("$CFG->libdir/resourcelib.php");
     require_once("$CFG->libdir/moodlelib.php");
 
@@ -53,4 +55,3 @@ if ($ADMIN->fulltree) {
     addwimsadminsetting($settings,"debugcron",0,ADMIN_SETTING_TYPE_CHECKBOX);
     addwimsadminsetting($settings,"debugsettings",0,ADMIN_SETTING_TYPE_CHECKBOX);
 }
-

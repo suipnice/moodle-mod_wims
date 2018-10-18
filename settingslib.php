@@ -17,10 +17,11 @@
 /**
  * utilities lib for defining wims module admin settings and defaults
  *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_wims
+ * @category    admin
+ * @copyright   2015 Edunao SAS (contact@edunao.com)
+ * @author      Sadge (daniel@edunao.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // this is settings.php - add code here to handle administration options for the module
@@ -31,6 +32,12 @@ define('ADMIN_SETTING_TYPE_TEXT', 'ADMIN_SETTING_TYPE_TEXT');
 define('ADMIN_SETTING_TYPE_SELECT', 'ADMIN_SETTING_TYPE_SELECT');
 define('ADMIN_SETTING_TYPE_CHECKBOX', 'ADMIN_SETTING_TYPE_CHECKBOX');
 
+/**
+ * add WIMS admin heading
+ *
+ * @param $settings
+ * @param $name
+ */
 function addwimsadminheading($settings,$name){
     $settings->add(new admin_setting_heading(
         "wims/".$name,
@@ -39,6 +46,15 @@ function addwimsadminheading($settings,$name){
     ));
 }
 
+/**
+ * add WIMS admin setting
+ *
+ * @param $settings
+ * @param $name
+ * @param $defaultvalue
+ * @param $settingtype
+ * @param $data
+ */
 function addwimsadminsetting($settings,$name,$defaultvalue,$settingtype=ADMIN_SETTING_TYPE_TEXT,$data=null){
     $uniquename  = "wims/".$name;
     $displayname = get_string("adminname".$name, "wims");

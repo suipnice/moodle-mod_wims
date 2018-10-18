@@ -18,10 +18,11 @@
 /**
  * Post installation and migration code.
  *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_wims
+ * @category    upgrade
+ * @copyright   2015 Edunao SAS (contact@edunao.com)
+ * @author      Sadge (daniel@edunao.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * This file replaces:
  *   - STATEMENTS section in db/install.xml
@@ -29,5 +30,8 @@
  *   - partially defaults.php
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 function xmldb_wims_install() {
+    //return true;
 }

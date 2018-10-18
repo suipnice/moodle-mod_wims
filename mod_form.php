@@ -17,9 +17,9 @@
 /**
  * Instance configuration formula for setting up new instances of the module
  *
+ * @package    mod_wims
  * @copyright  2015 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,6 +29,14 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
 
 class mod_wims_mod_form extends moodleform_mod {
 
+    /**
+     * __construct
+     *
+     * @param $current
+     * @param $section
+     * @param $cm
+     * @param $course
+     */
     public function __construct($current, $section, $cm, $course) {
         // store away properties that we may need later
         $this->cm=$cm;
@@ -40,6 +48,14 @@ class mod_wims_mod_form extends moodleform_mod {
         $WIMS_MOD_FORM=true;
     }
 
+    /**
+     * addtextfield
+     *
+     * @param $fieldnamebase
+     * @param $maxlen
+     * @param $defaultvalue
+     * @param $fieldsuffix
+     */
     private function addtextfield($fieldnamebase,$maxlen,$defaultvalue=null,$fieldsuffix=''){
         $mform = $this->_form;
         $fieldname=$fieldnamebase.$fieldsuffix;
@@ -52,6 +68,13 @@ class mod_wims_mod_form extends moodleform_mod {
         }
     }
 
+    /**
+     * addtextareafield
+     *
+     * @param $fieldnamebase
+     * @param $defaultvalue
+     * @param $fieldsuffix
+     */
     private function addtextareafield($fieldnamebase,$defaultvalue=null,$fieldsuffix=''){
         $mform = $this->_form;
         $fieldname=$fieldnamebase.$fieldsuffix;
@@ -62,6 +85,13 @@ class mod_wims_mod_form extends moodleform_mod {
         }
     }
 
+    /**
+     * addcheckbox
+     *
+     * @param $fieldnamebase
+     * @param $defaultvalue
+     * @param $fieldsuffix
+     */
     private function addcheckbox($fieldnamebase,$defaultvalue=null,$fieldsuffix=''){
         $mform = $this->_form;
         $fieldname=$fieldnamebase.$fieldsuffix;
@@ -72,10 +102,15 @@ class mod_wims_mod_form extends moodleform_mod {
         }
     }
 
-    function definition() {
+    /**
+     * Defines forms elements
+     */
+    public function definition() {
+        //global $CFG;
+
         $mform = $this->_form;
 
-        //-------------------------------------------------------
+        // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // text fields
@@ -87,6 +122,10 @@ class mod_wims_mod_form extends moodleform_mod {
         $this->addtextfield('userinstitution',127);
     }
 
+    /**
+     * definition_after_data
+     *
+     */
     function definition_after_data(){
         $mform = $this->_form;
 
@@ -147,6 +186,14 @@ class mod_wims_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
+    /**
+     * update default value
+     *
+     * @param $default_values
+     * @param $user
+     * @param $propname
+     * @param $fallback
+     */
     private function updatedefaultvalue(&$default_values,$user,$propname,$fallback){
         $localkey="user".$propname;
         if (array_key_exists($localkey,$default_values) && $default_values[$localkey]!=""){
@@ -158,6 +205,11 @@ class mod_wims_mod_form extends moodleform_mod {
         }
     }
 
+    /**
+     * data preprocessing
+     *
+     * @param $default_values
+     */
     function data_preprocessing(&$default_values) {
         global $DB;
         global $USER;
@@ -194,6 +246,12 @@ class mod_wims_mod_form extends moodleform_mod {
         }
     }
 
+    /**
+     * validation
+     *
+     * @param $data
+     * @param $files
+     */
     function validation($data, $files) {
         // if the course module has been instantiated already then put in an update request to wims
         if (is_object($this->cm)){

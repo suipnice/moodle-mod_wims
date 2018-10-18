@@ -64,6 +64,7 @@ class wims_comms_wrapper{
     /**
      * Private utility routine
      * NOTE: We actually expose this method publicly to allow for its use by the wimsinterface class
+     * @param string $msg
      */
     function debugmsg($msg){
         if ($this->debug > 0){
@@ -74,7 +75,10 @@ class wims_comms_wrapper{
     }
 
     /**
-     * Private utility routine
+     * Private utility routine to execute a call to adm/raw module
+     * @param $baseservice
+     * @param $which
+     * @param $params
      */
     private function executeraw($baseservice,$which,$params=''){
         // reset the status code to 'OK' here as a smart place to allow either coms or subsequent logic to reset to error condition
@@ -129,7 +133,9 @@ class wims_comms_wrapper{
     }
 
     /**
-     * Private utility routine
+     * Private utility routine, to handle request in old wims format
+     * @param $which
+     * @param $params
      */
     private function executewims($which,$params=''){
         // execute the request, requesting a wims format response
@@ -141,6 +147,9 @@ class wims_comms_wrapper{
 
     /**
      * Private utility routine
+     * @param $which
+     * @param $params
+     * @return linedata or null
      */
     private function executewimsandcheckok($which,$params=''){
         // execute the request
@@ -168,7 +177,11 @@ class wims_comms_wrapper{
     }
 
     /**
-     * Private utility routine
+     * Private utility routine, to handle request in json
+     * @param $which
+     * @param $params
+     * @param $silent
+     * @return jsondata or null
      */
     private function executejson($which,$params='',$silent=false){
         // execute the request, requesting a json format response
@@ -206,6 +219,8 @@ class wims_comms_wrapper{
 
     /**
      * Private utility routine
+     * @param $param
+     * @return urlencoded param
      */
     private function wimsencode($param){
         return urlencode( utf8_decode( $param ) );
@@ -664,7 +679,7 @@ class wims_comms_wrapper{
 
 
 //---------------------------------------------------------------------------------------------------------------------
-// NOTE: The following method has been tested by Sadge and shown to work but is not required by wimsinterface.class.php
+// NOTE: The following methods has been tested by Sadge and shown to work but are not required by wimsinterface.class.php
 //  and so has been commented out
 //---------------------------------------------------------------------------------------------------------------------
 //    function help(){
@@ -673,20 +688,14 @@ class wims_comms_wrapper{
 //        return $this->data;
 //    }
 
-//---------------------------------------------------------------------------------------------------------------------
-// NOTE: The following method has been tested by Sadge and shown to work but is not required by wimsinterface.class.php
-//  and so has been commented out
-//---------------------------------------------------------------------------------------------------------------------
+
 //    function getscore($qcl,$rcl,$login){
 //        $params="qclass=".$qcl."&rclass=".$this->wimsencode($rcl);
 //        $params.="&quser=".$login;
 //        return $this->executewimsandcheckok("getscore",$params);
 //    }
 
-//---------------------------------------------------------------------------------------------------------------------
-// NOTE: The following method has been tested by Sadge and shown to work but is not required by wimsinterface.class.php
-//  and so has been commented out
-//---------------------------------------------------------------------------------------------------------------------
+
 //    function addsheet($qcl,$rcl,$contents="",$sheetmode="0",$title="",$description="",$expiration=""){
 //        $contents=str_replace("\n",";",$contents);
 //        $params="qclass=".$qcl."&rclass=".$this->wimsencode($rcl);
@@ -700,10 +709,7 @@ class wims_comms_wrapper{
 //        return $this->executewimsandcheckok("addsheet",$params);
 //    }
 
-//---------------------------------------------------------------------------------------------------------------------
-// NOTE: The following method has been tested by Sadge and shown to work but is not required by wimsinterface.class.php
-//       and so has been commented out
-//---------------------------------------------------------------------------------------------------------------------
+
 //    function getcsv($qcl,$rcl,$option=""){
 //        $params="qclass=".$qcl."&rclass=".$this->wimsencode($rcl);
 //        $params.="&option=".$this->wimsencode($option)."&format=tsv";

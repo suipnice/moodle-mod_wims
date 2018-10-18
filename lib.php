@@ -17,9 +17,9 @@
 /**
  * Moodle interface library for wims
  *
+ * @package    mod_wims
  * @copyright  2015 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -94,7 +94,7 @@ function wims_get_post_actions() {
 }
 
 /**
- * Add wims instance.
+ * Add wims instance into the database.
  * @param object $data
  * @param object $mform
  * @return int new url instance id
@@ -107,10 +107,10 @@ function wims_add_instance($data, $mform) {
 }
 
 /**
- * Update wims instance.
- * @param object $data
- * @param object $mform
- * @return bool true
+ * Updates an instance of the mod_wims in the database.
+ * @param object $data An object from the form in mod_form.php.
+ * @param mod_wims_mod_form $mform The form.
+ * @return bool True if successful, false otherwise.
  */
 function wims_update_instance($data, $mform) {
     global $CFG, $DB;
@@ -186,6 +186,7 @@ function wims_get_coursemodule_info($coursemodule) {
  * @param string $pagetype current page type
  * @param stdClass $parentcontext Block's parent context
  * @param stdClass $currentcontext Current context of block
+ * @return a list of page types
  */
 function wims_page_type_list($pagetype, $parentcontext, $currentcontext) {
     $module_pagetype = array('mod-wims-*'=>get_string('page-mod-wims-x', 'wims'));
@@ -195,6 +196,8 @@ function wims_page_type_list($pagetype, $parentcontext, $currentcontext) {
 /**
  * Export URL resource contents
  *
+ * @param $cm
+ * @param $baseurl
  * @return array of file content
  */
 function wims_export_contents($cm, $baseurl) {
@@ -206,6 +209,7 @@ function wims_export_contents($cm, $baseurl) {
  * Function to be run periodically according to the moodle cron
  * This function searches for things that need to be done, such
  * as sending out mail, toggling flags etc ...
+ * @param $forceupdate
  * @return boolean true on success
  */
 function wims_cron($forceupdate=null){

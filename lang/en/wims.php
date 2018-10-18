@@ -17,12 +17,14 @@
 /**
  * Strings for component 'wims', language 'en'
  *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_wims
+ * @category    string
+ * @copyright   2015 Edunao SAS (contact@edunao.com)
+ * @author      Sadge (daniel@edunao.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
 
 // general strings - for use selecting a module type, or listing module types, etc
 $string['modulename']                  = 'WIMS Course';

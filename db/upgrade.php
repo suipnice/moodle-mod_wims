@@ -17,10 +17,11 @@
 /**
  * wims module version upgrade code
  *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_wims
+ * @category    upgrade
+ * @copyright   2015 Edunao SAS (contact@edunao.com)
+ * @author      Sadge (daniel@edunao.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * This file keeps track of upgrades to
  * the resource module
@@ -43,6 +44,7 @@
  * before any action that may take longer time to finish.
  */
 
+defined('MOODLE_INTERNAL') || die();
 function xmldb_wims_addfield($dbman,$table,$name, $type=null, $precision=null, $unsigned=null, $notnull=null, $sequence=null, $default=null, $previous=null) {
     // instantiate a field object
     $field = new xmldb_field($name, $type, $precision, $unsigned, $notnull, $sequence, $default, $previous);
@@ -52,10 +54,19 @@ function xmldb_wims_addfield($dbman,$table,$name, $type=null, $precision=null, $
     }
 }
 
+/**
+ * Execute mod_wims upgrade from the given old version.
+ *
+ * @param int $oldversion
+ * @return bool
+ */
 function xmldb_wims_upgrade($oldversion) {
     global $CFG, $DB;
     $dbman = $DB->get_manager();
     $modulename='wims';
+
+    // For further information please read the Upgrade API documentation:
+    // https://docs.moodle.org/dev/Upgrade_API
 
     // Upgrade to version with extra user... fields in database
     $nextversion=2015102201;

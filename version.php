@@ -17,13 +17,15 @@
 /**
  * wims module version information
  *
+ * @package    mod_wims
  * @copyright  2015 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->version   = 2018101700;    // The current module version (Date: YYYYMMDDXX)
-$plugin->requires  = 2014050800;    // Requires this Moodle version
 $plugin->component = 'mod_wims';    // Full name of the plugin (used for diagnostics)
+$plugin->release = '0.1.0';         // Don't forget to update the version too.
+$plugin->version   = 2018101800;    // The current module version (Date: YYYYMMDDXX)
+$plugin->requires  = 2014050800;    // Requires this Moodle version
+$plugin->maturity = MATURITY_BETA; // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
 $plugin->cron      = 1;             // Don't limit the frequency at which the CRON gets called (it will look after it for itself)

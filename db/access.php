@@ -17,9 +17,9 @@
 /**
  * Capability definitions for the wims module.
  *
+ * @package    mod_wims
  * @copyright  2015 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

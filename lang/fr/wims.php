@@ -17,12 +17,15 @@
 /**
  * Chaînes de caractères pour le module 'wims', langue 'fr'
  *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @auteur     Sadge (daniel@edunao.com)
- * @traducteur Frédéric Chiaroni (frederic@edunao.com)
- * @package    mod_wims
- * @licence    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_wims
+ * @category    string
+ * @copyright   2015 Edunao SAS (contact@edunao.com)
+ * @auteur      Sadge (daniel@edunao.com)
+ * @traducteur  Frédéric Chiaroni (frederic@edunao.com)
+ * @licence     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 // Chaînes de caractères générales (notamment utilisées lors de l'ajout d'une activité dans un cours)
 $string['modulename']                  = 'Classe WIMS';
@@ -30,7 +33,7 @@ $string['modulenameplural']            = 'Classes WIMS';
 $string['modulename_help']             = 'Intégrez une Classe d&rsquo;exercices WIMS dans votre cours';
 
 // Administration du module Wims
-$string['pluginadministration']        = 'Administration du module Wims';
+$string['pluginadministration']        = 'Administration du module WIMS';
 $string['pluginname']                  = 'WIMS';
 
 // Administration du module Wims - Réglages du serveur Wims

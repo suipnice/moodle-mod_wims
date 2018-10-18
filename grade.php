@@ -17,19 +17,20 @@
 /**
  * Respond to gradebook title click
  *
- * @copyright  2016 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_wims
+ * @category    grade
+ * @copyright   2016 Edunao SAS (contact@edunao.com)
+ * @author      Sadge (daniel@edunao.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// This is grade.php - it is called up by moodle when the user clicks on a hgradebook column title
+// This is grade.php - it is called up by moodle when the user clicks on a gradebook column title
 
 
 ///////////////////////////////////////////////////////////////////////////
 // includes
 
-require('../../config.php');
+require(__DIR__.'/../../config.php');
 require_once(dirname(__FILE__).'/wimsinterface.class.php');
 
 

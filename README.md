@@ -1,3 +1,5 @@
+# WIMS #
+
 This plugin allows one to insert WIMS classes in Moodle classes.
 It requires a WIMS server to have been setup and correctly configured.
 Information regarding extended configuration for the WIMS server required for this plugin to work can be found below:
@@ -59,3 +61,20 @@ If you create an exam in your WIMS classroom, the marks will be imported automat
 If you want also the sheets marks to be exported, you have to select the specific sheets in the activity parameters in Moodle.
 
 All marks (exams + selected sheets) will automatically be imported in Moodle every nights.
+
+## License ##
+
+- 2015 Edunao SAS <contact@edunao.com>
+- 2018 Université Nice Sophia Antipolis <pi@unice.fr>
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.

@@ -17,15 +17,16 @@
 /**
  * List of instances of wims module in the course
  *
+ * @package    mod_wims
  * @copyright  2015 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // This is index.php - add code here to output a list of all of the instances of the module's component in the course
 
-require('../../config.php');
+require(__DIR__.'/../../config.php');
+//require_once(__DIR__.'/lib.php');
 
 $id = required_param('id', PARAM_INT); // course id
 

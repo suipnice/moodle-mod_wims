@@ -17,24 +17,23 @@
 /**
  * Display wims course elements
  *
+ * @package    mod_wims
  * @copyright  2015 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // This is view.php - add all view routines here (for generating output for author, instructor & student)
 
-
-///////////////////////////////////////////////////////////////////////////
+////////////
 // includes
 
-require('../../config.php');
+require(__DIR__.'../../config.php');
 require_once(dirname(__FILE__).'/wimsinterface.class.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 
-///////////////////////////////////////////////////////////////////////////
+///////////////////////////
 // _GET / _POST parameters
 
 $id         = optional_param('id', 0, PARAM_INT);                     // Course module ID
@@ -42,16 +41,15 @@ $urltype    = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // type of
 $urlarg     = optional_param('wimsidx', null, PARAM_INT);             // Index of the page to view
 
 
-///////////////////////////////////////////////////////////////////////////
-// Data from moodle
-
 $cm = get_coursemodule_from_id('wims', $id, 0, false, MUST_EXIST);
 $instance = $DB->get_record('wims', array('id'=>$cm->instance), '*', MUST_EXIST);
 $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 $config = get_config('wims');
 
+/////////////////////
+// Data from Moodle
 
-///////////////////////////////////////////////////////////////////////////
+/////////////////
 // Sanity tests
 
 require_course_login($course, true, $cm);
@@ -59,7 +57,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/wims:view', $context);
 
 
-///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////
 // Moodle event logging & state update
 
 $params = array(
@@ -85,7 +83,7 @@ function raisewimserror($mainmsg,$errormsgs){
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
 // Render the output - by executing a redirect to WIMS
 
 $PAGE->set_url('/mod/wims/view.php', array('id' => $cm->id));
@@ -111,4 +109,3 @@ if ($isteacher){
 
 // do the redirection
 redirect($url);
-

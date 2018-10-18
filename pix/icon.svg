@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<g>
-	<path id="Logo_WIMS" fill="none" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
-	M14.742,12.501C9.82,11.084,1.116,9.422,1.949,15.823C4.167,22.758,12.105,13.291,14.742,12.501L14.742,12.501
-	C32.834,2.833,8.566-7.433,14.742,12.501C12,29.167,33.167,22.824,14.742,12.501L14.742,12.501z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px"
+	 height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g id="Logo_WIMS">
+	<g>
+		<path fill="none" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M13.18,11.525C10.623,10.359,8,9.632,5.123,9.753c-1.72,0.073-3.802,0.17-4.096,2.011c-0.302,1.896,1.988,2.113,3.523,2.242
+		c3.032,0.26,5.915-0.333,8.629-1.713l1.535-0.768c1.854-1.791,3.853-3.459,5.511-5.415c1.054-1.245,1.939-3.532,0.379-4.689
+		c-1.872-1.388-3.515,0.941-4.566,2.804c-2.93,5.187-2.591,12.433,0.765,16.524c1.059,1.287,2.614,2.83,3.97,1.573
+		c1.494-1.382,0.232-3.619-0.872-5.241c-1.396-2.052-3.176-3.652-5.377-4.789L13.18,11.525z"/>
+	</g>
+</g>
+<g id="Texte">
+	<g>
+		<g opacity="0.6">
+			<text transform="matrix(1 0 0 1 5.4253 18.9248)" fill="#FFF800" font-family="'TimesNewRomanPSMT'" font-size="17">W</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 5 18.5)" font-family="'TimesNewRomanPSMT'" font-size="17">W</text>
+		</g>
+	</g>
 </g>
 </svg>

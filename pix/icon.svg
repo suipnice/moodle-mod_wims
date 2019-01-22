@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px"
-	 height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<circle fill="#FF3333" cx="12" cy="12" r="12"/>
 <g id="Logo_WIMS">
-	<g>
-		<path fill="none" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
-		M13.18,11.525C10.623,10.359,8,9.632,5.123,9.753c-1.72,0.073-3.802,0.17-4.096,2.011c-0.302,1.896,1.988,2.113,3.523,2.242
-		c3.032,0.26,5.915-0.333,8.629-1.713l1.535-0.768c1.854-1.791,3.853-3.459,5.511-5.415c1.054-1.245,1.939-3.532,0.379-4.689
-		c-1.872-1.388-3.515,0.941-4.566,2.804c-2.93,5.187-2.591,12.433,0.765,16.524c1.059,1.287,2.614,2.83,3.97,1.573
-		c1.494-1.382,0.232-3.619-0.872-5.241c-1.396-2.052-3.176-3.652-5.377-4.789L13.18,11.525z"/>
-	</g>
-</g>
-<g id="Texte">
-	<g>
-		<g opacity="0.6">
-			<text transform="matrix(1 0 0 1 5.4253 18.9248)" fill="#FFF800" font-family="'TimesNewRomanPSMT'" font-size="17">W</text>
-		</g>
-		<g>
-			<text transform="matrix(1 0 0 1 5 18.5)" font-family="'TimesNewRomanPSMT'" font-size="17">W</text>
-		</g>
-	</g>
+	<path fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M11.428,12.007c-2.068-0.943-4.189-1.531-6.516-1.433c-1.391,0.059-3.075,0.137-3.313,1.626c-0.244,1.532,1.608,1.709,2.85,1.813
+		c2.452,0.209,4.784-0.271,6.979-1.387l1.24-0.621c1.501-1.449,3.116-2.797,4.458-4.379c0.853-1.007,1.567-2.856,0.306-3.792
+		c-1.513-1.123-2.842,0.761-3.691,2.268c-2.37,4.195-2.095,10.055,0.619,13.364c0.854,1.041,2.113,2.289,3.211,1.272
+		c1.209-1.118,0.188-2.927-0.706-4.238c-1.13-1.66-2.568-2.953-4.349-3.874L11.428,12.007z"/>
 </g>
 </svg>

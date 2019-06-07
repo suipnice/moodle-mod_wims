@@ -41,13 +41,16 @@ $urltype    = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // type of
 $urlarg     = optional_param('wimsidx', null, PARAM_INT);             // Index of the page to view
 
 
-$cm = get_coursemodule_from_id('wims', $id, 0, false, MUST_EXIST);
-$instance = $DB->get_record('wims', array('id'=>$cm->instance), '*', MUST_EXIST);
-$course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
-$config = get_config('wims');
-
 /////////////////////
 // Data from Moodle
+if ($id) {
+    $cm = get_coursemodule_from_id('wims', $id, 0, false, MUST_EXIST);
+    $instance = $DB->get_record('wims', array('id'=>$cm->instance), '*', MUST_EXIST);
+    $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
+    $config = get_config('wims');
+} else {
+    print_error(get_string('missingidandcmid', mod_wims));
+}
 
 /////////////////
 // Sanity tests

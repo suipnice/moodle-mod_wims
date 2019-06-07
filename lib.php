@@ -99,8 +99,9 @@ function wims_get_post_actions() {
  * @param object $mform
  * @return int new url instance id
  */
-function wims_add_instance($data, $mform) {
+function wims_add_instance($data, $mform = null) {
     global $CFG, $DB;
+    $data->timecreated = time();
     $data->id = $DB->insert_record('wims', $data);
 
     return $data->id;
@@ -209,7 +210,7 @@ function wims_export_contents($cm, $baseurl) {
  * Function to be run periodically according to the moodle cron
  * This function searches for things that need to be done, such
  * as sending out mail, toggling flags etc ...
- * @param $forceupdate
+ * @param boolean $forceupdate if true, force update even if there was already one today.
  * @return boolean true on success
  */
 function wims_cron($forceupdate=null){
@@ -226,7 +227,7 @@ function wims_cron($forceupdate=null){
     // NOTE: We're using 1:30am as MOODLE appears to do a lot of stuff at midnight and it's good to spread the load.
     $lastupdatetime=$CFG->wims_updatetimelast;
     $sitetimezone = $CFG->timezone;
-    $nextupdatetime = usergetmidnight($lastupdatetime, $sitetimezone) + ( 24 + 1 ) * 60 * 60 + 30 * 60;
+    $nextupdatetime = usergetmidnight($lastupdatetime, $sitetimezone) + 91800 // ( 24 + 1 ) * 60 * 60 + 30 * 60;
 
     // if we already ran an update since '1:30am today' then nothing to do so drop out
     $timenow = time();
@@ -360,7 +361,6 @@ function wims_cron($forceupdate=null){
         }
     }
     mtrace('Synchronising WIMS activity scores to grade book => Done.');
-
 
     return true;
 }

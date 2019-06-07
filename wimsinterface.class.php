@@ -109,14 +109,14 @@ class wims_interface{
             "institution=$wimsinfo->userinstitution"."\n".
             "supervisor=$wimsinfo->username"."\n".
             "email=$wimsinfo->useremail"."\n".
-            "password=Password$randomvalue1"."\n".
+            "password=Pwd$randomvalue1"."\n".
             "lang=$this->lang"."\n".
             "secure=all"."\n";
         $randomvalue2=rand(100000,999999);
         $data2=
             "lastname=$wimsinfo->userlastname"."\n".
             "firstname=$wimsinfo->userfirstname"."\n".
-            "password=Password$randomvalue2"."\n";
+            "password=Pwd$randomvalue2"."\n";
         $addresult=$this->wims->addclass($this->qcl,$this->rcl,$data1,$data2);
 
         // ensure that everything went to plan

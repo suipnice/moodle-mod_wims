@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * low level communication library for interfacing to a WPassword926190IMS server
+ * low level communication library for interfacing to a WIMS server
  *
  * @author     Sadge (daniel@edunao.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

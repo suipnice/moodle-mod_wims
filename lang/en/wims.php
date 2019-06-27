@@ -83,8 +83,8 @@ $string['username']                    = 'Supervisor Full Name';
 $string['useremail']                   = 'Course Contact Email';
 
 // worksheet and exam settings
-$string['sheettypeworksheets']         = '';
-$string['sheettypeexams']              = 'Exam: ';
+$string['sheettypeworksheets']         = 'Worksheets:';
+$string['sheettypeexams']              = 'Exam:';
 $string['sheettitle']                  = 'Title';
 $string['sheetgraded']                 = 'Track Grades';
 $string['sheetexpiry']                 = 'Expiry Date';
@@ -95,3 +95,6 @@ $string['wimsstatusx']                 = 'Inactive';
 // Misc strings
 $string['page-mod-wims-x']             = 'Any WIMS module page';
 $string['modulename_link']             = 'mod/wims/view';
+
+// Scheduled tasks
+$string['updatescores']             = 'Update WIMS scores';

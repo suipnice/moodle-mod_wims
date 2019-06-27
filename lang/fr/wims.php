@@ -85,8 +85,8 @@ $string['username']                    = 'Nom complet de l&rsquo;enseignant';
 $string['useremail']                   = 'Adresse électronique de contact';
 
 // worksheet and exam settings
-$string['sheettypeworksheets']         = '';
-$string['sheettypeexams']              = 'Examens : ';
+$string['sheettypeworksheets']         = 'Feuilles :';
+$string['sheettypeexams']              = 'Examens :';
 $string['sheettitle']                  = 'Titre';
 $string['sheetgraded']                 = 'Notes Suivies';
 $string['sheetexpiry']                 = 'Date d&rsquo;expiration';
@@ -97,3 +97,6 @@ $string['wimsstatusx']                 = 'Inactif';
 // Misc strings
 $string['page-mod-wims-x']             = 'N&rsquo;importe quelle page du module Wims';
 $string['modulename_link']             = 'mod/wims/view';
+
+// Taches planifiées
+$string['updatescores']             = 'Mise à jour des notes des activités WIMS';

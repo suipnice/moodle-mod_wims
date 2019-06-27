@@ -182,6 +182,7 @@ function wims_get_coursemodule_info($coursemodule) {
 
     return $info;
 }
+
 /**
  * Return a list of page types
  * @param string $pagetype current page type
@@ -207,161 +208,104 @@ function wims_export_contents($cm, $baseurl) {
 }
 
 /**
- * Function to be run periodically according to the moodle cron
- * This function searches for things that need to be done, such
- * as sending out mail, toggling flags etc ...
- * @param boolean $forceupdate if true, force update even if there was already one today.
- * @return boolean true on success
+ * Is a given scale used by the instance of mod_wims?
+ *
+ * This function returns if a scale is being used by one mod_wims
+ * if it has support for grading and scales.
+ *
+ * @param int $moduleinstanceid ID of an instance of this module.
+ * @param int $scaleid ID of the scale.
+ * @return bool True if the scale is used by the given mod_wims instance.
  */
-function wims_cron($forceupdate=null){
-    global $CFG, $DB;
+function wims_scale_used($moduleinstanceid, $scaleid) {
+    global $DB;
 
-    require_once($CFG->libdir.'/gradelib.php');
-
-    // if the cron has never been run before then prime the system with a dummy 'last run' date
-    if (!isset($CFG->wims_updatetimelast)) {
-        set_config('wims_updatetimelast', 0);
-    }
-
-    // calculate the time corresponding to 1:30am 'today'
-    // NOTE: We're using 1:30am as MOODLE appears to do a lot of stuff at midnight and it's good to spread the load.
-    $lastupdatetime=$CFG->wims_updatetimelast;
-    $sitetimezone = $CFG->timezone;
-    $nextupdatetime = usergetmidnight($lastupdatetime, $sitetimezone) + 91800 // ( 24 + 1 ) * 60 * 60 + 30 * 60;
-
-    // if we already ran an update since '1:30am today' then nothing to do so drop out
-    $timenow = time();
-    if ($timenow < $nextupdatetime && !$forceupdate) {
+    if ($scaleid && $DB->record_exists('wims', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
         return true;
+    } else {
+        return false;
     }
-
-    // we're starting a new run so upgrade the 'last update' timestamp
-    // Note that we do this first in order to minimise risk of race conditions if the run takes time
-    set_config('wims_updatetimelast', $timenow);
-
-    // log a message and load up key utility classes
-    mtrace('Synchronising WIMS activity scores to grade book');
-    require_once("wimsinterface.class.php");
-    $config=get_config('wims');
-    $wims=new wims_interface($config,$config->debugcron);
-
-    // iterate over the set of WIMS activities in the system
-    $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
-    $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
-    foreach($coursemodules as $cm){
-        mtrace('- PROCESSING: course='.$cm->course.' section='.$cm->section.' cm='.$cm->id.' instance='.$cm->instance );
-
-        // make sure the course is correctly accessible
-        $isaccessible=$wims->verifyclassaccessible($cm);
-        if (!$isaccessible){
-            mtrace('  - ALERT: Ignoring class as it is inaccessible - it may not have been setup yet');
-            continue;
-        }
-
-        // get the sheet index for this wims course
-        $sheetindex=$wims->getsheetindex($cm);
-        if ($sheetindex==null){
-            mtrace('  ERROR: Failed to fetch sheet index for WIMS course: cm='.$cm->id );
-            continue;
-        }
-
-        // iterate over the contents of the sheet index, storing pertinent entries in the 'required sheets' array
-        $requiredsheets=array();
-        $sheettitles=array();
-        foreach ($sheetindex as $sheettype=>$sheets){
-            $requiredsheets[$sheettype]=array();
-            $sheettitles[$sheettype]=array();
-            foreach ($sheets as $sheetid => $sheetsummary){
-                // ignore sheets that are in preparation as WIMS complains if one tries to access their scores
-                if ($sheetsummary->state==0){
-                    mtrace('  - Ignoring: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.'] - due to STATE');
-                    continue;
-                }
-                $title=$sheetsummary->title;
-                // if the sheet name is tagged with a '*' then strip it off and process the sheet
-                if (substr($title,-1)==='*'){
-                    $title=trim(substr($title,0,-1));
-                }else{
-                    // we don't have a * so if we're not an exam then drop our
-                    if ($sheettype!=='exams'){
-                        mtrace('  - Ignoring: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.'] - due to Lack of *');
-                        continue;
-                    }
-                }
-                // we're ready to process the sheet
-                mtrace('  * Keeping: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.']');
-                $requiredsheets[$sheettype][]=$sheetid;
-                $sheettitles[$sheettype][$sheetid]=$title;
-            }
-        }
-
-        // fetch the scores for the required sheets
-        $sheetscores=$wims->getsheetscores($cm,$requiredsheets);
-        if ($sheetscores==null){
-            mtrace('  ERROR: Failed to fetch sheet scores for WIMS course: cm='.$cm->id );
-            continue;
-        }
-
-        // fetch the complete user list from moodle (and hope that we don't run out of RAM)
-        $userrecords=$DB->get_records('user',null,'','id,firstname,lastname');
-
-        // build a lookup table to get from user names to Moodle user ids
-        $userlookup=array();
-        foreach($userrecords as $userinfo){
-            $wimslogin=$wims->generatewimslogin($userinfo);
-            $userlookup[$wimslogin]=$userinfo->id;
-        }
-
-        // We have an identifier problem: Exams and worksheets are both numbered from 1 up
-        // and for scoring we need to have a unique identifier for each scoring column
-        // so we're going to use an offset for worksheets
-        $itemnumberoffsetforsheettype = array( 'worksheets' => 1000, 'exams' => 0 );
-
-        // iterate over the records to setup meta data - ie to assign sheet names to the correct score columns
-        foreach ($sheetscores as $sheettype=>$sheets){
-            $itemnumberoffset= $itemnumberoffsetforsheettype[$sheettype];
-            foreach ($sheets as $sheetid => $sheetdata){
-                // generate the key identifier that allows us to differentiate scores within a single exercise
-                $itemnumber = $itemnumberoffset + $sheetid;
-                // construct the grade column definition object (with the name of the exercise, score ranges, etc)
-                $sheettitle = $sheettitles[$sheettype][$sheetid];
-                $params = array( 'itemname' => $sheettitle );
-                // The following 2 lines have been commented because they cause the grade update call to fail silently
-                //  $params = array( 'grademin' => 0 );
-                //  $params = array( 'grademax' => 10 );
-                // apply the grade column definition
-                $graderesult= grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);
-                if ($graderesult != GRADE_UPDATE_OK){
-                    mtrace('  ERROR: Grade update failed to set meta data: '.$sheettype.' '.$sheetid.' @ itemnumber = '.$itemnumber.' => '.$sheettitle);
-                }
-            }
-        }
-
-        // iterate over the sheet scores to write them to the database
-        foreach ($sheetscores as $sheettype=>$sheets){
-            $itemnumberoffset= $itemnumberoffsetforsheettype[$sheettype];
-            foreach ($sheets as $sheetid => $sheetdata){
-                // generate the key identifier that allows us to differentiate scores within a single exercise
-                $itemnumber = $itemnumberoffset + $sheetid;
-                // iterate over the per user records, updating the grade data for each
-                foreach ($sheetdata as $username => $scorevalue){
-                    if (! array_key_exists($username,$userlookup)){
-                        mtrace('  ERROR: Failed to lookup WIMS login in MOODLE users for login: '.$username);
-                        continue;
-                    }
-                    $userid=$userlookup[$username];
-                    $grade=array('userid'=>$userid,'rawgrade'=>$scorevalue);
-                    $graderesult= grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, $grade, null);
-                    if ($graderesult != GRADE_UPDATE_OK){
-                        mtrace('  ERROR: Grade update failed: '.$sheettype.' '.$sheetid.': '.$userid.' = '.$scorevalue.' @ itemnumber = '.$itemnumber);
-                        continue;
-                    }
-                }
-            }
-        }
-    }
-    mtrace('Synchronising WIMS activity scores to grade book => Done.');
-
-    return true;
 }
 
+/**
+ * Checks if scale is being used by any instance of mod_wims.
+ *
+ * This is used to find out if scale used anywhere.
+ *
+ * @param int $scaleid ID of the scale.
+ * @return bool True if the scale is used by any mod_wims instance.
+ */
+function wims_scale_used_anywhere($scaleid) {
+    global $DB;
+
+    if ($scaleid and $DB->record_exists('wims', array('grade' => -$scaleid))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Creates or updates grade item for the given mod_wims instance.
+ *
+ * Needed by {@link grade_update_mod_grades()}.
+ *
+ * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
+ * @param bool $reset Reset grades in the gradebook.
+ * @return void.
+ */
+function grade_item_update($moduleinstance, $reset=false) {
+    global $CFG;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    $item = array();
+    $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
+    $item['gradetype'] = GRADE_TYPE_VALUE;
+
+    if ($moduleinstance->grade > 0) {
+        $item['gradetype'] = GRADE_TYPE_VALUE;
+        $item['grademax']  = $moduleinstance->grade;
+        $item['grademin']  = 0;
+    } else if ($moduleinstance->grade < 0) {
+        $item['gradetype'] = GRADE_TYPE_SCALE;
+        $item['scaleid']   = -$moduleinstance->grade;
+    } else {
+        $item['gradetype'] = GRADE_TYPE_NONE;
+    }
+    if ($reset) {
+        $item['reset'] = true;
+    }
+
+    grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, null, $item);
+}
+
+/**
+ * Delete grade item for given mod_wims instance.
+ *
+ * @param stdClass $moduleinstance Instance object.
+ * @return grade_item.
+ */
+function wims_grade_item_delete($moduleinstance) {
+    global $CFG;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'wims',
+                        $moduleinstance->id, 0, null, array('deleted' => 1));
+}
+
+/**
+ * Update mod_wims grades in the gradebook.
+ *
+ * Needed by {@link grade_update_mod_grades()}.
+ *
+ * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
+ * @param int $userid Update grade of specific user only, 0 means all participants.
+ */
+function wims_update_grades($moduleinstance, $userid = 0) {
+    global $CFG, $DB;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    // Populate array of grade objects indexed by userid.
+    $grades = array();
+    grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, $grades);
+}

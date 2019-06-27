@@ -400,7 +400,7 @@ class wims_interface{
     }
 
     /**
-     * Fetch the scores for the given set of worksheets ans exams from the given WIMS class
+     * Fetch the scores for the given set of worksheets and exams from the given WIMS class
      * @param object $cm the course module that the wims class is bound to
      * @param array of array of string $requiredsheets the identifiers of the exams and worksheets requested
      * @return array of arrays of objects on success, null on failure

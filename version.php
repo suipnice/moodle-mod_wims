@@ -24,8 +24,8 @@
  */
 
 $plugin->component = 'mod_wims';    // Full name of the plugin (used for diagnostics)
-$plugin->release  = '0.2.0';         // Don't forget to update the version too.
-$plugin->version  = 2019062700;    // The current module version (Date: YYYYMMDDXX)
+$plugin->release  = '0.2.1';         // Don't forget to update the version too.
+$plugin->version  = 2019101500;    // The current module version (Date: YYYYMMDDXX)
 $plugin->requires = 2014050800;    // Requires this Moodle version
 $plugin->maturity = MATURITY_BETA;  // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
 $plugin->cron     = 0;             // Limit the frequency at which the CRON gets called

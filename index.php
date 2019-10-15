@@ -74,34 +74,27 @@ if ($usesections) {
 
 $modinfo = get_fast_modinfo($course);
 $currentsection = '';
-foreach ($instances as $instance) {
-    $cm = $modinfo->cms[$instance->coursemodule];
+foreach ($modinfo->instances['wims'] as $cm) {
+    $row = array();
     if ($usesections) {
-        $printsection = '';
-        if ($instance->section !== $currentsection) {
-            if ($instance->section) {
-                $printsection = get_section_name($course, $instance->section);
+        if ($cm -> sectionnum !== $currentsection) {
+            if ($cm -> sectionnum) {
+                $row[] = get_section_name($course, $cm -> sectionnum);
             }
             if ($currentsection !== '') {
-                $table->data[] = 'hr';
+                $table -> data[] = 'hr';
             }
-            $currentsection = $instance->section;
+            $currentsection = $cm -> sectionnum;
+        }
+        else{
+            $row[] = "";
         }
     }
 
-    $extra = empty($cm->extra) ? '' : $cm->extra;
-    $icon = '';
-    if (!empty($cm->icon)) {
-        $icon = '<img src="'.$OUTPUT->pix_url($cm->icon).'" class="activityicon" alt="'.get_string('modulename', $cm->modname).'" /> ';
-    }
+    $class = $cm -> visible ? null : array('class' => 'dimmed');
 
-    $class = $instance->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
-    $tabledata= array ();
-    if ($usesections) {
-         $tabledata[]=$printsection;
-    }
-    $tabledata[]="<a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($url->name)."</a>";
-    $table->data[]=$tabledata;
+    $row[] = html_writer::link(new moodle_url('view.php', array('id' => $cm -> id, 'class' => 'actionlink exportpage')), $cm -> get_formatted_name(), $class);
+    $table -> data[] = $row;
 }
 
 echo html_writer::table($table);

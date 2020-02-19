@@ -14,21 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * event defintion for wims event
- *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-// event definition for mod_wims\event\course_module_instance_list_viewed
-
 namespace mod_wims\event;
 
-// the following line is not needed as the file produces no output
-// defined('MOODLE_INTERNAL') || die();
+// The following line is not needed as the file produces no output.
+/* defined('MOODLE_INTERNAL') || die();*/
 
+/**
+ * Event defintion for WIMS event.
+ *   mod_wims\event\course_module_instance_list_viewed.
+ *
+ * @category event
+ * @package  mod_wims
+ * @author   Sadge <daniel@edunao.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @link     https://github.com/suipnice/moodle-mod_wims
+ */
 class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
 }

@@ -17,26 +17,26 @@
 /**
  * Chaînes de caractères pour le module 'wims', langue 'fr'
  *
- * @package     mod_wims
- * @category    string
- * @copyright   2015 Edunao SAS (contact@edunao.com)
- * @auteur      Sadge (daniel@edunao.com)
- * @traducteur  Frédéric Chiaroni (frederic@edunao.com)
- * @licence     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @category  string
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * translator: Frédéric Chiaroni <frederic@edunao.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-// Chaînes de caractères générales (notamment utilisées lors de l'ajout d'une activité dans un cours)
+// Chaînes de caractères générales (notamment utilisées lors de l'ajout d'une activité dans un cours).
 $string['modulename']                  = 'Classe WIMS';
 $string['modulenameplural']            = 'Classes WIMS';
 $string['modulename_help']             = 'Intégrez une Classe d&rsquo;exercices WIMS dans votre cours';
 
-// Administration du module Wims
+// Administration du module WIMS.
 $string['pluginadministration']        = 'Administration du module WIMS';
 $string['pluginname']                  = 'WIMS';
 
-// Administration du module Wims - Réglages du serveur Wims
+// Administration - Réglages du serveur WIMS.
 $string['serversettings']              = 'Réglages du serveur WIMS';
 $string['adminnameserverurl']          = 'URL du serveur WIMS';
 $string['admindescserverurl']          = '';
@@ -50,7 +50,7 @@ $string['admindescserverpassword']     = 'Doit être le même que celui que vous
 $string['adminnameqcloffset']          = 'Point de départ de la numérotation des classes WIMS';
 $string['admindescqcloffset']          = 'Doit être entre 11111 et 10^9';
 
-// Administration du module Wims - Réglages du serveur Wims
+// Administration - Réglages de l'interface.
 $string['wimssettings']                = 'Réglages de l&rsquo;interface Moodle-Wims';
 $string['adminnamelang']               = 'Langue des classes';
 $string['admindesclang']               = 'Code de langue par défaut des classes WIMS qui seront créées. (valeurs possibles : ca, cn, en, es, fr, it, nl, si, tw, de)';
@@ -64,7 +64,7 @@ $string['admindescusenameinlogin']     = '';
 $string['adminnameusegradepage']       = 'Rediriger les liens du carnet de notes MOODLE vers la page de notes de WIMS';
 $string['admindescusegradepage']       = '';
 
-// Administration du module Wims - Réglages de debug
+// Administration - Réglages de debug.
 $string['wimsdebugsettings']           = 'Réglages de debug de l&rsquo;interface WIMS';
 $string['adminnamedebugviewpage']      = 'Activer l&rsquo;affichage d&rsquo;information de debug: VIEW';
 $string['admindescdebugviewpage']      = '';
@@ -76,7 +76,7 @@ $string['adminnamedebugsettings']      = 'Activer l&rsquo;affichage d&rsquo;info
 $string['admindescdebugsettings']      = '';
 
 
-// Configuration des instances de modules Wims
+// Configuration des instances de modules WIMS.
 $string['name']                        = 'Nom de l&rsquo;activité';
 $string['userinstitution']             = 'Nom de l&rsquo;établissement';
 $string['userfirstname']               = 'Prénom de l&rsquo;enseignant';
@@ -84,7 +84,7 @@ $string['userlastname']                = 'Nom de famille de l&rsquo;enseignant';
 $string['username']                    = 'Nom complet de l&rsquo;enseignant';
 $string['useremail']                   = 'Adresse électronique de contact';
 
-// worksheet and exam settings
+// Configuration des feuilles et examens.
 $string['sheettypeworksheets']         = 'Feuilles :';
 $string['sheettypeexams']              = 'Examens :';
 $string['sheettitle']                  = 'Titre';
@@ -94,9 +94,9 @@ $string['wimsstatus1']                 = 'Actif';
 $string['wimsstatus2']                 = 'Expiré';
 $string['wimsstatusx']                 = 'Inactif';
 
-// Misc strings
+// Textes divers.
 $string['page-mod-wims-x']             = 'N&rsquo;importe quelle page du module Wims';
 $string['modulename_link']             = 'mod/wims/view';
 
-// Taches planifiées
+// Taches planifiées.
 $string['updatescores']             = 'Mise à jour des notes des activités WIMS';

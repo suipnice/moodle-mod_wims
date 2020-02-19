@@ -15,17 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * wims module version information
+ * WIMS module version information
  *
- * @package    mod_wims
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $plugin->component = 'mod_wims';    // Full name of the plugin (used for diagnostics)
-$plugin->release  = '0.2.1';         // Don't forget to update the version too.
-$plugin->version  = 2019101500;    // The current module version (Date: YYYYMMDDXX)
+$plugin->release  = '0.2.2';         // Don't forget to update the version too.
+$plugin->version  = 2020021900;    // The current module version (Date: YYYYMMDDXX)
 $plugin->requires = 2014050800;    // Requires this Moodle version
 $plugin->maturity = MATURITY_BETA;  // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
-$plugin->cron     = 0;             // Limit the frequency at which the CRON gets called
+$plugin->cron     = 0;             // Limit the frequency at which the CRON gets called.

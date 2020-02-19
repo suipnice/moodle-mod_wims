@@ -15,43 +15,42 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * wims module admin settings and defaults
+ * WIMS module admin settings and defaults
  *
- * @package     mod_wims
- * @category    admin
- * @copyright   2015 Edunao SAS (contact@edunao.com)
- * @author      Sadge (daniel@edunao.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// this is settings.php - add code here to handle administration options for the module
+// This is settings.php - add code here to handle administration options for the module.
 
 defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__)."/settingslib.php");
 
 if ($ADMIN->fulltree) {
-    // See https://docs.moodle.org/dev/Admin_settings
-    require_once("$CFG->libdir/resourcelib.php");
-    require_once("$CFG->libdir/moodlelib.php");
+    // See https://docs.moodle.org/dev/Admin_settings .
+    include_once("$CFG->libdir/resourcelib.php");
+    include_once("$CFG->libdir/moodlelib.php");
 
-    // WIMS server settings
-    addwimsadminheading($settings,"serversettings");
-    addwimsadminsetting($settings,"serverurl","https://192.168.0.1/wims/wims.cgi");
-    addwimsadminsetting($settings,"allowselfsigcerts",0,ADMIN_SETTING_TYPE_CHECKBOX);
-    addwimsadminsetting($settings,"serverpassword","password");
-    addwimsadminsetting($settings,"qcloffset","100000");
+    // WIMS server settings.
+    addwimsadminheading($settings, "serversettings");
+    addwimsadminsetting($settings, "serverurl", "https://192.168.0.1/wims/wims.cgi");
+    addwimsadminsetting($settings, "allowselfsigcerts", 0, ADMIN_SETTING_TYPE_CHECKBOX);
+    addwimsadminsetting($settings, "serverpassword", "password");
+    addwimsadminsetting($settings, "qcloffset", "100000");
 
-    // WIMS interaction configuration
-    addwimsadminheading($settings,"wimssettings");
-    addwimsadminsetting($settings,"lang",current_language());
-    addwimsadminsetting($settings,"defaultinstitution","Moodle/WIMS");
-    addwimsadminsetting($settings,"usenameinlogin",0,ADMIN_SETTING_TYPE_CHECKBOX);
-    addwimsadminsetting($settings,"usegradepage",0,ADMIN_SETTING_TYPE_CHECKBOX);
+    // WIMS interaction configuration.
+    addwimsadminheading($settings, "wimssettings");
+    addwimsadminsetting($settings, "lang", current_language());
+    addwimsadminsetting($settings, "defaultinstitution", "Moodle/WIMS");
+    addwimsadminsetting($settings, "usenameinlogin", 0, ADMIN_SETTING_TYPE_CHECKBOX);
+    addwimsadminsetting($settings, "usegradepage", 0, ADMIN_SETTING_TYPE_CHECKBOX);
 
-    // Debugging options
-    addwimsadminheading($settings,"wimsdebugsettings");
-    addwimsadminsetting($settings,"debugviewpage",0,ADMIN_SETTING_TYPE_CHECKBOX);
-    addwimsadminsetting($settings,"debugcron",0,ADMIN_SETTING_TYPE_CHECKBOX);
-    addwimsadminsetting($settings,"debugsettings",0,ADMIN_SETTING_TYPE_CHECKBOX);
+    // Debugging options.
+    addwimsadminheading($settings, "wimsdebugsettings");
+    addwimsadminsetting($settings, "debugviewpage", 0, ADMIN_SETTING_TYPE_CHECKBOX);
+    addwimsadminsetting($settings, "debugcron", 0, ADMIN_SETTING_TYPE_CHECKBOX);
+    addwimsadminsetting($settings, "debugsettings", 0, ADMIN_SETTING_TYPE_CHECKBOX);
 }

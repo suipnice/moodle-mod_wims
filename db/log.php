@@ -17,16 +17,17 @@
 /**
  * Definition of log events for module wims
  *
- * @package    mod_wims
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
 
-// add log event defintins here
+// Add log event definitions here.
 $logs = array(
-    array('module'=>'wims', 'action'=>'view', 'mtable'=>'wims', 'field'=>'name'),
-    array('module'=>'wims', 'action'=>'view all', 'mtable'=>'wims', 'field'=>'name'),
+    array('module' => 'wims', 'action' => 'view', 'mtable' => 'wims', 'field' => 'name'),
+    array('module' => 'wims', 'action' => 'view all', 'mtable' => 'wims', 'field' => 'name'),
 );
 

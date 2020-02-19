@@ -17,13 +17,15 @@
 /**
  * Capability definitions for the wims module.
  *
- * @package    mod_wims
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// add capability definitions here
+defined('MOODLE_INTERNAL') || die();
+
+// Add capability definitions here.
 $capabilities = array(
     'mod/wims:view' => array(
         'captype' => 'read',

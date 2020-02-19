@@ -14,18 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * event defintion for wims event
- *
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_wims
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-// event definition for mod_wims\event\course_module_viewed
 namespace mod_wims\event;
+/**
+ * Event defintion for course_module_viewed.
+ *
+ * @category  event
+ * @package   mod_wims
+ * @author    Sadge <daniel@edunao.com>
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @link      https://github.com/suipnice/moodle-mod_wims
+ */
 class course_module_viewed extends \core\event\course_module_viewed {
+    /**
+     * Init event
+     *
+     */
     protected function init() {
         $this->data['objecttable'] = 'wims';
         $this->data['crud'] = 'r';

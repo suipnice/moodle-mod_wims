@@ -17,25 +17,25 @@
 /**
  * Strings for component 'wims', language 'en'
  *
- * @package     mod_wims
- * @category    string
- * @copyright   2015 Edunao SAS (contact@edunao.com)
- * @author      Sadge (daniel@edunao.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @category  string
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-// general strings - for use selecting a module type, or listing module types, etc
+// General strings - for use selecting a module type, or listing module types, etc...
 $string['modulename']                  = 'WIMS Course';
 $string['modulenameplural']            = 'WIMS courses';
 $string['modulename_help']             = 'Integrate a WIMS virtual classroom into your course';
 
-// plugin administration strings
+// Plugin administration strings.
 $string['pluginadministration']        = 'WIMS module administration';
 $string['pluginname']                  = 'WIMS';
 
-// admin settings - server configuration
+// Admin settings - server configuration.
 $string['serversettings']              = 'WIMS Server Settings';
 $string['adminnameserverurl']          = 'WIMS Server URL';
 $string['admindescserverurl']          = '';
@@ -49,7 +49,7 @@ $string['admindescserverpassword']     = 'The one you\'ve defined in the files i
 $string['adminnameqcloffset']          = 'WIMS Course Numbering Offset';
 $string['admindescqcloffset']          = 'Between 11111 and 10^9';
 
-// admin settings - Interface Settings
+// Admin settings - Interface settings.
 $string['wimssettings']                = 'Moodle-Wims Interface Settings';
 $string['adminnamelang']               = 'Course Language (default value)';
 $string['admindesclang']               = 'Must be one of ca, cn, en, es, fr, it, nl, si, tw, de';
@@ -63,7 +63,7 @@ $string['admindescusenameinlogin']     = '';
 $string['adminnameusegradepage']       = 'Redirect Moodle Gradebook links to WIMS grade page';
 $string['admindescusegradepage']       = '';
 
-// admin settings - Debug Settings
+// Admin settings - Debug settings.
 $string['wimsdebugsettings']           = 'WIMS interface debug settings';
 $string['adminnamedebugviewpage']      = 'VIEW debug output';
 $string['admindescdebugviewpage']      = '';
@@ -74,7 +74,7 @@ $string['admindescdebugcron']          = '';
 $string['adminnamedebugsettings']      = 'SETTINGS debug output';
 $string['admindescdebugsettings']      = '';
 
-// instance settings
+// Instance settings.
 $string['name']                        = 'Activity Name';
 $string['userinstitution']             = 'Institution Name';
 $string['userfirstname']               = 'Supervisor First Name';
@@ -82,7 +82,7 @@ $string['userlastname']                = 'Supervisor Last Name';
 $string['username']                    = 'Supervisor Full Name';
 $string['useremail']                   = 'Course Contact Email';
 
-// worksheet and exam settings
+// Worksheet and exam settings.
 $string['sheettypeworksheets']         = 'Worksheets:';
 $string['sheettypeexams']              = 'Exam:';
 $string['sheettitle']                  = 'Title';
@@ -92,9 +92,9 @@ $string['wimsstatus1']                 = 'Active';
 $string['wimsstatus2']                 = 'Expired';
 $string['wimsstatusx']                 = 'Inactive';
 
-// Misc strings
+// Misc strings.
 $string['page-mod-wims-x']             = 'Any WIMS module page';
 $string['modulename_link']             = 'mod/wims/view';
 
-// Scheduled tasks
+// Scheduled tasks.
 $string['updatescores']             = 'Update WIMS scores';

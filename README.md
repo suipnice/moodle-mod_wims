@@ -1,4 +1,6 @@
 # WIMS #
+![Licence](https://img.shields.io/github/license/suipnice/moodle-mod_wims)
+
 
 This plugin allows one to insert WIMS classes in Moodle classes.
 It requires a WIMS server to have been setup and correctly configured.

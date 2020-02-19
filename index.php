@@ -17,20 +17,20 @@
 /**
  * List of instances of wims module in the course
  *
- * @package    mod_wims
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// This is index.php - add code here to output a list of all of the instances of the module's component in the course
+// This is index.php - add code here to output a list of all of the instances of the module's component in the course.
 
 require(__DIR__.'/../../config.php');
-//require_once(__DIR__.'/lib.php');
+/* require_once(__DIR__.'/lib.php'); */
 
-$id = required_param('id', PARAM_INT); // course id
+$id = required_param('id', PARAM_INT); // Course id.
 
-$course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 
 require_course_login($course, true);
 $PAGE->set_pagelayout('incourse');
@@ -77,21 +77,20 @@ $currentsection = '';
 foreach ($modinfo->instances['wims'] as $cm) {
     $row = array();
     if ($usesections) {
-        if ($cm -> sectionnum !== $currentsection) {
-            if ($cm -> sectionnum) {
-                $row[] = get_section_name($course, $cm -> sectionnum);
+        if ($cm->sectionnum !== $currentsection) {
+            if ($cm->sectionnum) {
+                $row[] = get_section_name($course, $cm->sectionnum);
             }
             if ($currentsection !== '') {
-                $table -> data[] = 'hr';
+                $table->data[] = 'hr';
             }
-            $currentsection = $cm -> sectionnum;
-        }
-        else{
+            $currentsection = $cm->sectionnum;
+        } else {
             $row[] = "";
         }
     }
 
-    $class = $cm -> visible ? null : array('class' => 'dimmed');
+    $class = $cm->visible ? null : array('class' => 'dimmed');
 
     $row[] = html_writer::link(new moodle_url('view.php', array('id' => $cm -> id, 'class' => 'actionlink exportpage')), $cm -> get_formatted_name(), $class);
     $table -> data[] = $row;

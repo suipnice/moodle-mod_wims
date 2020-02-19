@@ -15,16 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * utilities lib for defining wims module admin settings and defaults
+ * Utilities lib for defining WIMS module admin settings and defaults.
  *
- * @package     mod_wims
- * @category    admin
- * @copyright   2015 Edunao SAS (contact@edunao.com)
- * @author      Sadge (daniel@edunao.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// this is settings.php - add code here to handle administration options for the module
+// This is settingslib.php - add code here to handle administration options for the module.
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -33,12 +32,12 @@ define('ADMIN_SETTING_TYPE_SELECT', 'ADMIN_SETTING_TYPE_SELECT');
 define('ADMIN_SETTING_TYPE_CHECKBOX', 'ADMIN_SETTING_TYPE_CHECKBOX');
 
 /**
- * add WIMS admin heading
+ * Add WIMS admin heading.
  *
- * @param $settings
- * @param $name
+ * @param unknown $settings settings
+ * @param unknown $name     name
  */
-function addwimsadminheading($settings,$name){
+function addwimsadminheading($settings, $name) {
     $settings->add(new admin_setting_heading(
         "wims/".$name,
         get_string($name, "wims"),
@@ -47,37 +46,37 @@ function addwimsadminheading($settings,$name){
 }
 
 /**
- * add WIMS admin setting
+ * Add WIMS admin setting.
  *
- * @param $settings
- * @param $name
- * @param $defaultvalue
- * @param $settingtype
- * @param $data
+ * @param unknown $settings     settings
+ * @param unknown $name         name
+ * @param unknown $defaultvalue default value
+ * @param unknown $settingtype  setting type
+ * @param unknown $data         data
  */
-function addwimsadminsetting($settings,$name,$defaultvalue,$settingtype=ADMIN_SETTING_TYPE_TEXT,$data=null){
+function addwimsadminsetting($settings, $name, $defaultvalue, $settingtype=ADMIN_SETTING_TYPE_TEXT, $data=null) {
     $uniquename  = "wims/".$name;
     $displayname = get_string("adminname".$name, "wims");
     $displayinfo = get_string("admindesc".$name, "wims");
     switch ($settingtype){
 
-        case ADMIN_SETTING_TYPE_CHECKBOX:
-            $settings->add(new admin_setting_configcheckbox(
-                $uniquename, $displayname, $displayinfo, $defaultvalue
-            ));
-            break;
+    case ADMIN_SETTING_TYPE_CHECKBOX:
+        $settings->add(new admin_setting_configcheckbox(
+            $uniquename, $displayname, $displayinfo, $defaultvalue
+        ));
+        break;
 
-        case ADMIN_SETTING_TYPE_SELECT:
-            $settings->add(new admin_setting_configselect(
-                $uniquename, $displayname, $displayinfo, $defaultvalue, $data
-            ));
-            break;
+    case ADMIN_SETTING_TYPE_SELECT:
+        $settings->add(new admin_setting_configselect(
+            $uniquename, $displayname, $displayinfo, $defaultvalue, $data
+        ));
+        break;
 
-        case ADMIN_SETTING_TYPE_TEXT:
-            // drop through to default clause
-        default:
-            $settings->add(new admin_setting_configtext(
-                $uniquename, $displayname, $displayinfo, $defaultvalue
-            ));
+    case ADMIN_SETTING_TYPE_TEXT:
+        // Drop through to default clause.
+    default:
+        $settings->add(new admin_setting_configtext(
+            $uniquename, $displayname, $displayinfo, $defaultvalue
+        ));
     }
 }

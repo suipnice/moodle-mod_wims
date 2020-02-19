@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * wims module version upgrade code
+ * WIMS module version upgrade code
  *
- * @package     mod_wims
- * @category    upgrade
- * @copyright   2015 Edunao SAS (contact@edunao.com)
- * @author      Sadge (daniel@edunao.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @category  upgrade
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * This file keeps track of upgrades to
  * the resource module
@@ -45,10 +45,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+/**
+ * Add field in DB on upgrade
+ */
 function xmldb_wims_addfield($dbman,$table,$name, $type=null, $precision=null, $unsigned=null, $notnull=null, $sequence=null, $default=null, $previous=null) {
-    // instantiate a field object
+    // Instantiate a field object.
     $field = new xmldb_field($name, $type, $precision, $unsigned, $notnull, $sequence, $default, $previous);
-    // If the field doesn't already exist in the given table then add it
+    // If the field doesn't already exist in the given table then add it.
     if (!$dbman->field_exists($table, $field)) {
         $dbman->add_field($table, $field);
     }
@@ -58,6 +61,7 @@ function xmldb_wims_addfield($dbman,$table,$name, $type=null, $precision=null, $
  * Execute mod_wims upgrade from the given old version.
  *
  * @param int $oldversion
+ *
  * @return bool
  */
 function xmldb_wims_upgrade($oldversion) {
@@ -68,18 +72,18 @@ function xmldb_wims_upgrade($oldversion) {
     // For further information please read the Upgrade API documentation:
     // https://docs.moodle.org/dev/Upgrade_API
 
-    // Upgrade to version with extra user... fields in database
-    $nextversion=2015102201;
+    // Upgrade to version with extra user... fields in database.
+    $nextversion = 2015102201;
     if ($oldversion < $nextversion) {
-        // Get hold of the module's database table
+        // Get hold of the module's database table.
         $table = new xmldb_table($modulename);
-        // Adding fields to table
-        xmldb_wims_addfield($dbman,$table,'userinstitution', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
-        xmldb_wims_addfield($dbman,$table,'userfirstname', XMLDB_TYPE_CHAR, '63', null, XMLDB_NOTNULL);
-        xmldb_wims_addfield($dbman,$table,'userlastname', XMLDB_TYPE_CHAR, '63', null, XMLDB_NOTNULL);
-        xmldb_wims_addfield($dbman,$table,'username', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
-        xmldb_wims_addfield($dbman,$table,'useremail', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
-        // Wims savepoint reached.
+        // Adding fields to table.
+        xmldb_wims_addfield($dbman, $table, 'userinstitution', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
+        xmldb_wims_addfield($dbman, $table, 'userfirstname', XMLDB_TYPE_CHAR, '63', null, XMLDB_NOTNULL);
+        xmldb_wims_addfield($dbman, $table, 'userlastname', XMLDB_TYPE_CHAR, '63', null, XMLDB_NOTNULL);
+        xmldb_wims_addfield($dbman, $table, 'username', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
+        xmldb_wims_addfield($dbman, $table, 'useremail', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
+        // WIMS savepoint reached.
         upgrade_mod_savepoint(true, $nextversion, $modulename);
     }
 

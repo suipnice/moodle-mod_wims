@@ -17,39 +17,39 @@
 /**
  * Event handler implementatins for wims module
  *
- * @package    mod_wims
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * course_module_updated event handler
+ * Event handler for course_module_updated
  *
  * @param \core\event\course_module_updated $event
  */
 function on_course_module_updated(\core\event\course_module_updated $event) {
-    // we're only interested in our own updates
-    if ( $event->other['modulename'] != 'wims' ){
+    // We're only interested in our own updates.
+    if ($event->other['modulename'] != 'wims') {
         return;
     }
 
-    // ignore the event if we've come from the mod_form as the name will already have been sent to WIMS
-    global $WIMS_MOD_FORM;
-    if ($WIMS_MOD_FORM){
+    // Ignore the event if we've come from the mod_form as the name will already have been sent to WIMS.
+    global $wimsmodform;
+    if ($wimsmodform) {
         return;
     }
 
-    // setup a fake course module to provide the data that the wims interface needs
-    $cm=new StdClass;
-    $cm->id=$event->objectid;
+    // Setup a fake course module to provide the data that the wims interface needs.
+    $cm = new StdClass;
+    $cm->id = $event->objectid;
 
-    // try to send the updated name to WIMS
-    require_once(dirname(__FILE__).'/wimsinterface.class.php');
-    $wimsdata=array( "description" => $event->other['name'] );
-    $config=get_config('wims');
-    $wims=new wims_interface($config,$config->debugsettings);
-    $wims->updateclassconfigformodule($cm,$wimsdata);
+    // Try to send the updated name to WIMS.
+    include_once dirname(__FILE__).'/wimsinterface.class.php';
+    $wimsdata = array("description" => $event->other['name']);
+    $config = get_config('wims');
+    $wims = new wims_interface($config, $config->debugsettings);
+    $wims->updateclassconfigformodule($cm, $wimsdata);
 }

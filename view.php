@@ -15,34 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Display wims course elements
+ * Display WIMS course elements.
  *
- * @package    mod_wims
- * @copyright  2015 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @author    Sadge <daniel@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// This is view.php - add all view routines here (for generating output for author, instructor & student)
+// This is view.php - add all view routines here (for generating output for author, instructor & student).
 
-////////////
-// includes
 
 require(__DIR__.'/../../config.php');
 require_once(dirname(__FILE__).'/wimsinterface.class.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 
-///////////////////////////
-// _GET / _POST parameters
+// _GET / _POST parameters.
 
 $id         = optional_param('id', 0, PARAM_INT);                     // Course module ID
 $urltype    = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // type of page to view in wims
-$urlarg     = optional_param('wimsidx', null, PARAM_INT);             // Index of the page to view
+$urlarg     = optional_param('wimsidx', null, PARAM_INT);             // Index of the page to view.
 
 
-/////////////////////
-// Data from Moodle
+// Data from Moodle.
 if ($id) {
     $cm = get_coursemodule_from_id('wims', $id, 0, false, MUST_EXIST);
     $instance = $DB->get_record('wims', array('id'=>$cm->instance), '*', MUST_EXIST);
@@ -52,16 +48,14 @@ if ($id) {
     print_error(get_string('missingidandcmid', mod_wims));
 }
 
-/////////////////
-// Sanity tests
+// Sanity tests.
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/wims:view', $context);
 
 
-///////////////////////////////////////
-// Moodle event logging & state update
+// Moodle event logging & state update.
 
 $params = array(
     'context' => $context,
@@ -74,47 +68,45 @@ $event->add_record_snapshot('wims', $instance);
 $event->trigger();
 
 
-/////////////
-// Work Code
+// Work Code.
 
 /**
-* raise wims error
-*
-* @param string $mainmsg
-* @param array $errormsgs
-*/
-function raisewimserror($mainmsg,$errormsgs){
+ * Raise an error.
+ *
+ * @param string $mainmsg   Error Title
+ * @param array  $errormsgs List of errors
+ */
+function raisewimserror($mainmsg, $errormsgs) {
     echo "<h1>".$mainmsg."</h1>";
-    foreach ($errormsgs as $msg){
+    foreach ($errormsgs as $msg) {
         echo "&gt; $msg<br/>";
     }
     die();
 }
 
 
-//////////////////////////////////////////////////////
-// Render the output - by executing a redirect to WIMS
+// Render the output - by executing a redirect to WIMS.
 
 $PAGE->set_url('/mod/wims/view.php', array('id' => $cm->id));
 
-// instantiate a wims interface
-$wims=new wims_interface($config,$config->debugviewpage);
+// Instantiate a wims interface.
+$wims=new wims_interface($config, $config->debugviewpage);
 
-// start by connecting to the course on the WIMS server (and instantiate the course if required)
-$wimsresult=$wims->selectclassformodule($course,$cm,$config);
-($wimsresult==true)||raisewimserror("WIMS Course Select FAILED",$wims->errormsgs);
+// Start by connecting to the course on the WIMS server (and instantiate the course if required).
+$wimsresult = $wims->selectclassformodule($course, $cm, $config);
+($wimsresult == true)||raisewimserror("WIMS Course Select FAILED", $wims->errormsgs);
 
-// if we're a teacher then we need the supervisor url otherwise we need the student url
-$sitelang=current_language();
-$isteacher=has_capability('moodle/course:manageactivities', $context);
-if ($isteacher){
-    $url=$wims->getteacherurl($sitelang,$urltype,$urlarg);
-}else{
-    $url=$wims->getstudenturl($USER,$sitelang,$urltype,$urlarg);
+// If we're a teacher then we need the supervisor url otherwise we need the student url.
+$sitelang = current_language();
+$isteacher = has_capability('moodle/course:manageactivities', $context);
+if ($isteacher) {
+    $url = $wims->getteacherurl($sitelang, $urltype, $urlarg);
+} else {
+    $url = $wims->getstudenturl($USER, $sitelang, $urltype, $urlarg);
 }
 
-// if we've failed to get hold of a plausible url then bomb out with an error message
-($url!=null)||raisewimserror("WIMS User Authentication FAILED",$wims->errormsgs);
+// If we've failed to get hold of a plausible url then bomb out with an error message.
+($url != null)||raisewimserror("WIMS User Authentication FAILED", $wims->errormsgs);
 
-// do the redirection
+// Do the redirection.
 redirect($url);

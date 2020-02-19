@@ -102,10 +102,10 @@ class mod_wims_mod_form extends moodleform_mod {
      * @param unknown $defaultvalue  default value
      * @param unknown $fieldsuffix   field suffix
      */
-    private function addcheckbox($fieldnamebase,$defaultvalue=null,$fieldsuffix='') {
+    private function addcheckbox($fieldnamebase, $defaultvalue=null, $fieldsuffix='') {
         $mform = $this->_form;
-        $fieldname=$fieldnamebase.$fieldsuffix;
-        $mform->addElement('checkbox', $fieldname, get_string($fieldnamebase,'wims'));
+        $fieldname = $fieldnamebase.$fieldsuffix;
+        $mform->addElement('checkbox', $fieldname, get_string($fieldnamebase, 'wims'));
         $mform->setType($fieldname, PARAM_TEXT);
         if ($defaultvalue) {
             $mform->setDefault($fieldname, $defaultvalue);
@@ -139,26 +139,25 @@ class mod_wims_mod_form extends moodleform_mod {
     public function definition_after_data() {
         $mform = $this->_form;
 
-        // -------------------------------------------------------
         // If we have data from WIMS then use it.
         if (property_exists($this, 'configfromwims') === true) {
 
             // Treat all of the worksheets and then all of the exams.
-            foreach (array("worksheets","exams") as $sheettype) {
+            foreach (array("worksheets", "exams") as $sheettype) {
                 $sheettypestr = get_string('sheettype'.$sheettype, 'wims');
 
                 // For each sheet (whether worksheet or exam).
                 foreach ($this->configfromwims[$sheettype] as $sheetidx => $sheetprops) {
                     // Work out the sheet status.
                     switch($sheetprops['status']) {
-                    case '1': $statusstr='';
-                        break;
-                    case '2':
-                        $statusstr = get_string('wimsstatus2', 'wims');
-                        break;
-                    default :
-                        $statusstr = get_string('wimsstatusx', 'wims');
-                        break;
+                        case '1': $statusstr = '';
+                            break;
+                        case '2':
+                            $statusstr = get_string('wimsstatus2', 'wims');
+                            break;
+                        default :
+                            $statusstr = get_string('wimsstatusx', 'wims');
+                            break;
                     }
                     if ($statusstr !== '') {
                         $statusstr = ' [ '.$statusstr.' ] ';
@@ -169,12 +168,12 @@ class mod_wims_mod_form extends moodleform_mod {
                         $title = trim(substr($fulltitle, 0, -1));
                         $graded = '1';
                     } else {
-                        $title=$fulltitle;
-                        $graded='0';
+                        $title = $fulltitle;
+                        $graded = '0';
                     }
 
                     // Open a dedicated section for each sheet.
-                    $headerstr=$sheettypestr.$title.$statusstr;
+                    $headerstr = $sheettypestr.$title.$statusstr;
                     $mform->addElement('header', 'sheetheader'.$sheettype.$sheetidx, $headerstr);
 
                     // Add title and 'graded' checkbox.
@@ -184,20 +183,22 @@ class mod_wims_mod_form extends moodleform_mod {
                     }
 
                     // Add an expiry date field.
-                    $datestr=$sheetprops['expiration'];
-                    $dateobj=new DateTime($datestr, new DateTimeZone('UTC'));
-                    $dateval=$dateobj->getTimestamp();
-                    $expiryfieldname='sheetexpiry'.$sheettype.$sheetidx;
-                    $mform->addElement('date_selector', $expiryfieldname, get_string('sheetexpiry', 'wims'), array('timezone'=>'UTC'));
+                    $datestr = $sheetprops['expiration'];
+                    $dateobj = new DateTime($datestr, new DateTimeZone('UTC'));
+                    $dateval = $dateobj->getTimestamp();
+                    $expiryfieldname = 'sheetexpiry'.$sheettype.$sheetidx;
+                    $mform->addElement(
+                        'date_selector',
+                        $expiryfieldname,
+                        get_string('sheetexpiry', 'wims'),
+                        array('timezone' => 'UTC')
+                    );
                     $mform->setDefault($expiryfieldname, $dateval);
                 }
             }
         }
 
-        //-------------------------------------------------------
         $this->standard_coursemodule_elements();
-
-        //-------------------------------------------------------
         $this->add_action_buttons();
     }
 
@@ -210,13 +211,13 @@ class mod_wims_mod_form extends moodleform_mod {
      * @param unknown $fallback      fallback
      */
     private function updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback) {
-        $localkey="user".$propname;
+        $localkey = "user".$propname;
         if (array_key_exists($localkey, $defaultvalues) && $defaultvalues[$localkey] != "") {
             // We have a non-empty value so don't change it.
         } else if ($user->$propname != "") {
-            $defaultvalues[$localkey]=$user->$propname;
+            $defaultvalues[$localkey] = $user->$propname;
         } else {
-            $defaultvalues[$localkey]=$fallback;
+            $defaultvalues[$localkey] = $fallback;
         }
     }
 
@@ -225,11 +226,11 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @param unknown $defaultvalues default values
      */
-    function data_preprocessing(&$defaultvalues) {
+    public function data_preprocessing(&$defaultvalues) {
         global $DB;
         global $USER;
         // Prime the default values using the database entries that we've stored away.
-        $user = $DB->get_record('user', array('id'=>$USER->id));
+        $user = $DB->get_record('user', array('id' => $USER->id));
         $config = get_config('wims');
         $this->updatedefaultvalue($defaultvalues, $user, "firstname", "anonymous");
         $this->updatedefaultvalue($defaultvalues, $user, "lastname", "supervisor");
@@ -267,11 +268,11 @@ class mod_wims_mod_form extends moodleform_mod {
      * @param unknown $data  data
      * @param unknown $files files
      */
-    function validation($data, $files) {
+    public function validation($data, $files) {
         // If the course module has been instantiated already then put in an update request to WIMS.
         if (is_object($this->cm)) {
             // Extract the properties that are of relevance for WIMS and organise them into a candidate data array.
-            $wimsdata=array(
+            $wimsdata = array(
                 "description" => $data["name"],
                 "institution" => $data["userinstitution"],
                 "supervisor"  => $data["username"],
@@ -290,24 +291,24 @@ class mod_wims_mod_form extends moodleform_mod {
 
             // Iterate over worksheets and exams.
             if (property_exists($this, 'configfromwims') === true) {
-                foreach (array("worksheets","exams") as $sheettype) {
-                    $changeddata[$sheettype]=array();
+                foreach (array("worksheets", "exams") as $sheettype) {
+                    $changeddata[$sheettype] = array();
                     foreach ($this->configfromwims[$sheettype] as $sheetidx => $sheetprops) {
                         // Fetch parameters from data.
-                        $gradedkey='sheetgraded'.$sheettype.$sheetidx;
+                        $gradedkey = 'sheetgraded'.$sheettype.$sheetidx;
                         $title = $data['sheettitle'.$sheettype.$sheetidx];
-                        $graded = array_key_exists($gradedkey, $data)? $data[$gradedkey]: '';
+                        $graded = array_key_exists($gradedkey, $data) ? $data[$gradedkey] : '';
                         $expiry = $data['sheetexpiry'.$sheettype.$sheetidx];
                         // Compose full title.
-                        $gradestr = ($graded==='1')? ' *': '';
+                        $gradestr = ($graded === '1') ? ' *' : '';
                         $fulltitle = trim($title).$gradestr;
                         // Compose the expiry date.
                         $dateobj = new DateTime('@'.$expiry, new DateTimeZone('UTC'));
-                        $expirydate=$dateobj->format('Ymd');
+                        $expirydate = $dateobj->format('Ymd');
                         // Determine whether anything has changed.
-                        $dirty=
-                            ($sheetprops['title'] !== $fulltitle)? true:
-                            ($sheetprops['expiration'] !== $expirydate)? true:
+                        $dirty =
+                            ($sheetprops['title'] !== $fulltitle) ? true :
+                            ($sheetprops['expiration'] !== $expirydate) ? true :
                             false;
                         // Write the properties to the output data structure.
                         if ($dirty === true) {

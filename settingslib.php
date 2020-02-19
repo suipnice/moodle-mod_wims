@@ -60,23 +60,23 @@ function addwimsadminsetting($settings, $name, $defaultvalue, $settingtype=ADMIN
     $displayinfo = get_string("admindesc".$name, "wims");
     switch ($settingtype){
 
-    case ADMIN_SETTING_TYPE_CHECKBOX:
-        $settings->add(new admin_setting_configcheckbox(
-            $uniquename, $displayname, $displayinfo, $defaultvalue
-        ));
-        break;
+        case ADMIN_SETTING_TYPE_CHECKBOX:
+            $settings->add(new admin_setting_configcheckbox(
+                $uniquename, $displayname, $displayinfo, $defaultvalue
+            ));
+            break;
 
-    case ADMIN_SETTING_TYPE_SELECT:
-        $settings->add(new admin_setting_configselect(
-            $uniquename, $displayname, $displayinfo, $defaultvalue, $data
-        ));
-        break;
+        case ADMIN_SETTING_TYPE_SELECT:
+            $settings->add(new admin_setting_configselect(
+                $uniquename, $displayname, $displayinfo, $defaultvalue, $data
+            ));
+            break;
 
-    case ADMIN_SETTING_TYPE_TEXT:
-        // Drop through to default clause.
-    default:
-        $settings->add(new admin_setting_configtext(
-            $uniquename, $displayname, $displayinfo, $defaultvalue
-        ));
+        case ADMIN_SETTING_TYPE_TEXT:
+            // Drop through to default clause.
+        default:
+            $settings->add(new admin_setting_configtext(
+                $uniquename, $displayname, $displayinfo, $defaultvalue
+            ));
     }
 }

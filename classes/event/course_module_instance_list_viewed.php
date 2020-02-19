@@ -16,8 +16,7 @@
 
 namespace mod_wims\event;
 
-// The following line is not needed as the file produces no output.
-/* defined('MOODLE_INTERNAL') || die();*/
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Event defintion for WIMS event.

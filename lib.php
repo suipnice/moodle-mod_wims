@@ -36,27 +36,27 @@ defined('MOODLE_INTERNAL') || die;
  */
 function wims_supports($feature) {
     switch($feature) {
-    case FEATURE_GROUPS:
-        return false;
-    case FEATURE_GROUPINGS:
-        return false;
-    case FEATURE_GROUPMEMBERSONLY:
-        return false;
-    case FEATURE_MOD_INTRO:
-        return false;
-    case FEATURE_COMPLETION_TRACKS_VIEWS:
-        return false;
-    case FEATURE_GRADE_HAS_GRADE:
-        return true;
-    case FEATURE_GRADE_OUTCOMES:
-        return false;
-    case FEATURE_BACKUP_MOODLE2:
-        return false;
-    case FEATURE_SHOW_DESCRIPTION:
-        return false;
+        case FEATURE_GROUPS:
+            return false;
+        case FEATURE_GROUPINGS:
+            return false;
+        case FEATURE_GROUPMEMBERSONLY:
+            return false;
+        case FEATURE_MOD_INTRO:
+            return false;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return false;
+        case FEATURE_GRADE_HAS_GRADE:
+            return true;
+        case FEATURE_GRADE_OUTCOMES:
+            return false;
+        case FEATURE_BACKUP_MOODLE2:
+            return false;
+        case FEATURE_SHOW_DESCRIPTION:
+            return false;
 
-    default:
-        return null;
+        default:
+            return null;
     }
 }
 
@@ -110,8 +110,10 @@ function wims_get_post_actions() {
 
 /**
  * Add wims instance into the database.
- * @param object $data
- * @param object $mform
+ *
+ * @param object $data  data
+ * @param object $mform The form
+ *
  * @return int new url instance id
  */
 function wims_add_instance($data, $mform = null) {
@@ -124,8 +126,10 @@ function wims_add_instance($data, $mform = null) {
 
 /**
  * Updates an instance of the mod_wims in the database.
- * @param object $data An object from the form in mod_form.php.
+ *
+ * @param object $data             An object from the form in mod_form.php.
  * @param mod_wims_mod_form $mform The form.
+ *
  * @return bool True if successful, false otherwise.
  */
 function wims_update_instance($data, $mform) {
@@ -152,7 +156,9 @@ function wims_update_instance($data, $mform) {
 
 /**
  * Delete wims instance.
+ *
  * @param int $id
+ *
  * @return bool true
  */
 function wims_delete_instance($id) {
@@ -163,7 +169,6 @@ function wims_delete_instance($id) {
     }
 
     // Note: all context files are deleted automatically.
-
     $DB->delete_records('wims', array('id' => $url->id));
 
     return true;
@@ -176,7 +181,8 @@ function wims_delete_instance($id) {
  *
  * See {@link get_array_of_activities()} in course/lib.php
  *
- * @param object $coursemodule
+ * @param object $coursemodule Course module
+ *
  * @return cached_cm_info info
  */
 function wims_get_coursemodule_info($coursemodule) {
@@ -191,7 +197,7 @@ function wims_get_coursemodule_info($coursemodule) {
     $info->name = $instance->name;
     $info->icon = null;
 
-    // display as a new window
+    // Display as a new window.
     $fullurl = "$CFG->wwwroot/mod/wims/view.php?id=$coursemodule->id&amp;redirect=1";
     $info->onclick = "window.open('$fullurl'); return false;";
 
@@ -276,7 +282,7 @@ function wims_scale_used_anywhere($scaleid) {
  */
 function grade_item_update($moduleinstance, $reset=false) {
     global $CFG;
-    include_once $CFG->libdir.'/gradelib.php';
+    include_once($CFG->libdir.'/gradelib.php');
 
     $item = array();
     $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
@@ -308,7 +314,7 @@ function grade_item_update($moduleinstance, $reset=false) {
  */
 function wims_grade_item_delete($moduleinstance) {
     global $CFG;
-    include_once $CFG->libdir.'/gradelib.php';
+    include_once($CFG->libdir.'/gradelib.php');
 
     return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'wims',
                         $moduleinstance->id, 0, null, array('deleted' => 1));
@@ -324,7 +330,7 @@ function wims_grade_item_delete($moduleinstance) {
  */
 function wims_update_grades($moduleinstance, $userid = 0) {
     global $CFG, $DB;
-    include_once $CFG->libdir.'/gradelib.php';
+    include_once($CFG->libdir.'/gradelib.php');
 
     // Populate array of grade objects indexed by userid.
     $grades = array();

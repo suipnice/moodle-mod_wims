@@ -48,7 +48,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Add field in DB on upgrade
  */
-function xmldb_wims_addfield($dbman,$table,$name, $type=null, $precision=null, $unsigned=null, $notnull=null, $sequence=null, $default=null, $previous=null) {
+function xmldb_wims_addfield($dbman, $table, $name, $type=null, $precision=null, $unsigned=null, $notnull=null, $sequence=null, $default=null, $previous=null) {
     // Instantiate a field object.
     $field = new xmldb_field($name, $type, $precision, $unsigned, $notnull, $sequence, $default, $previous);
     // If the field doesn't already exist in the given table then add it.
@@ -67,10 +67,10 @@ function xmldb_wims_addfield($dbman,$table,$name, $type=null, $precision=null, $
 function xmldb_wims_upgrade($oldversion) {
     global $CFG, $DB;
     $dbman = $DB->get_manager();
-    $modulename='wims';
+    $modulename = 'wims';
 
     // For further information please read the Upgrade API documentation:
-    // https://docs.moodle.org/dev/Upgrade_API
+    // {@link https://docs.moodle.org/dev/Upgrade_API}.
 
     // Upgrade to version with extra user... fields in database.
     $nextversion = 2015102201;

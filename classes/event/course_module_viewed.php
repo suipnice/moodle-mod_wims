@@ -15,6 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_wims\event;
+
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Event defintion for course_module_viewed.
  *

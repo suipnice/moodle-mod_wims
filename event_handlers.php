@@ -47,7 +47,7 @@ function on_course_module_updated(\core\event\course_module_updated $event) {
     $cm->id = $event->objectid;
 
     // Try to send the updated name to WIMS.
-    include_once dirname(__FILE__).'/wimsinterface.class.php';
+    include_once(dirname(__FILE__).'/wimsinterface.class.php');
     $wimsdata = array("description" => $event->other['name']);
     $config = get_config('wims');
     $wims = new wims_interface($config, $config->debugsettings);

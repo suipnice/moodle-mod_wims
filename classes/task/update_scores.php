@@ -51,11 +51,11 @@ class update_scores extends \core\task\scheduled_task {
     public function execute() {
         global $CFG, $DB;
 
-        include_once $CFG->libdir.'/gradelib.php';
+        include_once($CFG->libdir.'/gradelib.php');
 
         // Log a message and load up key utility classes.
         mtrace('Synchronising WIMS activity scores to grade book');
-        include_once __DIR__ . "/../../wimsinterface.class.php";
+        include_once(__DIR__ . "/../../wimsinterface.class.php");
         $config = get_config('wims');
         $wims = new \wims_interface($config, $config->debugcron);
 
@@ -80,8 +80,8 @@ class update_scores extends \core\task\scheduled_task {
             }
 
             // Iterate over the contents of the sheet index, storing pertinent entries in the 'required sheets' array.
-            $requiredsheets=array();
-            $sheettitles=array();
+            $requiredsheets = array();
+            $sheettitles = array();
             foreach ($sheetindex as $sheettype => $sheets) {
                 $requiredsheets[$sheettype] = array();
                 $sheettitles[$sheettype] = array();
@@ -96,16 +96,16 @@ class update_scores extends \core\task\scheduled_task {
                     if (substr($title, -1) === '*') {
                         $title = trim(substr($title, 0, -1));
                     } else {
-                        // We don't have a * so if we're not an exam then drop our
-                        if ($sheettype !=='exams') {
+                        // We don't have a * so if we're not an exam then drop our.
+                        if ($sheettype !== 'exams') {
                                 mtrace('  - Ignoring: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.'] - due to Lack of *');
                                 continue;
                         }
                     }
                     // We're ready to process the sheet.
                     mtrace('  * Keeping: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.']');
-                    $requiredsheets[$sheettype][]=$sheetid;
-                    $sheettitles[$sheettype][$sheetid]=$title;
+                    $requiredsheets[$sheettype][] = $sheetid;
+                    $sheettitles[$sheettype][$sheetid] = $title;
                 }
             }
 
@@ -120,7 +120,7 @@ class update_scores extends \core\task\scheduled_task {
             $userrecords = $DB->get_records('user', null, '', 'id, firstname, lastname');
 
             // Build a lookup table to get from user names to Moodle user ids.
-            $userlookup=array();
+            $userlookup = array();
             foreach ($userrecords as $userinfo) {
                 $wimslogin = $wims->generatewimslogin($userinfo);
                 $userlookup[$wimslogin] = $userinfo->id;
@@ -144,7 +144,7 @@ class update_scores extends \core\task\scheduled_task {
                     $params = array( 'grademax' => 10 );
 
                     // Apply the grade column definition.
-                    $graderesult= grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);
+                    $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);
                     if ($graderesult != GRADE_UPDATE_OK) {
                             mtrace('  ERROR: Grade update failed to set meta data: '.$sheettype.' '.$sheetid.' @ itemnumber = '.$itemnumber.' => '.$sheettitle);
                     }
@@ -153,7 +153,7 @@ class update_scores extends \core\task\scheduled_task {
 
             // Iterate over the sheet scores to write them to the database.
             foreach ($sheetscores as $sheettype => $sheets) {
-                $itemnumberoffset= $itemnumberoffsetforsheettype[$sheettype];
+                $itemnumberoffset = $itemnumberoffsetforsheettype[$sheettype];
                 foreach ($sheets as $sheetid => $sheetdata) {
                     // Generate the key identifier that allows us to differentiate scores within a single exercise.
                     $itemnumber = $itemnumberoffset + $sheetid;
@@ -163,9 +163,9 @@ class update_scores extends \core\task\scheduled_task {
                             mtrace('  ERROR: Failed to lookup WIMS login in MOODLE users for login: '.$username);
                             continue;
                         }
-                        $userid=$userlookup[$username];
-                        $grade=array('userid'=>$userid,'rawgrade'=>$scorevalue);
-                        $graderesult= grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, $grade, null);
+                        $userid = $userlookup[$username];
+                        $grade = array('userid' => $userid,'rawgrade' => $scorevalue);
+                        $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, $grade, null);
                         if ($graderesult != GRADE_UPDATE_OK) {
                             mtrace('  ERROR: Grade update failed: '.$sheettype.' '.$sheetid.': '.$userid.' = '.$scorevalue.' @ itemnumber = '.$itemnumber);
                             continue;

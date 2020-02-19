@@ -31,7 +31,7 @@ require_once(dirname(__FILE__).'/wimsinterface.class.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 
-// _GET / _POST parameters.
+// GET / _POST parameters.
 
 $id         = optional_param('id', 0, PARAM_INT);                     // Course module ID
 $urltype    = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // type of page to view in wims
@@ -41,8 +41,8 @@ $urlarg     = optional_param('wimsidx', null, PARAM_INT);             // Index o
 // Data from Moodle.
 if ($id) {
     $cm = get_coursemodule_from_id('wims', $id, 0, false, MUST_EXIST);
-    $instance = $DB->get_record('wims', array('id'=>$cm->instance), '*', MUST_EXIST);
-    $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
+    $instance = $DB->get_record('wims', array('id' => $cm->instance), '*', MUST_EXIST);
+    $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $config = get_config('wims');
 } else {
     print_error(get_string('missingidandcmid', mod_wims));
@@ -90,7 +90,7 @@ function raisewimserror($mainmsg, $errormsgs) {
 $PAGE->set_url('/mod/wims/view.php', array('id' => $cm->id));
 
 // Instantiate a wims interface.
-$wims=new wims_interface($config, $config->debugviewpage);
+$wims = new wims_interface($config, $config->debugviewpage);
 
 // Start by connecting to the course on the WIMS server (and instantiate the course if required).
 $wimsresult = $wims->selectclassformodule($course, $cm, $config);

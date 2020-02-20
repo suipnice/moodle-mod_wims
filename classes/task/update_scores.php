@@ -164,8 +164,19 @@ class update_scores extends \core\task\scheduled_task {
                             continue;
                         }
                         $userid = $userlookup[$username];
-                        $grade = array('userid' => $userid,'rawgrade' => $scorevalue);
-                        $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, $grade, null);
+                        $grade = array(
+                            'userid' => $userid,
+                            'rawgrade' => $scorevalue);
+                        $graderesult = grade_update(
+                            'mod/wims',
+                            $cm->course,
+                            'mod',
+                            'wims',
+                            $cm->instance,
+                            $itemnumber,
+                            $grade,
+                            null
+                        );
                         if ($graderesult != GRADE_UPDATE_OK) {
                             mtrace('  ERROR: Grade update failed: '.$sheettype.' '.$sheetid.': '.$userid.' = '.$scorevalue.' @ itemnumber = '.$itemnumber);
                             continue;

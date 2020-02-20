@@ -47,8 +47,21 @@
 defined('MOODLE_INTERNAL') || die();
 /**
  * Add field in DB on upgrade
+ *
+ * @param object  $dbman     dbman
+ * @param unknown $table     table
+ * @param unknown $name      name
+ * @param unknown $type      type
+ * @param unknown $precision precision
+ * @param unknown $unsigned  unsigned
+ * @param unknown $notnull   notnull
+ * @param unknown $sequence  sequence
+ * @param unknown $default   default
+ * @param unknown $previous  previous
  */
-function xmldb_wims_addfield($dbman, $table, $name, $type=null, $precision=null, $unsigned=null, $notnull=null, $sequence=null, $default=null, $previous=null) {
+function xmldb_wims_addfield($dbman, $table, $name, $type=null,
+    $precision=null, $unsigned=null, $notnull=null, $sequence=null,
+    $default=null, $previous=null) {
     // Instantiate a field object.
     $field = new xmldb_field($name, $type, $precision, $unsigned, $notnull, $sequence, $default, $previous);
     // If the field doesn't already exist in the given table then add it.
@@ -60,7 +73,7 @@ function xmldb_wims_addfield($dbman, $table, $name, $type=null, $precision=null,
 /**
  * Execute mod_wims upgrade from the given old version.
  *
- * @param int $oldversion
+ * @param int $oldversion old version
  *
  * @return bool
  */

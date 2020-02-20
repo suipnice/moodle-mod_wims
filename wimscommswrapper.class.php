@@ -112,7 +112,7 @@ class wims_comms_wrapper {
         // Reset the status code to 'OK' here as a smart place to allow either coms or subsequent logic to reset to error condition.
         $this->status = 'OK';
 
-        // Choose a random request id (not very secure system but good enough for showing up consistency problems in the WIMS code)
+        // Choose a random request id (not very secure system but good enough for showing up consistency problems in the WIMS code).
         $code = rand(100, 999);
         $this->code = "$code";
 
@@ -240,7 +240,9 @@ class wims_comms_wrapper {
         }
         $isok =
             ($this->jsondata->status == 'OK' && $this->jsondata->code == $this->code) ? true :
-            ($this->jsondata->status == 'ERROR' && $this->jsondata->code == $this->code && $this->jsondata->message == 'nothing done') ? true :
+            ($this->jsondata->status == 'ERROR' &&
+             $this->jsondata->code == $this->code &&
+             $this->jsondata->message == 'nothing done') ? true :
             false;
         if ($isok === false) {
             $this->status = 'WIMS_FAIL';
@@ -426,12 +428,12 @@ class wims_comms_wrapper {
      */
     public function gethomepageurl($qcl, $rcl, $login, $currentlang) {
         // If we have already generated an access url for this user then reuse it.
-        $fulluserid=$qcl.'/'.$rcl.'/'.$login;
+        $fulluserid = $qcl.'/'.$rcl.'/'.$login;
         if (array_key_exists($fulluserid, $this->accessurls)) {
             return $this->accessurls[$fulluserid];
         }
         $params = 'qclass='.$qcl.'&rclass='.$this->wimsencode($rcl);
-        $params.= '&quser='.$login;
+        $params .= '&quser='.$login;
         $urlparam = '&data1='.$_SERVER['REMOTE_ADDR'];
         $jsondata = $this->executejson('authuser', $params.$urlparam);
         if ($this->status == 'COMMS_FAIL') {

@@ -31,11 +31,14 @@ require(__DIR__.'/../../config.php');
 require_once(dirname(__FILE__).'/wimsinterface.class.php');
 
 
-// _GET / _POST parameters
+// GET / POST parameters.
 
-$id         = required_param('id', PARAM_INT);           // Course module ID
-$itemnumber = required_param('itemnumber', PARAM_INT);   // The grade column that was clicked - identifies the exam, worksheet, etc from which we come
-$userid     = optional_param('userid', 0, PARAM_INT);    // Graded user ID (optional).
+// Course module ID.
+$id         = required_param('id', PARAM_INT);
+// The grade column that was clicked - identifies the exam, worksheet, etc from which we come.
+$itemnumber = required_param('itemnumber', PARAM_INT);
+// Graded user ID (optional).
+$userid     = optional_param('userid', 0, PARAM_INT);
 
 
 if (! $cm = get_coursemodule_from_id('wims', $id)) {

@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once("wimsinterface.class.php");
 
 $course = new StdClass;
-$course->lang="en";
+$course->lang = "en";
 
 $coursemodule = new StdClass;
 $coursemodule->id = 1494306;
@@ -54,11 +54,13 @@ $courseconfigupdate = array();
 $courseconfigupdate["firstname"] = "Sadge";
 $courseconfigupdate["exams"] = array();
 $courseconfigupdate["worksheets"] = array();
-//$courseconfigupdate["exams"][] = array("title"=>"updated exam title","duration"=>"60","expiration"=>'20171111');
-//$courseconfigupdate["worksheets"][] = array();
-//$courseconfigupdate["worksheets"][] = array("title"=>"updated ws title","expiration"=>'20161212');
-$courseconfigupdate["exams"][1] = array("title"=>"updated exam title", "duration"=>"60", "expiration"=>'20171111');
-$courseconfigupdate["worksheets"][2] = array("title"=>"updated ws title (*)", "expiration"=>'20161212');
+/*
+$courseconfigupdate["exams"][] = array("title" => "updated exam title", "duration" => "60", "expiration" => '20171111');
+$courseconfigupdate["worksheets"][] = array();
+$courseconfigupdate["worksheets"][] = array("title" => "updated ws title", "expiration" => '20161212');
+*/
+$courseconfigupdate["exams"][1] = array("title" => "updated exam title", "duration" => "60", "expiration" => '20171111');
+$courseconfigupdate["worksheets"][2] = array("title" => "updated ws title (*)", "expiration" => '20161212');
 
 $wimsdebug = true;
 $wif = new wims_interface($config, $wimsdebug);
@@ -115,7 +117,7 @@ if ($teacherurl != null) {
     }
 }
 
-// Get a student URL
+// Get a student URL.
 $studenturl = $wif->getstudenturl($user, "fr");
 if ($studenturl != null) {
     echo "Student: ";
@@ -158,8 +160,8 @@ if ($configupdateresult != null) {
     }
 }
 
-// fetch the config information
-$configfromwims=$wif->getclassconfigformodule($coursemodule);
+// Fetch the config information.
+$configfromwims = $wif->getclassconfigformodule($coursemodule);
 if ($configfromwims) {
     echo "<h1>Class Config</h1>";
     echo "<table>";
@@ -169,7 +171,7 @@ if ($configfromwims) {
         }
     }
     echo "</table>";
-    foreach (array("worksheets","exams") as $typeidx => $sheettype) {
+    foreach (array("worksheets", "exams") as $typeidx => $sheettype) {
         foreach ($configfromwims[$sheettype] as $sheetidx => $sheetprops) {
             echo "<h2>$sheettype $sheetidx</h2>";
             echo "<table>";
@@ -182,4 +184,3 @@ if ($configfromwims) {
 } else {
     echo "GetClassConfig() - failed";
 }
-

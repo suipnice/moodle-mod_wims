@@ -221,7 +221,8 @@ class wims_interface{
      *                            string $user->username the user's login name
      * @param string $currentlang current language (to force the wims site language to match the moodle language)
      * @param string $urltype     the type of url required (defaults to 'home page')
-     * @param string $arg         the argument to be used for selecting which worksheet or exam page to display, depending on $urltype
+     * @param string $arg         the argument to be used for selecting which worksheet or exam page to display,
+                                  depending on $urltype
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
@@ -253,7 +254,7 @@ class wims_interface{
                 return $this->getworksheeturlforlogin($login, $currentlang, $arg);
             case WIMS_EXAM       :
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
-            default:
+            default :
                 throw new Exception('BUG: Bad urltype parameter '.$urltype);
         }
     }
@@ -264,14 +265,15 @@ class wims_interface{
      * @param string $currentlang current language
                                   (to force the WIMS site language to match the Moodle language)
      * @param string $urltype     the type of url required (defaults to 'home page')
-     * @param string $arg         the argument to be used for selecting which worksheet or exam page to display, depending on $urltype
+     * @param string $arg         the argument to be used for selecting which worksheet or exam page to display,
+                                  depending on $urltype
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
     public function getteacherurl($currentlang, $urltype=WIMS_HOME_PAGE, $arg=null) {
         // The "supervisor" login is a special login bound by WIMS,
-        // using it we get the url to the teacher's page and not the student page
-        $login="supervisor";
+        // using it we get the url to the teacher's page and not the student page.
+        $login = "supervisor";
         switch($urltype) {
             case WIMS_HOME_PAGE  :
                 return $this->gethomepageurlforlogin($login, $currentlang);
@@ -314,7 +316,7 @@ class wims_interface{
         // Combine the two.
         $result = array_merge($userconfig, $classconfig);
 
-        // fetch the list of worksheets and add them to the result one by one
+        // Fetch the list of worksheets and add them to the result one by one.
         $result["worksheets"] = array();
         $worksheetids = $this->wims->getworksheetlist($this->qcl, $this->rcl);
         foreach ($worksheetids as $sheetid => $sheetinfo) {
@@ -343,7 +345,7 @@ class wims_interface{
      *
      * @return true on success, null on failure
      */
-    function updateclassconfigformodule($cm, $data) {
+    public function updateclassconfigformodule($cm, $data) {
         // Start by determining the identifiers for the class.
         $this->initforcm($cm);
 
@@ -365,9 +367,9 @@ class wims_interface{
 
         // Build and apply updated supervisor parameters.
         $userdata = "";
-        $userdata.= $this->dataline($data, "lastname");
-        $userdata.= $this->dataline($data, "firstname");
-        $userdata.= $this->dataline($data, "email");
+        $userdata .= $this->dataline($data, "lastname");
+        $userdata .= $this->dataline($data, "firstname");
+        $userdata .= $this->dataline($data, "email");
         if ($userdata != "") {
             $result = $this->wims->updateclasssupervisor($this->qcl, $this->rcl, $userdata);
             if ($result == null) {
@@ -395,7 +397,7 @@ class wims_interface{
         foreach ($data["exams"] as $examid => $examconfig) {
             $examdata = "";
             foreach ($examconfig as $prop => $val) {
-                $examdata.= $prop.'='.$val."\n";
+                $examdata .= $prop.'='.$val."\n";
             }
             if ($examdata != "") {
                 $result = $this->wims->updateexamproperties($this->qcl, $this->rcl, $examid, $examdata);
@@ -423,7 +425,7 @@ class wims_interface{
         $this->initforcm($cm);
 
         // Setup a result object.
-        $result=array();
+        $result = array();
 
         // Ask WIMS for a list of worksheets.
         $sheetlist = $this->wims->getworksheetlist($this->qcl, $this->rcl);
@@ -472,7 +474,7 @@ class wims_interface{
                 }
                 // Iterate over user score records.
                 foreach ($sheetdata as $userscore) {
-                    $result['worksheets'][$sheetid][$userscore->id] = floatval($userscore->user_percent)*0.1;
+                    $result['worksheets'][$sheetid][$userscore->id] = floatval($userscore->user_percent) * 0.1;
                 }
             }
         }
@@ -494,7 +496,7 @@ class wims_interface{
             }
         }
 
-        // return the result object
+        // Return the result object.
         return $result;
     }
 
@@ -544,7 +546,7 @@ class wims_interface{
      * @return string $accessurl
      */
     private function getscorepageurlforlogin($login, $currentlang) {
-        // Attempt to create the WIMS session
+        // Attempt to create the WIMS session.
         $accessurl = $this->wims->getscorepageurl($this->qcl, $this->rcl, $login, $currentlang);
 
         // On failure setup the error message.
@@ -567,12 +569,12 @@ class wims_interface{
         // Attempt to create the WIMS session.
         $accessurl = $this->wims->getworksheeturl($this->qcl, $this->rcl, $login, $currentlang, $sheet);
 
-        // on failure setup the error message
+        // On failure setup the error message.
         if ($accessurl == null) {
             $this->errormsgs = $this->wims->linedata;
         }
 
-        // Construct the result URL
+        // Construct the result URL.
         return $accessurl;
     }
 
@@ -592,7 +594,7 @@ class wims_interface{
             $this->errormsgs = $this->wims->linedata;
         }
 
-        // Construct the result URL
+        // Construct the result URL.
         return $accessurl;
     }
 
@@ -610,7 +612,7 @@ class wims_interface{
      */
     private function initforcm($cm) {
         // Setup the unique WIMS class identifier.
-        $this->qcl = "".($this->config->qcloffset+$cm->id);
+        $this->qcl = "".($this->config->qcloffset + $cm->id);
         // Setup the 'owner' identifier (derived from the Moodle class id).
         $this->rcl = "moodle_$cm->id";
     }

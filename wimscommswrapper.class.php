@@ -54,16 +54,16 @@ defined('MOODLE_INTERNAL') || die;
  * @var array  $accessurls       list
  */
 class wims_comms_wrapper {
-    public $wimsurl;
-    public $protocolmodifier;
-    public $servicepass;
-    public $debug;
-    public $rawdata;
-    public $qclass;
-    public $status;
-    public $code;
-    public $sslverifypeer;
-    public $accessurls;
+    public $wimsurl;          // URL to the wims server
+    public $protocolmodifier; // http or https (extracted from $wimsurl)
+    public $servicepass;      // The password required for us to connect
+    public $debug;            // default:0
+    public $rawdata;          // WIMS raw response
+    public $qclass;           // Querried WIMS class id
+    public $status;           // can be "OK", COMMS_FAIL", or "WIMS_FAIL"
+    public $code;             // A random string used to match response with its request
+    public $sslverifypeer;    // true if $allowselfsignedcertificates=false
+    public $accessurls;       // list.
 
     /**
      * Ctor (the class constructor)

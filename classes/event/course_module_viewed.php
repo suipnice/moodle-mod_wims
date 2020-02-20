@@ -13,13 +13,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ * Event definition for course_module_viewed.
+ *
+ * @package   mod_wims
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_wims\event;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Event defintion for course_module_viewed.
+ * Event definition for course_module_viewed.
  *
  * @category  event
  * @package   mod_wims

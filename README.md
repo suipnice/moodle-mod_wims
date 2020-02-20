@@ -1,8 +1,8 @@
-# WIMS #
+# WIMS classroom as Moodle activity #
 ![Licence](https://img.shields.io/github/license/suipnice/moodle-mod_wims)
 
 
-This plugin allows one to insert WIMS classes in Moodle classes.
+This plugin allows one to insert WIMS classes in Moodle courses.
 It requires a WIMS server to have been setup and correctly configured.
 Information regarding extended configuration for the WIMS server required for this plugin to work can be found below:
 
@@ -54,7 +54,9 @@ Now the administrator tasks are finished.
 How works the plugin:
 ---------------------
 
-You must know that the WIMS classroom is created and maintained from the Moodle server. If you log in Moodle as teacher, then you will have teacher permisions in the WIMS classroom. In the same way, if you are student in Moodle, you will connect in the WIMS classroom as student.
+You must know that the WIMS classroom is created and maintained from the Moodle server.
+If you log in Moodle as teacher, then you will have teacher permisions in the WIMS classroom.
+In the same way, if you are student in Moodle, you will connect in the WIMS classroom as student.
 
 Add an activity and choose `WIMS Course`. Then choose the value for the **Activity Name** and this will be the name of the new classroom created in WIMS.
 
@@ -67,16 +69,16 @@ All marks (exams + selected sheets) will automatically be imported in Moodle eve
 ## License ##
 
 - 2015 Edunao SAS <contact@edunao.com>
-- 2018 Université Nice Sophia Antipolis <pi@unice.fr>
+- 2018-2019 Université Nice Sophia Antipolis <pi@unice.fr>
+- 2020 Université Côte d'Azur <cap-personnel@univ-cotedazur.fr>
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
+This program is free software:
+ you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation,
+ either version 3 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with this program.
+If not, see <http://www.gnu.org/licenses/>.

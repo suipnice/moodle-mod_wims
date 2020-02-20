@@ -49,11 +49,11 @@ define('WIMS_EXAM', 4);
  * @var object $config the WIMS configuration object
  */
 class wims_interface{
-    public $erromsgs;
-    private $wims;
-    private $qcl;
-    private $rcl;
-    private $config;
+    public $erromsgs; // In the case where an error is encounterd this variable will contain error message as an array of lines.
+    private $wims;    // wims_comms_wrapper object
+    private $qcl;     // querried WIMS class ID
+    private $rcl;     // local course ID (remote class for WIMS)
+    private $config;  // the WIMS configuration object.
 
     /**
      * Ctor (the class constructor)
@@ -222,7 +222,7 @@ class wims_interface{
      * @param string $currentlang current language (to force the wims site language to match the moodle language)
      * @param string $urltype     the type of url required (defaults to 'home page')
      * @param string $arg         the argument to be used for selecting which worksheet or exam page to display,
-                                  depending on $urltype
+     *                            depending on $urltype
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
@@ -263,10 +263,10 @@ class wims_interface{
      * Create a WIMS supervisor session for this course and return an access url
      *
      * @param string $currentlang current language
-                                  (to force the WIMS site language to match the Moodle language)
+     *                            (to force the WIMS site language to match the Moodle language)
      * @param string $urltype     the type of url required (defaults to 'home page')
      * @param string $arg         the argument to be used for selecting which worksheet or exam page to display,
-                                  depending on $urltype
+     *                            depending on $urltype
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
@@ -450,8 +450,8 @@ class wims_interface{
     /**
      * Fetch the scores for the given set of worksheets and exams from the given WIMS class
      *
-     * @param object                   $cm             the course module that the wims class is bound to
-     * @param array of array of string $requiredsheets the identifiers of the exams and worksheets requested
+     * @param object $cm             the course module that the WIMS class is bound to
+     * @param array  $requiredsheets the identifiers of the exams and worksheets requested (array of array of string)
      *
      * @return array of arrays of objects on success, null on failure
      */
@@ -506,7 +506,7 @@ class wims_interface{
      * @param array  $data data
      * @param string $prop prop
      *
-     * @return string
+     * @return string used by WIMS to set a data value.
      */
     private function dataline($data, $prop) {
         if (array_key_exists($prop, $data)) {
@@ -564,6 +564,8 @@ class wims_interface{
      * @param string $login       login
      * @param string $currentlang current lang
      * @param string $sheet       sheet id
+     *
+     * @return an access URL to log into the worksheet
      */
     private function getworksheeturlforlogin($login, $currentlang, $sheet) {
         // Attempt to create the WIMS session.
@@ -584,6 +586,8 @@ class wims_interface{
      * @param string $login       login
      * @param string $currentlang current lang code
      * @param string $exam        exam id
+     *
+     * @return an access URL to log into the exam
      */
     private function getexamurlforlogin($login, $currentlang, $exam) {
         // Attempt to create the WIMS session.
@@ -600,6 +604,8 @@ class wims_interface{
 
     /**
      * Private utility routine
+     *
+     * @return a string used by WIMS to set which server/course couple can access to the WIMS class.
      */
     private function constructconnectsline() {
         return "connections=+moodle/$this->rcl+ +moodlejson/$this->rcl+ +moodlehttps/$this->rcl+ +moodlejsonhttps/$this->rcl+";

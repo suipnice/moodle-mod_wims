@@ -33,42 +33,11 @@
  * The upgrade function in this file will attempt
  * to perform all the necessary actions to upgrade
  * your older installation to the current version.
- *
- * If there's something it cannot do itself, it
- * will tell you what you need to do.
- *
- * The commands in here will all be database-neutral,
- * using the methods of database_manager class
- *
- * Please do not forget to use upgrade_set_timeout()
- * before any action that may take longer time to finish.
  */
 
 defined('MOODLE_INTERNAL') || die();
-/**
- * Add field in DB on upgrade
- *
- * @param object  $dbman     dbman
- * @param unknown $table     table
- * @param unknown $name      name
- * @param unknown $type      type
- * @param unknown $precision precision
- * @param unknown $unsigned  unsigned
- * @param unknown $notnull   notnull
- * @param unknown $sequence  sequence
- * @param unknown $default   default
- * @param unknown $previous  previous
- */
-function xmldb_wims_addfield($dbman, $table, $name, $type=null,
-    $precision=null, $unsigned=null, $notnull=null, $sequence=null,
-    $default=null, $previous=null) {
-    // Instantiate a field object.
-    $field = new xmldb_field($name, $type, $precision, $unsigned, $notnull, $sequence, $default, $previous);
-    // If the field doesn't already exist in the given table then add it.
-    if (!$dbman->field_exists($table, $field)) {
-        $dbman->add_field($table, $field);
-    }
-}
+
+require_once __DIR__.'/upgradelib.php';
 
 /**
  * Execute mod_wims upgrade from the given old version.
@@ -78,12 +47,16 @@ function xmldb_wims_addfield($dbman, $table, $name, $type=null,
  * @return bool
  */
 function xmldb_wims_upgrade($oldversion) {
-    global $CFG, $DB;
+    global $DB;
     $dbman = $DB->get_manager();
     $modulename = 'wims';
 
     // For further information please read the Upgrade API documentation:
     // {@link https://docs.moodle.org/dev/Upgrade_API}.
+    //
+    // You will also have to create the db/install.xml file by using the XMLDB Editor.
+    // Documentation for the XMLDB Editor can be found at:
+    // https://docs.moodle.org/dev/XMLDB_editor
 
     // Upgrade to version with extra user... fields in database.
     $nextversion = 2015102201;

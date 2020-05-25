@@ -53,7 +53,6 @@ require_course_login($course, false, $cm);
 // Lookup configuration from moodle.
 $config = get_config('wims');
 
-
 // Construct the arguments for the URL.
 $urlargs = array( 'id' => $id );
 
@@ -61,7 +60,7 @@ define('WORKSHEET_ID_OFFSET', 1000);
 if ($config->usegradepage == 1) {
     // Direct the user to the grade page.
     $urlargs['wimspage']    = WIMS_GRADE_PAGE;
-} else if ($itemnuer >= WORKSHEET_ID_OFFSET) {
+} else if ($itemnumber >= WORKSHEET_ID_OFFSET) {
     // Direct the user to a specific worksheet.
     $urlargs['wimspage']    = WIMS_WORKSHEET;
     $urlargs['wimsidx']     = $itemnumber - WORKSHEET_ID_OFFSET;
@@ -70,7 +69,6 @@ if ($config->usegradepage == 1) {
     $urlargs['wimspage']    = WIMS_EXAM;
     $urlargs['wimsidx']     = $itemnumber;
 }
-
 
 // Delegate to view.php page which will look after redirecting to WIMS.
 redirect( new moodle_url( '/mod/wims/view.php', $urlargs ) );

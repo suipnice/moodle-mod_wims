@@ -25,9 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'mod_wims';    // Full name of the plugin (used for diagnostics)
-$plugin->release  = '0.2.2';         // Don't forget to update the version too.
-$plugin->version  = 2020021900;    // The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2014050800;    // Requires this Moodle version
-$plugin->maturity = MATURITY_BETA;  // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
+$plugin->component = 'mod_wims';   // Full name of the plugin (used for diagnostics)
+$plugin->release  = '0.2.3';       // Don't forget to update the version too.
+$plugin->version  = 2020052500;    // The current module version (Date: YYYYMMDDXX)
+$plugin->requires = 2018120300;    // Requires this Moodle version (3.6)
+$plugin->maturity = MATURITY_BETA; // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
 $plugin->cron     = 0;             // Limit the frequency at which the CRON gets called.

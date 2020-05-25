@@ -36,9 +36,9 @@ defined('MOODLE_INTERNAL') || die();
  */
 class update_scores extends \core\task\scheduled_task {
     /**
-     * Get name
+     * Get task name
      *
-     * @return the name
+     * @return the name of this task
      */
     public function get_name() {
         return get_string('updatescores', 'mod_wims');
@@ -63,7 +63,7 @@ class update_scores extends \core\task\scheduled_task {
         $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
         $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
         foreach ($coursemodules as $cm) {
-            mtrace('- PROCESSING: course='.$cm->course.' section='.$cm->section.' cm='.$cm->id.' instance='.$cm->instance );
+            mtrace("\n------------\n- PROCESSING: course=".$cm->course." section=".$cm->section." cm=".$cm->id." instance=".$cm->instance );
 
             // Make sure the course is correctly accessible.
             $isaccessible = $wims->verifyclassaccessible($cm);
@@ -116,8 +116,8 @@ class update_scores extends \core\task\scheduled_task {
                 continue;
             }
 
-            // Fetch the complete user list from moodle (and hope that we don't run out of RAM).
-            $userrecords = $DB->get_records('user', null, '', 'id, firstname, lastname');
+            // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
+            $userrecords = $DB->get_records('user', array('deleted'=>0, 'suspended'=>0 ), '', 'id, firstname, lastname');
 
             // Build a lookup table to get from user names to Moodle user ids.
             $userlookup = array();
@@ -129,16 +129,17 @@ class update_scores extends \core\task\scheduled_task {
             // We have an identifier problem: Exams and worksheets are both numbered from 1 up
             // and for scoring we need to have a unique identifier for each scoring column
             // so we're going to use an offset for worksheets.
-            $itemnumberoffsetforsheettype = array('worksheets' => 1000, 'exams' => 0);
+            $offsetforsheettype = array('worksheets' => 1000, 'exams' => 0);
 
             // Iterate over the records to setup meta data - ie to assign sheet names to the correct score columns.
             foreach ($sheetscores as $sheettype => $sheets) {
-                $itemnumberoffset = $itemnumberoffsetforsheettype[$sheettype];
+                $itemnumberoffset = $offsetforsheettype[$sheettype];
                 foreach ($sheets as $sheetid => $sheetdata) {
                     // Generate the key identifier that allows us to differentiate scores within a single exercise.
                     $itemnumber = $itemnumberoffset + $sheetid;
                     // Construct the grade column definition object (with the name of the exercise, score ranges, etc).
                     $sheettitle = $sheettitles[$sheettype][$sheetid];
+                    // See https://docs.moodle.org/dev/Grades#grade_items for grade item props.
                     $params = array( 'itemname' => $sheettitle );
                     $params = array( 'grademin' => 0 );
                     $params = array( 'grademax' => 10 );
@@ -153,7 +154,7 @@ class update_scores extends \core\task\scheduled_task {
 
             // Iterate over the sheet scores to write them to the database.
             foreach ($sheetscores as $sheettype => $sheets) {
-                $itemnumberoffset = $itemnumberoffsetforsheettype[$sheettype];
+                $itemnumberoffset = $offsetforsheettype[$sheettype];
                 foreach ($sheets as $sheetid => $sheetdata) {
                     // Generate the key identifier that allows us to differentiate scores within a single exercise.
                     $itemnumber = $itemnumberoffset + $sheetid;

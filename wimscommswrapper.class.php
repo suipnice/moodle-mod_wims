@@ -95,7 +95,7 @@ class wims_comms_wrapper {
      */
     public function debugmsg($msg) {
         if ($this->debug > 0) {
-            print("<pre>\n$msg\n</pre>");
+            print("\n<pre>$msg</pre>");
         }
         // The following line can be uncommented when debugging to redirect debug messages to apache error log.
         /* error_log($msg); */

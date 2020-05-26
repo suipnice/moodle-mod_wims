@@ -225,14 +225,17 @@ class wims_comms_wrapper {
         // If the request went through ok (ie if the HTTP GET request succeeded) then make sure that it responded with an OK.
         $statusline = trim($this->linedata[0]);
 
-        if ($statusline === 'OK '.$this->code || ($statusline === 'ERROR' && trim($this->linedata[1]) == 'nothing done')){
+        if ($statusline === 'OK '.$this->code || ($statusline === 'ERROR' && trim($this->linedata[1]) == 'nothing done')) {
             // Done!
             $this->debugmsg("WIMS: status = OK ($statusline)");
             return $this->linedata;
-        }
-        else {
+        } else {
             $this->status = 'WIMS_FAIL';
-            $this->debugmsg("ERROR: ".__FILE__.":".__LINE__.": WIMS OK code not matched (expecting -OK $this->code-): -$statusline-\n$this->rawdata");
+            $this->debugmsg(
+                "ERROR: ".__FILE__.":".
+                __LINE__.
+                ": WIMS OK code not matched (expecting -OK $this->code-): -$statusline-\n$this->rawdata"
+            );
             return null;
         }
     }
@@ -275,8 +278,7 @@ class wims_comms_wrapper {
             // Done!
             $this->debugmsg("JSON: status = OK");
             return $this->jsondata;
-        }
-        else {
+        } else {
             $this->status = 'WIMS_FAIL';
             $this->debugmsg(
                 "ERROR: ".__FILE__.":".__LINE__.

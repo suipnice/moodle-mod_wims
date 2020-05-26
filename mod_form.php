@@ -307,7 +307,7 @@ class mod_wims_mod_form extends moodleform_mod {
                         $expirydate = $dateobj->format('Ymd');
 
                         // Determine whether anything has changed.
-                        if ($sheetprops['title'] !== $fulltitle || $sheetprops['expiration'] !== $expirydate){
+                        if ($sheetprops['title'] !== $fulltitle || $sheetprops['expiration'] !== $expirydate) {
                             // Write the properties to the output data structure.
                             $changeddata[$sheettype][$sheetidx] = array();
                             $changeddata[$sheettype][$sheetidx]['title'] = $fulltitle;

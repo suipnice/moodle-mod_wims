@@ -48,27 +48,27 @@ class wims_interface{
     /**
      * @var array  $erromsgs In the case where an error is encounterd this variable will contain error message as an array of lines.
      */
-    public $erromsgs; // In the case where an error is encounterd this variable will contain error message as an array of lines.
+    public $erromsgs;
 
     /**
-     * @var object $_wims   wims_comms_wrapper object
+     * @var object $_wims wims_comms_wrapper object
      */
-    private $_wims;    // wims_comms_wrapper object
+    private $_wims;
 
     /**
-     * @var string $_qcl    querried WIMS class ID
+     * @var string $_qcl querried WIMS class ID
      */
-    private $_qcl;     // querried WIMS class ID
+    private $_qcl;
 
     /**
-     * @var string $_rcl    local course ID (remote class for WIMS)
+     * @var string $_rcl local course ID (remote class for WIMS)
      */
-    private $_rcl;     // local course ID (remote class for WIMS)
+    private $_rcl;
 
     /**
      * @var object $_config the WIMS configuration object
      */
-    private $_config;  // the WIMS configuration object.
+    private $_config;
 
     /**
      * Ctor (the class constructor)

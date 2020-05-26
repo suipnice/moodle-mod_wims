@@ -28,11 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * The mod_wims updating scores task class
  *
- * @category task
- * @package  mod_wims
- * @author   Badatos <bado@unice.fr>
- * @license  http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @link     https://github.com/suipnice/moodle-mod_wims
+ * @category  task
+ * @package   mod_wims
+ * @author    Badatos <bado@unice.fr>
+ * @copyright 2019 UCA
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class update_scores extends \core\task\scheduled_task {
     /**
@@ -63,7 +64,12 @@ class update_scores extends \core\task\scheduled_task {
         $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
         $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
         foreach ($coursemodules as $cm) {
-            mtrace("\n------------\n- PROCESSING: course=".$cm->course." section=".$cm->section." cm=".$cm->id." instance=".$cm->instance );
+            mtrace(
+                "\n------------\n- PROCESSING: course=".$cm->course.
+                " section=".$cm->section.
+                " cm=".$cm->id.
+                " instance=".$cm->instance
+            );
 
             // Make sure the course is correctly accessible.
             $isaccessible = $wims->verifyclassaccessible($cm);
@@ -88,7 +94,11 @@ class update_scores extends \core\task\scheduled_task {
                 foreach ($sheets as $sheetid => $sheetsummary) {
                     // Ignore sheets that are in preparation as WIMS complains if one tries to access their scores.
                     if ($sheetsummary->state == 0) {
-                        mtrace('  - Ignoring: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.'] - due to STATE');
+                        mtrace(
+                            '  - Ignoring: '.$sheettype.' '.
+                            $sheetid.': "'.$title.
+                            '" [state='.$sheetsummary->state.'] - due to STATE'
+                        );
                         continue;
                     }
                     $title = $sheetsummary->title;
@@ -98,7 +108,11 @@ class update_scores extends \core\task\scheduled_task {
                     } else {
                         // We don't have a * so if we're not an exam then drop our.
                         if ($sheettype !== 'exams') {
-                                mtrace('  - Ignoring: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.'] - due to Lack of *');
+                                mtrace(
+                                    '  - Ignoring: '.$sheettype.
+                                    ' '.$sheetid.': "'.$title.
+                                    '" [state='.$sheetsummary->state.'] - due to Lack of *'
+                                );
                                 continue;
                         }
                     }
@@ -117,7 +131,7 @@ class update_scores extends \core\task\scheduled_task {
             }
 
             // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
-            $userrecords = $DB->get_records('user', array('deleted'=>0, 'suspended'=>0 ), '', 'id, firstname, lastname');
+            $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');
 
             // Build a lookup table to get from user names to Moodle user ids.
             $userlookup = array();
@@ -147,7 +161,11 @@ class update_scores extends \core\task\scheduled_task {
                     // Apply the grade column definition.
                     $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);
                     if ($graderesult != GRADE_UPDATE_OK) {
-                            mtrace('  ERROR: Grade update failed to set meta data: '.$sheettype.' '.$sheetid.' @ itemnumber = '.$itemnumber.' => '.$sheettitle);
+                            mtrace(
+                                '  ERROR: Grade update failed to set meta data: '.
+                                $sheettype.' '.$sheetid.
+                                ' @ itemnumber = '.$itemnumber.' => '.$sheettitle
+                            );
                     }
                 }
             }
@@ -179,7 +197,12 @@ class update_scores extends \core\task\scheduled_task {
                             null
                         );
                         if ($graderesult != GRADE_UPDATE_OK) {
-                            mtrace('  ERROR: Grade update failed: '.$sheettype.' '.$sheetid.': '.$userid.' = '.$scorevalue.' @ itemnumber = '.$itemnumber);
+                            mtrace(
+                                ' ERROR: Grade update failed: '.
+                                $sheettype.' '.$sheetid.': '.
+                                $userid.' = '.$scorevalue.
+                                ' @ itemnumber = '.$itemnumber
+                            );
                             continue;
                         }
                     }

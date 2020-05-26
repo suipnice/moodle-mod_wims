@@ -305,17 +305,15 @@ class mod_wims_mod_form extends moodleform_mod {
                         // Compose the expiry date.
                         $dateobj = new DateTime('@'.$expiry, new DateTimeZone('UTC'));
                         $expirydate = $dateobj->format('Ymd');
+
                         // Determine whether anything has changed.
-                        $dirty =
-                            ($sheetprops['title'] !== $fulltitle) ? true :
-                            ($sheetprops['expiration'] !== $expirydate) ? true :
-                            false;
-                        // Write the properties to the output data structure.
-                        if ($dirty === true) {
+                        if ($sheetprops['title'] !== $fulltitle || $sheetprops['expiration'] !== $expirydate){
+                            // Write the properties to the output data structure.
                             $changeddata[$sheettype][$sheetidx] = array();
                             $changeddata[$sheettype][$sheetidx]['title'] = $fulltitle;
                             $changeddata[$sheettype][$sheetidx]['expiration'] = $expirydate;
                         }
+
                     }
                 }
             }

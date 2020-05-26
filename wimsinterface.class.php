@@ -36,24 +36,39 @@ define('WIMS_EXAM', 4);
 /**
  * Low level communication library for interfacing to a WIMS server
  *
- * @category external
- * @package  mod_wims
- * @author   Sadge <daniel@edunao.com>
- * @license  http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @link     https://github.com/suipnice/moodle-mod_wims
- *
- * @var array  $erromsgs In the case where an error is encounterd this variable will contain error message as an array of lines.
- * @var object $wims   wims_comms_wrapper object
- * @var string $qcl    querried WIMS class ID
- * @var string $rcl    local course ID (remote class for WIMS)
- * @var object $config the WIMS configuration object
+ * @category  external
+ * @package   mod_wims
+ * @author    Sadge <daniel@edunao.com>
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class wims_interface{
+
+    /**
+     * @var array  $erromsgs In the case where an error is encounterd this variable will contain error message as an array of lines.
+     */
     public $erromsgs; // In the case where an error is encounterd this variable will contain error message as an array of lines.
-    private $wims;    // wims_comms_wrapper object
-    private $qcl;     // querried WIMS class ID
-    private $rcl;     // local course ID (remote class for WIMS)
-    private $config;  // the WIMS configuration object.
+
+    /**
+     * @var object $_wims   wims_comms_wrapper object
+     */
+    private $_wims;    // wims_comms_wrapper object
+
+    /**
+     * @var string $_qcl    querried WIMS class ID
+     */
+    private $_qcl;     // querried WIMS class ID
+
+    /**
+     * @var string $_rcl    local course ID (remote class for WIMS)
+     */
+    private $_rcl;     // local course ID (remote class for WIMS)
+
+    /**
+     * @var object $_config the WIMS configuration object
+     */
+    private $_config;  // the WIMS configuration object.
 
     /**
      * Ctor (the class constructor)

@@ -28,11 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Event definition for course_module_instance_list_viewed.
  *
- * @category event
- * @package  mod_wims
- * @author   Sadge <daniel@edunao.com>
- * @license  http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @link     https://github.com/suipnice/moodle-mod_wims
+ * @category  event
+ * @package   mod_wims
+ * @author    Sadge <daniel@edunao.com>
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
 }

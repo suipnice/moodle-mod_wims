@@ -36,34 +36,63 @@ defined('MOODLE_INTERNAL') || die;
 /**
  * Low level communication library for interfacing to a WIMS server
  *
- * @category external
- * @package  mod_wims
- * @author   Sadge <daniel@edunao.com>
- * @license  http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @link     https://github.com/suipnice/moodle-mod_wims
- *
- * @var string $wimsurl          the URL to the wims server
- * @var string $protocolmodifier http or https (extracted from $wimsurl)
- * @var string $servicepass      the password required for us to connect
- * @var int    $debug            default:0
- * @var string $rawdata          WIMS raw response
- * @var string $qclass           Querried WIMS class id
- * @var string $status           can be "OK", COMMS_FAIL", or "WIMS_FAIL"
- * @var string $code             A random string used to match response with its request
- * @var bool   $sslverifypeer    true if $allowselfsignedcertificates=false
- * @var array  $accessurls       list
+ * @category  external
+ * @package   mod_wims
+ * @author    Sadge <daniel@edunao.com>
+ * @copyright 2015 Edunao SAS <contact@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class wims_comms_wrapper {
-    public $wimsurl;          // URL to the wims server
-    public $protocolmodifier; // http or https (extracted from $wimsurl)
-    public $servicepass;      // The password required for us to connect
-    public $debug;            // default:0
-    public $rawdata;          // WIMS raw response
-    public $qclass;           // Querried WIMS class id
-    public $status;           // can be "OK", COMMS_FAIL", or "WIMS_FAIL"
-    public $code;             // A random string used to match response with its request
-    public $sslverifypeer;    // true if $allowselfsignedcertificates=false
-    public $accessurls;       // list.
+    /**
+     * @var string $wimsurl  URL to the wims server
+     */
+    public $wimsurl;
+
+    /**
+     * @var string $protocolmodifier http or https (extracted from $wimsurl)
+     */
+    public $protocolmodifier;
+
+    /**
+     * @var string $servicepass the password required for us to connect
+     */
+    public $servicepass;
+
+    /**
+     * @var int $debug default:0
+     */
+    public $debug;
+
+    /**
+     * @var string $rawdata WIMS raw response
+     */
+    public $rawdata;
+
+    /**
+     * @var string $qclass Querried WIMS class id
+     */
+    public $qclass;
+
+    /**
+     * @var string $status can be "OK", "COMMS_FAIL", or "WIMS_FAIL"
+     */
+    public $status;
+
+    /**
+     * @var string $code A random string used to match response with its request
+     */
+    public $code;
+
+    /**
+     * @var bool  $sslverifypeer true if $allowselfsignedcertificates=false
+     */
+    public $sslverifypeer;
+
+    /**
+     * @var array $accessurls list
+     */
+    public $accessurls;
 
     /**
      * Ctor (the class constructor)
@@ -95,7 +124,7 @@ class wims_comms_wrapper {
      */
     public function debugmsg($msg) {
         if ($this->debug > 0) {
-            print("\n<pre>$msg</pre>");
+            print("\n<pre>$msg</pre>\n");
         }
         // The following line can be uncommented when debugging to redirect debug messages to apache error log.
         /* error_log($msg); */
@@ -195,19 +224,17 @@ class wims_comms_wrapper {
 
         // If the request went through ok (ie if the HTTP GET request succeeded) then make sure that it responded with an OK.
         $statusline = trim($this->linedata[0]);
-        $isok =
-            ($statusline === 'OK '.$this->code) ? true :
-            ($statusline === 'ERROR' && trim($this->linedata[1]) == 'nothing done') ? true :
-            /* else */ false;
-        if ($isok === false) {
+
+        if ($statusline === 'OK '.$this->code || ($statusline === 'ERROR' && trim($this->linedata[1]) == 'nothing done')){
+            // Done!
+            $this->debugmsg("WIMS: status = OK ($statusline)");
+            return $this->linedata;
+        }
+        else {
             $this->status = 'WIMS_FAIL';
             $this->debugmsg("ERROR: ".__FILE__.":".__LINE__.": WIMS OK code not matched (expecting -OK $this->code-): -$statusline-\n$this->rawdata");
             return null;
         }
-
-        // Done!
-        $this->debugmsg("WIMS: status = OK ($statusline)");
-        return $this->linedata;
     }
 
     /**
@@ -238,24 +265,28 @@ class wims_comms_wrapper {
             }
             throw new Exception('WIMS server returned invalid JSON: $which:'.$this->rawdata);
         }
-        $isok =
-            ($this->jsondata->status == 'OK' && $this->jsondata->code == $this->code) ? true :
-            ($this->jsondata->status == 'ERROR' &&
-             $this->jsondata->code == $this->code &&
-             $this->jsondata->message == 'nothing done') ? true :
-            false;
-        if ($isok === false) {
+
+        if (($this->jsondata->status == 'OK'
+            && $this->jsondata->code == $this->code)
+            || ($this->jsondata->status == 'ERROR'
+            && $this->jsondata->code == $this->code
+            && $this->jsondata->message == 'nothing done')
+        ) {
+            // Done!
+            $this->debugmsg("JSON: status = OK");
+            return $this->jsondata;
+        }
+        else {
             $this->status = 'WIMS_FAIL';
-            $this->debugmsg("ERROR: ".__FILE__.":".__LINE__.": WIMS JSON OK response not matched: (for code $this->code):\n");
+            $this->debugmsg(
+                "ERROR: ".__FILE__.":".__LINE__.
+                ": WIMS JSON OK response not matched: (for code $this->code):\n"
+            );
             if ($silent !== true) {
                 var_dump($this->jsondata);
             }
             return null;
         }
-
-        // Done!
-        $this->debugmsg("JSON: status = OK");
-        return $this->jsondata;
     }
 
     /**
@@ -448,7 +479,10 @@ class wims_comms_wrapper {
                 $this->debugmsg('authuser failed - and regex not matched so give up without retry');
                 return null;
             }
-            $this->debugmsg('authuser - retrying after first refusal => applying URL '.$matches[1].' FROM '.$this->jsondata->message);
+            $this->debugmsg(
+                'authuser - retrying after first refusal => applying URL '.
+                $matches[1].' FROM '.$this->jsondata->message
+            );
             // Our error message did match the regex so try again, substituting in the deducd IP address.
             $urlparam = '&data1='.$matches[1];
             $jsondata = $this->executejson('authuser', $params.$urlparam);

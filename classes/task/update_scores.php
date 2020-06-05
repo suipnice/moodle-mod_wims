@@ -61,9 +61,20 @@ class update_scores extends \core\task\scheduled_task {
         $config = get_config('wims');
         $wims = new \wims_interface($config, $config->debugcron);
 
+        // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
+        $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');
+
+        // Build a lookup table to get Moodle user ids from wimslogin.
+        $userlookup = array();
+        foreach ($userrecords as $userinfo) {
+            $wimslogin = $wims->generatewimslogin($userinfo);
+            $userlookup[$wimslogin] = $userinfo->id;
+        }
+
         // Iterate over the set of WIMS activities in the system.
         $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
         $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
+
         foreach ($coursemodules as $cm) {
             mtrace(
                 "\n------------\n- PROCESSING: course=".$cm->course.
@@ -109,12 +120,12 @@ class update_scores extends \core\task\scheduled_task {
                     } else {
                         // We don't have a * so if we're not an exam then drop our.
                         if ($sheettype !== 'exams') {
-                                mtrace(
-                                    '  - Ignoring: '.$sheettype.
-                                    ' '.$sheetid.': "'.$title.
-                                    '" [state='.$sheetsummary->state.'] - due to Lack of *'
-                                );
-                                continue;
+                            mtrace(
+                                '  - Ignoring: '.$sheettype.
+                                ' '.$sheetid.': "'.$title.
+                                '" [state='.$sheetsummary->state.'] - due to Lack of *'
+                            );
+                            continue;
                         }
                     }
                     // We're ready to process the sheet.
@@ -131,16 +142,6 @@ class update_scores extends \core\task\scheduled_task {
                 continue;
             }
 
-            // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
-            $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');
-
-            // Build a lookup table to get from user names to Moodle user ids.
-            $userlookup = array();
-            foreach ($userrecords as $userinfo) {
-                $wimslogin = $wims->generatewimslogin($userinfo);
-                $userlookup[$wimslogin] = $userinfo->id;
-            }
-
             // We have an identifier problem: Exams and worksheets are both numbered from 1 up
             // and for scoring we need to have a unique identifier for each scoring column
             // so we're going to use an offset for worksheets.
@@ -154,10 +155,11 @@ class update_scores extends \core\task\scheduled_task {
                     $itemnumber = $itemnumberoffset + $sheetid;
                     // Construct the grade column definition object (with the name of the exercise, score ranges, etc).
                     $sheettitle = $sheettitles[$sheettype][$sheetid];
-                    // See https://docs.moodle.org/dev/Grades#grade_items for grade item props.
-                    $params = array( 'itemname' => $sheettitle );
-                    $params = array( 'grademin' => 0 );
-                    $params = array( 'grademax' => 10 );
+                    // See {@link https://docs.moodle.org/dev/Grades#grade_items} for grade item props.
+                    $params = array(
+                        'itemname' => $sheettitle,
+                        'grademin' => 0 ,
+                        'grademax' => 10 );
 
                     // Apply the grade column definition.
                     $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);

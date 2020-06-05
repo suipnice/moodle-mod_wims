@@ -127,7 +127,7 @@ function wims_add_instance($data, $mform = null) {
 /**
  * Updates an instance of the mod_wims in the database.
  *
- * @param object $data             An object from the form in mod_form.php.
+ * @param object            $data  An object from the form in mod_form.php.
  * @param mod_wims_mod_form $mform The form.
  *
  * @return bool True if successful, false otherwise.
@@ -157,7 +157,7 @@ function wims_update_instance($data, $mform) {
 /**
  * Delete wims instance.
  *
- * @param int $id
+ * @param int $id instance id
  *
  * @return bool true
  */
@@ -178,8 +178,7 @@ function wims_delete_instance($id) {
  * Given a course_module object, this function returns any
  * "extra" information that may be needed when printing
  * this activity in a course listing.
- *
- * See {@link get_array_of_activities()} in course/lib.php
+ * See get_array_of_activities() in course/lib.php
  *
  * @param object $coursemodule Course module
  *
@@ -274,7 +273,7 @@ function wims_scale_used_anywhere($scaleid) {
 /**
  * Creates or updates grade item for the given mod_wims instance.
  *
- * Needed by {@link grade_update_mod_grades()}.
+ * Needed by {@see core_grades\grade_update_mod_grades()} in lib/gradelib.php.
  *
  * @param object       $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param array|object $grades         optional array/object of grade(s); 'reset' means reset grades in gradebook
@@ -327,10 +326,11 @@ function wims_grade_item_delete($moduleinstance) {
 /**
  * Update mod_wims grades in the gradebook.
  *
- * Needed by {@link grade_update_mod_grades()}.
+ * Needed by {@see core_grades\grade_update_mod_grades()} in lib/gradelib.php.
  *
  * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param int      $userid         Update grade of specific user only, 0 means all participants.
+ *
  * @return int 0 if ok, error code otherwise
  */
 function wims_update_grades($moduleinstance, $userid = 0) {

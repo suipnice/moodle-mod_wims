@@ -59,7 +59,7 @@ class wims_comms_wrapper {
      *
      * @var string
      */
-     public $protocolmodifier;
+    public $protocolmodifier;
 
     /**
      * The password required for us to connect
@@ -151,7 +151,7 @@ class wims_comms_wrapper {
      */
     public function debugmsg($msg) {
         if ($this->debug > 0) {
-            print("\n $msg \n");
+            print("<pre>$msg</pre>\n");
         }
         // The following line can be uncommented when debugging to redirect debug messages to apache error log.
         /* error_log($msg); */

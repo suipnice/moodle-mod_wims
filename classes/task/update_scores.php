@@ -46,8 +46,9 @@ class update_scores extends \core\task\scheduled_task {
     }
 
     /**
-     * Execute task. return nothing.
+     * Execute task.
      *
+     * @return void
      */
     public function execute() {
         global $CFG, $DB;
@@ -81,7 +82,7 @@ class update_scores extends \core\task\scheduled_task {
             // Get the sheet index for this wims course.
             $sheetindex = $wims->getsheetindex($cm);
             if ($sheetindex == null) {
-                mtrace('  ERROR: Failed to fetch sheet index for WIMS course: cm='.$cm->id );
+                mtrace('  ERROR: Failed to fetch sheet index for WIMS course: cm='.$cm->id);
                 continue;
             }
 
@@ -161,11 +162,11 @@ class update_scores extends \core\task\scheduled_task {
                     // Apply the grade column definition.
                     $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);
                     if ($graderesult != GRADE_UPDATE_OK) {
-                            mtrace(
-                                '  ERROR: Grade update failed to set meta data: '.
-                                $sheettype.' '.$sheetid.
-                                ' @ itemnumber = '.$itemnumber.' => '.$sheettitle
-                            );
+                        mtrace(
+                            '  ERROR: Grade update failed to set meta data: '.
+                            $sheettype.' '.$sheetid.
+                            ' @ itemnumber = '.$itemnumber.' => '.$sheettitle
+                        );
                     }
                 }
             }
@@ -179,7 +180,7 @@ class update_scores extends \core\task\scheduled_task {
                     // Iterate over the per user records, updating the grade data for each.
                     foreach ($sheetdata as $username => $scorevalue) {
                         if (! array_key_exists($username, $userlookup)) {
-                            mtrace('  ERROR: Failed to lookup WIMS login in MOODLE users for login: '.$username);
+                            mtrace(' ERROR: Failed to lookup WIMS login in MOODLE users for login: '.$username);
                             continue;
                         }
                         $userid = $userlookup[$username];

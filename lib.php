@@ -233,8 +233,7 @@ function wims_export_contents($cm, $baseurl) {
 /**
  * Is a given scale used by the instance of mod_wims?
  *
- * This function returns if a scale is being used by one mod_wims
- * if it has support for grading and scales.
+ * As all WIMS grades use the "value" type, "scales" are never used.
  *
  * @param int $moduleinstanceid ID of an instance of this module.
  * @param int $scaleid          ID of the scale.
@@ -242,32 +241,34 @@ function wims_export_contents($cm, $baseurl) {
  * @return bool True if the scale is used by the given mod_wims instance.
  */
 function wims_scale_used($moduleinstanceid, $scaleid) {
-    global $DB;
+    return false;
+    /*global $DB;
 
     if ($scaleid && $DB->record_exists('wims', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
         return true;
     } else {
         return false;
-    }
+    }*/
 }
 
 /**
  * Checks if scale is being used by any instance of mod_wims.
  *
- * This is used to find out if scale used anywhere.
+ * As all WIMS grades use the "value" type, "scales" are never used.
  *
  * @param int $scaleid ID of the scale.
  *
  * @return bool True if the scale is used by any mod_wims instance.
  */
 function wims_scale_used_anywhere($scaleid) {
-    global $DB;
+    return false;
+    /*global $DB;
 
     if ($scaleid and $DB->record_exists('wims', array('grade' => -$scaleid))) {
         return true;
     } else {
         return false;
-    }
+    }*/
 }
 
 /**
@@ -275,12 +276,14 @@ function wims_scale_used_anywhere($scaleid) {
  *
  * Needed by {@link grade_update_mod_grades()}.
  *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param bool     $reset          Reset grades in the gradebook.
+ * @param object       $moduleinstance Instance object with extra cmidnumber and modname property.
+ * @param array|object $grades         optional array/object of grade(s); 'reset' means reset grades in gradebook
  *
- * @return void.
+ * @category grade
+ *
+ * @return int 0 if ok, error code otherwise
  */
-function grade_item_update($moduleinstance, $reset=false) {
+function wims_grade_item_update($moduleinstance, $grades = null) {
     global $CFG;
     include_once($CFG->libdir.'/gradelib.php');
 
@@ -298,11 +301,12 @@ function grade_item_update($moduleinstance, $reset=false) {
     } else {
         $item['gradetype'] = GRADE_TYPE_NONE;
     }
-    if ($reset) {
+    if ($grades === 'reset') {
         $item['reset'] = true;
+        $grades = null;
     }
 
-    grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, null, $item);
+    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, null, $item);
 }
 
 /**
@@ -310,7 +314,7 @@ function grade_item_update($moduleinstance, $reset=false) {
  *
  * @param stdClass $moduleinstance Instance object.
  *
- * @return grade_item.
+ * @return int 0 if ok, error code otherwise
  */
 function wims_grade_item_delete($moduleinstance) {
     global $CFG;
@@ -327,6 +331,7 @@ function wims_grade_item_delete($moduleinstance) {
  *
  * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param int      $userid         Update grade of specific user only, 0 means all participants.
+ * @return int 0 if ok, error code otherwise
  */
 function wims_update_grades($moduleinstance, $userid = 0) {
     global $CFG, $DB;
@@ -334,5 +339,5 @@ function wims_update_grades($moduleinstance, $userid = 0) {
 
     // Populate array of grade objects indexed by userid.
     $grades = array();
-    grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, $grades);
+    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, $grades);
 }

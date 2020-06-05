@@ -46,6 +46,8 @@ class mod_wims_mod_form extends moodleform_mod {
      * @param unknown $section section
      * @param object  $cm      course module object
      * @param unknown $course  course
+     *
+     * @return void
      */
     public function __construct($current, $section, $cm, $course) {
         // Store away properties that we may need later.
@@ -65,6 +67,8 @@ class mod_wims_mod_form extends moodleform_mod {
      * @param unknown $maxlen        max len
      * @param unknown $defaultvalue  default value
      * @param unknown $fieldsuffix   field suffix
+     *
+     * @return void
      */
     private function addtextfield($fieldnamebase, $maxlen, $defaultvalue=null, $fieldsuffix='') {
         $mform = $this->_form;
@@ -79,13 +83,15 @@ class mod_wims_mod_form extends moodleform_mod {
     }
 
     /**
-     * Add textarea field
+     * Add textarea field (currently unsed here ?)
      *
      * @param unknown $fieldnamebase field name base
      * @param unknown $defaultvalue  default value
      * @param unknown $fieldsuffix   field suffix
+     *
+     * @return void
      */
-    private function addtextareafield($fieldnamebase, $defaultvalue=null, $fieldsuffix='') {
+    private function _addtextareafield($fieldnamebase, $defaultvalue=null, $fieldsuffix='') {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('textarea', $fieldname, get_string($fieldnamebase, 'wims'), array('cols' => '60', 'rows' => '5'));
@@ -101,8 +107,10 @@ class mod_wims_mod_form extends moodleform_mod {
      * @param unknown $fieldnamebase field name base
      * @param unknown $defaultvalue  default value
      * @param unknown $fieldsuffix   field suffix
+     *
+     * @return void
      */
-    private function addcheckbox($fieldnamebase, $defaultvalue=null, $fieldsuffix='') {
+    private function _addcheckbox($fieldnamebase, $defaultvalue=null, $fieldsuffix='') {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('checkbox', $fieldname, get_string($fieldnamebase, 'wims'));
@@ -114,6 +122,8 @@ class mod_wims_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements
+     *
+     * @return void
      */
     public function definition() {
         /* global $CFG; */
@@ -135,6 +145,7 @@ class mod_wims_mod_form extends moodleform_mod {
     /**
      * Definition after data
      *
+     * @return void
      */
     public function definition_after_data() {
         $mform = $this->_form;
@@ -179,7 +190,7 @@ class mod_wims_mod_form extends moodleform_mod {
                     // Add title and 'graded' checkbox.
                     $this->addtextfield('sheettitle', 255, $title, $sheettype.$sheetidx);
                     if ($sheettype != 'exams') {
-                        $this->addcheckbox('sheetgraded', $graded, $sheettype.$sheetidx);
+                        $this->_addcheckbox('sheetgraded', $graded, $sheettype.$sheetidx);
                     }
 
                     // Add an expiry date field.
@@ -209,8 +220,10 @@ class mod_wims_mod_form extends moodleform_mod {
      * @param unknown $user          user
      * @param unknown $propname      prop name
      * @param unknown $fallback      fallback
+     *
+     * @return void
      */
-    private function updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback) {
+    private function _updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback) {
         $localkey = "user".$propname;
         if (array_key_exists($localkey, $defaultvalues) && $defaultvalues[$localkey] != "") {
             // We have a non-empty value so don't change it.
@@ -225,6 +238,8 @@ class mod_wims_mod_form extends moodleform_mod {
      * Data preprocessing
      *
      * @param unknown $defaultvalues default values
+     *
+     * @return void
      */
     public function data_preprocessing(&$defaultvalues) {
         global $DB;
@@ -232,10 +247,10 @@ class mod_wims_mod_form extends moodleform_mod {
         // Prime the default values using the database entries that we've stored away.
         $user = $DB->get_record('user', array('id' => $USER->id));
         $config = get_config('wims');
-        $this->updatedefaultvalue($defaultvalues, $user, "firstname", "anonymous");
-        $this->updatedefaultvalue($defaultvalues, $user, "lastname", "supervisor");
-        $this->updatedefaultvalue($defaultvalues, $user, "email", "noreply@wims.com");
-        $this->updatedefaultvalue($defaultvalues, $user, "institution", $config->defaultinstitution);
+        $this->_updatedefaultvalue($defaultvalues, $user, "firstname", "anonymous");
+        $this->_updatedefaultvalue($defaultvalues, $user, "lastname", "supervisor");
+        $this->_updatedefaultvalue($defaultvalues, $user, "email", "noreply@wims.com");
+        $this->_updatedefaultvalue($defaultvalues, $user, "institution", $config->defaultinstitution);
         if (!(array_key_exists("username", $defaultvalues) && $defaultvalues["username"])) {
             $defaultvalues["username"] = $defaultvalues["userfirstname"]." ".$defaultvalues["userlastname"];
         }
@@ -267,6 +282,8 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @param unknown $data  data
      * @param unknown $files files
+     *
+     * @return array The list of errors keyed by element name (given by moodleform_mod parent validation)
      */
     public function validation($data, $files) {
         // If the course module has been instantiated already then put in an update request to WIMS.
@@ -319,7 +336,7 @@ class mod_wims_mod_form extends moodleform_mod {
             }
 
             // Put a call in to the wims server to update parameters.
-            require_once(dirname(__FILE__).'/wimsinterface.class.php');
+            include_once(dirname(__FILE__).'/wimsinterface.class.php');
             $config = get_config('wims');
             $wims = new wims_interface($config, $config->debugsettings);
             $wims->updateclassconfigformodule($this->cm, $changeddata);

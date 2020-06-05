@@ -56,7 +56,7 @@ function xmldb_wims_upgrade($oldversion) {
     //
     // You will also have to create the db/install.xml file by using the XMLDB Editor.
     // Documentation for the XMLDB Editor can be found at:
-    // https://docs.moodle.org/dev/XMLDB_editor
+    // {@link https://docs.moodle.org/dev/XMLDB_editor}.
 
     // Upgrade to version with extra user... fields in database.
     $nextversion = 2015102201;

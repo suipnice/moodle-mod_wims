@@ -19,7 +19,6 @@
         <FIELD NAME="userinstitution" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="userfirstname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="userlastname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="username" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="useremail" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false"/>
 
       </FIELDS>

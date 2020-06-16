@@ -137,7 +137,6 @@ class mod_wims_mod_form extends moodleform_mod {
         $this->addtextfield('name', 255);
         $this->addtextfield('userfirstname', 63);
         $this->addtextfield('userlastname', 63);
-        $this->addtextfield('username', 63);
         $this->addtextfield('useremail', 255);
         $this->addtextfield('userinstitution', 127);
     }
@@ -251,9 +250,7 @@ class mod_wims_mod_form extends moodleform_mod {
         $this->_updatedefaultvalue($defaultvalues, $user, "lastname", "supervisor");
         $this->_updatedefaultvalue($defaultvalues, $user, "email", "noreply@wims.com");
         $this->_updatedefaultvalue($defaultvalues, $user, "institution", $config->defaultinstitution);
-        if (!(array_key_exists("username", $defaultvalues) && $defaultvalues["username"])) {
-            $defaultvalues["username"] = $defaultvalues["userfirstname"]." ".$defaultvalues["userlastname"];
-        }
+
         // Try to contact the WIMS server and see if the course already exists.
         if (is_object($this->cm)) {
             include_once(dirname(__FILE__).'/wimsinterface.class.php');
@@ -292,7 +289,7 @@ class mod_wims_mod_form extends moodleform_mod {
             $wimsdata = array(
                 "description" => $data["name"],
                 "institution" => $data["userinstitution"],
-                "supervisor"  => $data["username"],
+                "supervisor"  => $data["userfirstname"]+" "+$data["userlastname"],
                 "email"       => $data["useremail"],
                 "lastname"    => $data["userlastname"],
                 "firstname"   => $data["userfirstname"],

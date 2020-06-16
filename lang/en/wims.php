@@ -79,7 +79,6 @@ $string['name']                        = 'Activity Name';
 $string['userinstitution']             = 'Institution Name';
 $string['userfirstname']               = 'Supervisor First Name';
 $string['userlastname']                = 'Supervisor Last Name';
-$string['username']                    = 'Supervisor Full Name';
 $string['useremail']                   = 'Course Contact Email';
 
 // Worksheet and exam settings.

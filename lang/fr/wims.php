@@ -81,7 +81,6 @@ $string['name']                        = 'Nom de l&rsquo;activité';
 $string['userinstitution']             = 'Nom de l&rsquo;établissement';
 $string['userfirstname']               = 'Prénom de l&rsquo;enseignant';
 $string['userlastname']                = 'Nom de famille de l&rsquo;enseignant';
-$string['username']                    = 'Nom complet de l&rsquo;enseignant';
 $string['useremail']                   = 'Adresse électronique de contact';
 
 // Configuration des feuilles et examens.

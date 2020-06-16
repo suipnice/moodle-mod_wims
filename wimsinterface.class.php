@@ -155,7 +155,7 @@ class wims_interface{
         $data1 =
             "description=$cm->name"."\n".
             "institution=$wimsinfo->userinstitution"."\n".
-            "supervisor=$wimsinfo->username"."\n".
+            "supervisor=$wimsinfo->firstname $wimsinfo->lastname"."\n".
             "email=$wimsinfo->useremail"."\n".
             "password=Pwd$randomvalue1"."\n".
             "lang=$this->lang"."\n".
@@ -246,7 +246,6 @@ class wims_interface{
      * @param object $user        including the following:
      *                            string $user->firstname the user's first name
      *                            string $user->lastname the user's last name
-     *                            string $user->username the user's login name
      * @param string $currentlang current language (to force the wims site language to match the moodle language)
      * @param string $urltype     the type of url required (defaults to 'home page')
      * @param string $arg         the argument to be used for selecting which worksheet or exam page to display,
@@ -433,7 +432,10 @@ class wims_interface{
             if ($examdata != "") {
                 $result = $this->_wims->updateexamproperties($this->_qcl, $this->_rcl, $examid, $examdata);
                 if ($result == null) {
-                    $this->_wims->debugmsg(__FILE__.':'.__LINE__.': wims interface returning NULL due to comms wrapper null result');
+                    $this->_wims->debugmsg(
+                        __FILE__.':'.
+                        __LINE__.': wims interface returning NULL due to comms wrapper null result'
+                    );
                     return null;
                 }
             }

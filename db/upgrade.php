@@ -67,8 +67,16 @@ function xmldb_wims_upgrade($oldversion) {
         xmldb_wims_addfield($dbman, $table, 'userinstitution', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
         xmldb_wims_addfield($dbman, $table, 'userfirstname', XMLDB_TYPE_CHAR, '63', null, XMLDB_NOTNULL);
         xmldb_wims_addfield($dbman, $table, 'userlastname', XMLDB_TYPE_CHAR, '63', null, XMLDB_NOTNULL);
-        xmldb_wims_addfield($dbman, $table, 'username', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
         xmldb_wims_addfield($dbman, $table, 'useremail', XMLDB_TYPE_CHAR, '127', null, XMLDB_NOTNULL);
+        // WIMS savepoint reached.
+        upgrade_mod_savepoint(true, $nextversion, $modulename);
+    }
+
+    $nextversion = 2020061600;
+    if ($oldversion < $nextversion) {
+        // remove "username" from db (redondant with firstname/lastname )
+        xmldb_wims_removefield($dbman, $table, 'username');
+
         // WIMS savepoint reached.
         upgrade_mod_savepoint(true, $nextversion, $modulename);
     }

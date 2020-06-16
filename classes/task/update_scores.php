@@ -138,7 +138,7 @@ class update_scores extends \core\task\scheduled_task {
             // Fetch the scores for the required sheets.
             $sheetscores = $wims->getsheetscores($cm, $requiredsheets);
             if ($sheetscores == null) {
-                mtrace('  ERROR: Failed to fetch sheet scores for WIMS course: cm='.$cm->id);
+                mtrace(' ERROR: Failed to fetch sheet scores for WIMS course: cm='.$cm->id);
                 continue;
             }
 

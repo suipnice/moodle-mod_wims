@@ -43,7 +43,7 @@ function mod_wims_helper_function() {
 /**
  * Add field in DB on upgrade
  *
- * @param object             $dbman     dbman
+ * @param object             $dbman     Moodle DB manager
  * @param string|xmldb_table $table     The table to be searched (string name or xmldb_table instance).
  * @param string             $name      of field
  * @param int                $type      XMLDB_TYPE_INTEGER, XMLDB_TYPE_NUMBER, XMLDB_TYPE_CHAR, XMLDB_TYPE_TEXT, XMLDB_TYPE_BINARY
@@ -65,5 +65,21 @@ function xmldb_wims_addfield($dbman, $table, $name, $type=null,
     // If the field doesn't already exist in the given table then add it.
     if (!$dbman->field_exists($table, $name)) {
         $dbman->add_field($table, $field);
+    }
+}
+
+/**
+ * Drop a field in DB on upgrade
+ *
+ * @param object             $dbman     Moodle DB manager (see  https://docs.moodle.org/dev/Data_definition_API)
+ * @param string|xmldb_table $table     The table to be searched (string name or xmldb_table instance).
+ * @param string             $name      of field
+ *
+ * @return void
+ */
+function xmldb_wims_dropfield($dbman, $table, $name) {
+    // If the field exist in the given table then delete it.
+    if (!$dbman->field_exists($table, $name)) {
+        $dbman->drop_field($table, $field);
     }
 }

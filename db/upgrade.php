@@ -75,7 +75,7 @@ function xmldb_wims_upgrade($oldversion) {
     $nextversion = 2020061600;
     if ($oldversion < $nextversion) {
         // remove "username" from db (redondant with firstname/lastname )
-        xmldb_wims_removefield($dbman, $table, 'username');
+        xmldb_wims_dropfield($dbman, $table, 'username');
 
         // WIMS savepoint reached.
         upgrade_mod_savepoint(true, $nextversion, $modulename);

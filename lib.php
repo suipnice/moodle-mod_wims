@@ -305,7 +305,7 @@ function wims_grade_item_update($moduleinstance, $grades = null) {
         $grades = null;
     }
 
-    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, null, $item);
+    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'wims', $moduleinstance->id, 0, null, $item);
 }
 
 /**

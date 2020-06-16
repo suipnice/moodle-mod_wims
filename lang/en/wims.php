@@ -74,6 +74,9 @@ $string['admindescdebugcron']          = '';
 $string['adminnamedebugsettings']      = 'SETTINGS debug output';
 $string['admindescdebugsettings']      = '';
 
+// Errors Msgs
+$string['wims_class_select_failed']    = 'Unable to access the WIMS classroom. The server is probably unavailable. Please retest in a few minutes, or notify the site administrator.' ;
+
 // Instance settings.
 $string['name']                        = 'Activity Name';
 $string['userinstitution']             = 'Institution Name';

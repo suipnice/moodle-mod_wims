@@ -70,7 +70,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function addtextfield($fieldnamebase, $maxlen, $defaultvalue=null, $fieldsuffix='') {
+    private function _addtextfield($fieldnamebase, $maxlen, $defaultvalue=null, $fieldsuffix='') {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('text', $fieldname, get_string($fieldnamebase, 'wims'), array('size' => '60'));
@@ -134,11 +134,11 @@ class mod_wims_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Text fields.
-        $this->addtextfield('name', 255);
-        $this->addtextfield('userfirstname', 63);
-        $this->addtextfield('userlastname', 63);
-        $this->addtextfield('useremail', 255);
-        $this->addtextfield('userinstitution', 127);
+        $this->_addtextfield('name', 255);
+        $this->_addtextfield('userfirstname', 63);
+        $this->_addtextfield('userlastname', 63);
+        $this->_addtextfield('useremail', 255);
+        $this->_addtextfield('userinstitution', 127);
     }
 
     /**
@@ -187,7 +187,7 @@ class mod_wims_mod_form extends moodleform_mod {
                     $mform->addElement('header', 'sheetheader'.$sheettype.$sheetidx, $headerstr);
 
                     // Add title and 'graded' checkbox.
-                    $this->addtextfield('sheettitle', 255, $title, $sheettype.$sheetidx);
+                    $this->_addtextfield('sheettitle', 255, $title, $sheettype.$sheetidx);
                     if ($sheettype != 'exams') {
                         $this->_addcheckbox('sheetgraded', $graded, $sheettype.$sheetidx);
                     }

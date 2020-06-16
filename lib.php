@@ -273,7 +273,7 @@ function wims_scale_used_anywhere($scaleid) {
 /**
  * Creates or updates grade item for the given mod_wims instance.
  *
- * Needed by {@see core_grades\grade_update_mod_grades()} in lib/gradelib.php.
+ * Needed by {core_grades\grade_update_mod_grades()} in lib/gradelib.php.
  *
  * @param object       $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param array|object $grades         optional array/object of grade(s); 'reset' means reset grades in gradebook
@@ -326,7 +326,7 @@ function wims_grade_item_delete($moduleinstance) {
 /**
  * Update mod_wims grades in the gradebook.
  *
- * Needed by {@see core_grades\grade_update_mod_grades()} in lib/gradelib.php.
+ * Needed by {core_grades\grade_update_mod_grades()} in lib/gradelib.php.
  *
  * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param int      $userid         Update grade of specific user only, 0 means all participants.
@@ -334,10 +334,15 @@ function wims_grade_item_delete($moduleinstance) {
  * @return int 0 if ok, error code otherwise
  */
 function wims_update_grades($moduleinstance, $userid = 0) {
+    /*
     global $CFG, $DB;
     include_once($CFG->libdir.'/gradelib.php');
 
     // Populate array of grade objects indexed by userid.
     $grades = array();
-    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'mod_wims', $moduleinstance->id, 0, $grades);
+    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'wims', $moduleinstance->id, 0, $grades);
+    */
+
+    // WIMS doesn't have its own grade table so the only thing to do is update the grade item.
+    return wims_grade_item_update($moduleinstance);
 }

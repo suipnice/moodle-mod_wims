@@ -149,7 +149,7 @@ class wims_interface{
         $data1 =
             "description=$cm->name"."\n".
             "institution=$wimsinfo->userinstitution"."\n".
-            "supervisor=$wimsinfo->firstname $wimsinfo->lastname"."\n".
+            "supervisor=".$wimsinfo->firstname." ".$wimsinfo->lastname."\n".
             "email=$wimsinfo->useremail"."\n".
             "password=Pwd$randomvalue1"."\n".
             "lang=$this->lang"."\n".

@@ -289,7 +289,7 @@ class mod_wims_mod_form extends moodleform_mod {
             $wimsdata = array(
                 "description" => $data["name"],
                 "institution" => $data["userinstitution"],
-                "supervisor"  => $data["userfirstname"]+" "+$data["userlastname"],
+                "supervisor"  => $data["userfirstname"]." ".$data["userlastname"],
                 "email"       => $data["useremail"],
                 "lastname"    => $data["userlastname"],
                 "firstname"   => $data["userfirstname"],

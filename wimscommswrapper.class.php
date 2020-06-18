@@ -161,16 +161,16 @@ class wims_comms_wrapper {
      * Private utility routine to execute a call to adm/raw module
      *
      * @param string $baseservice 'moodle' or 'moodlejson'
-     * @param string $which       The WIMS job to execute.
+     * @param string $job         The WIMS job to execute.
      * @param string $params      optional URL parameters
      *
      * @return void
      */
-    private function _executeraw($baseservice, $which, $params = '') {
+    private function _executeraw($baseservice, $job, $params = '') {
         // Reset the status code to 'OK' here as a smart place to allow either coms or subsequent logic to reset to error condition.
         $this->status = 'OK';
 
-        // Choose a random request id (not very secure system but good enough for showing up consistency problems in the WIMS code).
+        // Choose a random request id (for keeping consistency with the WIMS response).
         $code = rand(100, 999);
         $this->code = "$code";
 
@@ -178,7 +178,7 @@ class wims_comms_wrapper {
         $service = $baseservice.$this->protocolmodifier;
 
         // Construct the core URL.
-        $url = $this->wimsurl."?module=adm/raw&job=$which&code=$this->code&ident=$service&passwd=$this->servicepass";
+        $url = $this->wimsurl."?module=adm/raw&job=".$job."&code=".$this->code."&ident=".$service."&passwd=".$this->servicepass;
 
         // Add URL parameters (if any).
         if (strlen($params) > 0) {
@@ -237,51 +237,17 @@ class wims_comms_wrapper {
     }
 
     /**
-     * Private utility routine
+     * Call WIMS API, which respond in JSON
      *
-     * @param string $which  The WIMS job to execute.
-     * @param string $params optional URL parameters
-     *
-     * @return array|null linedata or null if fail
-     */
-    private function _executewimsandcheckok($which, $params = '') {
-        // Execute the request.
-        $this->_executewims($which, $params);
-        if ($this->status != 'OK') {
-            $this->debugmsg("WIMS execute failed: status = $this->status");
-            return null;
-        }
-
-        // If the request went through ok (ie if the HTTP GET request succeeded) then make sure that it responded with an OK.
-        $statusline = trim($this->linedata[0]);
-
-        if ($statusline === 'OK '.$this->code || ($statusline === 'ERROR' && trim($this->linedata[1]) == 'nothing done')) {
-            // Done!
-            $this->debugmsg("WIMS: status = OK ($statusline)");
-            return $this->linedata;
-        } else {
-            $this->status = 'WIMS_FAIL';
-            $this->debugmsg(
-                "ERROR: ".__FILE__.":".
-                __LINE__.
-                ": WIMS OK code not matched (expecting -OK $this->code-): -$statusline-\n$this->rawdata"
-            );
-            return null;
-        }
-    }
-
-    /**
-     * Private utility routine, to handle request in json
-     *
-     * @param string $which  The WIMS job to execute.
+     * @param string $job    The WIMS job to execute.
      * @param string $params optional URL parameters
      * @param bool   $silent make a var_dump or not
      *
      * @return array|null
      */
-    private function _executejson($which, $params = '', $silent=false) {
+    private function _executejson($job, $params='', $silent=false) {
         // Execute the request, requesting a json format response.
-        $this->_executeraw("moodlejson", $which, $params);
+        $this->_executeraw("moodlejson", $job, $params);
         if ($this->status != 'OK') {
             $this->debugmsg("WIMS execute failed: status = $this->status");
             return null;
@@ -291,12 +257,12 @@ class wims_comms_wrapper {
         // then parse json data and make sure that it contains a Status=>OK.
         $this->jsondata = json_decode($this->rawdata);
         if (!$this->jsondata) {
-            echo "<pre>\nERROR Invalid JSON response to WIMS request: ".$which."\n".$this->rawdata."\n</pre>";
+            echo "<pre>\nERROR Invalid JSON response to WIMS request: ".$job."\n".$this->rawdata."\n</pre>";
             $hmp = "";
             for ($i = 0; $i < strlen($this->rawdata); ++$i) {
                 $hmp .= '/'.ord($this->rawdata[$i]);
             }
-            throw new Exception('WIMS server returned invalid JSON: $which:'.$this->rawdata);
+            throw new Exception('WIMS server returned invalid JSON: $job:'.$this->rawdata);
         }
 
         if (($this->jsondata->status == 'OK'
@@ -338,7 +304,7 @@ class wims_comms_wrapper {
      * @return true on success, null on failure (with error information available in $linedata)
      */
     public function checkidentwims() {
-        $this->_executewimsandcheckok('checkident');
+        $this->_executejson('checkident');
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -393,7 +359,7 @@ class wims_comms_wrapper {
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
-        $result = $this->_executewimsandcheckok('checkuser', $params);
+        $result = $this->_executejson('checkuser', $params);
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -412,7 +378,7 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&data1='.$this->_wimsencode($data1);
         $params .= '&data2='.$this->_wimsencode($data2);
-        $this->_executewimsandcheckok('addclass', $params);
+        $this->_executejson('addclass', $params);
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -429,7 +395,7 @@ class wims_comms_wrapper {
     public function updateclass($qcl, $rcl, $data1) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&data1='.$this->_wimsencode($data1);
-        $this->_executewimsandcheckok('modclass', $params);
+        $this->_executejson('modclass', $params);
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -447,7 +413,7 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&data1='.$this->_wimsencode($data1);
         $params .= '&quser=supervisor';
-        $this->_executewimsandcheckok('moduser', $params);
+        $this->_executejson('moduser', $params);
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -474,7 +440,7 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
         $params .= '&data1='.$this->_wimsencode($data1);
-        $this->_executewimsandcheckok('adduser', $params);
+        $this->_executejson('adduser', $params);
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -729,7 +695,7 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qsheet='.$sheet;
         $params .= '&data1='.$this->_wimsencode($data1);
-        $this->_executewimsandcheckok('modsheet', $params);
+        $this->_executejson('modsheet', $params);
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -831,10 +797,25 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qexam='.$exam;
         $params .= '&data1='.$this->_wimsencode($data1);
-        $this->_executewimsandcheckok('modexam', $params);
+        $this->_executejson('modexam', $params);
         return ($this->status == 'OK') ? true : null;
     }
 
+    /**
+     * Get scores of one user
+     *
+     * @param string $qcl The WIMS class identifier
+     * @param string $rcl An unique identifier derived from properties of the Moodle module instance
+     * @param string $quser WIMS user ID to be deleted
+     *
+     * @return bool true on success
+     */
+    public function getscore($qcl, $rcl, $quser){
+        $params = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
+        $params.= "&quser=".$login;
+        $this->_executejson("getscore", $params);
+        return ($this->status == 'OK');
+    }
 
     /*
      NOTE: The following methods has been tested by Sadge and shown to work but are not required by wimsinterface.class.php
@@ -846,14 +827,6 @@ class wims_comms_wrapper {
         return $this->data;
     }
 
-
-    public function getscore($qcl, $rcl, $login){
-        $params = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
-        $params.= "&quser=".$login;
-        return $this->_executewimsandcheckok("getscore", $params);
-    }
-
-
     public function addsheet($qcl, $rcl, $contents="", $sheetmode="0", $title="", $description="", $expiration=""){
         $contents = str_replace("\n", ";", $contents);
         $params = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
@@ -864,7 +837,7 @@ class wims_comms_wrapper {
         if ($contents != "")    $data1.= "contents=$contents\n";
         if ($sheetmode != "0")  $data1.= "sheetmode=$sheetmode\n";
         $params.= "&data1=".$this->_wimsencode($data1);
-        return $this->_executewimsandcheckok("addsheet", $params);
+        return $this->_executejson("addsheet", $params);
     }
 
 

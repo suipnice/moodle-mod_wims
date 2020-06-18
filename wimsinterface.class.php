@@ -102,23 +102,17 @@ class wims_interface{
     /**
      * Attempt to connect to the WIMS server and verify that it responds with an OK message
      *
-     * @return true if the connection attempt succeeded, null if it failed
+     * @return null|true if the connection attempt succeeded, null if it failed
      */
     public function testconnection() {
-        // Try connecting to the server using both of the required API modes.
-        $wimsresult = $this->_wims->checkidentwims();
-        $jsonresult = $this->_wims->checkidentjson();
+        // Try connecting to the server using adm/raw WIMS API.
 
         // If both of the connection tests succeeded then we're done.
-        if ($wimsresult && $jsonresult) {
+        if ($this->_wims->checkident()) {
             return true;
         }
-
-        // At least one of the connection tests failed so construst an erro message and return NULL.
-        $this->errormsgs = array();
-        $this->errormsgs[] = 'WIMS connection test failed:';
-        ($wimsresult === true) || $this->errormsgs[] = '- WIMS interface: ' . (($wimsresult === true) ? 'OK' : 'FAILED');
-        ($jsonresult === true) || $this->errormsgs[] = '- JSON interface: ' . (($wimsresult === true) ? 'OK' : 'FAILED');
+        // The connection test failed, so construst an error message and return NULL.
+        $this->errormsgs = ['WIMS connection test failed'];
         return null;
     }
 

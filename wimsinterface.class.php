@@ -149,7 +149,7 @@ class wims_interface{
         $data1 =
             "description=$cm->name"."\n".
             "institution=$wimsinfo->userinstitution"."\n".
-            "supervisor=".$wimsinfo->firstname." ".$wimsinfo->lastname."\n".
+            "supervisor=".$wimsinfo->userfirstname." ".$wimsinfo->userlastname."\n".
             "email=$wimsinfo->useremail"."\n".
             "password=Pwd$randomvalue1"."\n".
             "lang=$this->lang"."\n".
@@ -163,7 +163,7 @@ class wims_interface{
 
         // Ensure that everything went to plan.
         if ($addresult !== true) {
-            $this->errormsgs = $this->_wims->linedata;
+            $this->errormsgs = $this->_wims->jsondata->message;
             return null;
         }
 
@@ -175,7 +175,7 @@ class wims_interface{
         if ($modresult === true) {
             return true;
         } else {
-            $this->errormsgs = $this->_wims->linedata;
+            $this->errormsgs = $this->_wims->jsondata->message;
             return null;
         }
     }
@@ -260,7 +260,7 @@ class wims_interface{
             $addresult = $this->_wims->adduser($this->_qcl, $this->_rcl, $firstname, $lastname, $login);
             if ($addresult == null) {
                 // If the call to adduser failed then deal with it.
-                $this->errormsgs = $this->_wims->linedata;
+                $this->errormsgs = $this->_wims->jsondata->message;
                 return null;
             }
         }
@@ -565,7 +565,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->linedata;
+            $this->errormsgs = $this->_wims->jsondata->message;
         }
 
         // Construct the result URL.
@@ -586,7 +586,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->linedata;
+            $this->errormsgs = $this->_wims->jsondata->message;
         }
 
         // Construct the result URL.
@@ -608,7 +608,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->linedata;
+            $this->errormsgs = $this->_wims->jsondata->message;
         }
 
         // Construct the result URL.
@@ -630,7 +630,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->linedata;
+            $this->errormsgs = $this->_wims->jsondata->message;
         }
 
         // Construct the result URL.

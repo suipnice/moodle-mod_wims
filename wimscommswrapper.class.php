@@ -280,6 +280,7 @@ class wims_comms_wrapper {
                 ": WIMS JSON OK response not matched: (for code $this->code):\n"
             );
             if ($silent !== true) {
+                echo "<div>SENDED PARAMS: ".urldecode($params)."</div>";
                 var_dump($this->jsondata);
             }
             return null;
@@ -361,14 +362,14 @@ class wims_comms_wrapper {
      * @param string $data1 a multi-line text block containing various course-related parameters
      * @param string $data2 a multi-line text block containing various course-creator-related parameters
      *
-     * @return bool|null true on success, null on failure
+     * @return bool true on success
      */
     public function addclass($qcl, $rcl, $data1, $data2) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&data1='.$this->_wimsencode($data1);
         $params .= '&data2='.$this->_wimsencode($data2);
         $this->_executejson('addclass', $params);
-        return ($this->status == 'OK') ? true : null;
+        return ($this->status == 'OK');
     }
 
     /**

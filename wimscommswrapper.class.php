@@ -223,14 +223,13 @@ class wims_comms_wrapper {
     /**
      * Private utility routine, to handle request in old wims format
      *
-     * @param string $which  The WIMS job to execute.
+     * @param string $job  The WIMS job to execute.
      * @param string $params optional URL parameters
      *
      * @return void
      */
-    private function _executewims($which, $params = '') {
-        // Execute the request, requesting a wims format response.
-        $this->_executeraw('moodle', $which, $params);
+    private function _executewims($job, $params='') {
+        $this->_executeraw('moodlejson', $which, $params);
         if ($this->status == 'OK') {
             $this->linedata = explode("\n", $this->rawdata);
         }
@@ -299,23 +298,13 @@ class wims_comms_wrapper {
     }
 
     /**
-     * Connect to the WIMS server and verify that our connection credentials are valid using 'wims' API mode
+     * Connect to the WIMS server and verify that our connection credentials are valid.
      *
-     * @return true on success, null on failure (with error information available in $linedata)
+     * @return bool true on success
      */
-    public function checkidentwims() {
+    public function checkident() {
         $this->_executejson('checkident');
-        return ($this->status == 'OK') ? true : null;
-    }
-
-    /**
-     * Connect to the WIMS server and verify that our connection credentials are valid using 'json' API mode
-     *
-     * @return true on success, null on failure (with error information available in $linedata)
-     */
-    public function checkidentjson() {
-        $this->_executejson('checkident');
-        return ($this->status == 'OK') ? true : null;
+        return ($this->status == 'OK');
     }
 
     /**
@@ -328,7 +317,7 @@ class wims_comms_wrapper {
      * @param boolean $extended if true uses getclass call instead of checkclass call to verify
      *                          not only existence of class but also service access rights
      *
-     * @return true on success, null on failure (with error information available in $linedata)
+     * @return true on success, null on failure)
      */
     public function checkclass($qcl, $rcl, $extended=false) {
         $cmd = ($extended === true) ? 'getclass' : 'checkclass';
@@ -348,7 +337,7 @@ class wims_comms_wrapper {
      *                      instance that the WIMS class is bound to
      * @param string $login the login of the user (which must respect WIMS user identifier rules)
      *
-     * @return true on success, null on failure (with error information available in $linedata)
+     * @return true on success, null on failure
      */
     public function checkuser($qcl, $rcl, $login) {
         // If we have already generated an access url for this user then no need to recheck them as they must be OK.
@@ -372,7 +361,7 @@ class wims_comms_wrapper {
      * @param string $data1 a multi-line text block containing various course-related parameters
      * @param string $data2 a multi-line text block containing various course-creator-related parameters
      *
-     * @return bool|null true on success, null on failure (with error information available in $linedata)
+     * @return bool|null true on success, null on failure
      */
     public function addclass($qcl, $rcl, $data1, $data2) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
@@ -390,7 +379,7 @@ class wims_comms_wrapper {
      *                      instance that the WIMS class is bound to
      * @param string $data1 a multi-line text block containing various course-related parameters
      *
-     * @return true on success, null on failure (with error information available in $linedata)
+     * @return true on success, null on failure
      */
     public function updateclass($qcl, $rcl, $data1) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
@@ -407,7 +396,7 @@ class wims_comms_wrapper {
      *                      instance that the WIMS class is bound to
      * @param string $data1 a multi-line text block containing various user parameters
      *
-     * @return bool|null true on success, null on failure (with error information available in $linedata)
+     * @return bool|null true on success, null on failure
      */
     public function updateclasssupervisor($qcl, $rcl, $data1) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
@@ -427,7 +416,7 @@ class wims_comms_wrapper {
      * @param string $lastname  the user's last name
      * @param string $login     the user's login (sometimes refered to as their user name)
      *
-     * @return bool|null true on success, null on failure (with error information available in $linedata)
+     * @return bool|null true on success, null on failure
      */
     public function adduser($qcl, $rcl, $firstname, $lastname, $login) {
         // Generate a non-useful password.
@@ -453,7 +442,7 @@ class wims_comms_wrapper {
      * @param string $login       the user's login (sometimes refered to as their user name)
      * @param string $currentlang Language
      *
-     * @return string|null fully qualified connection url on success, null on failure (with error information in $linedata)
+     * @return string|null fully qualified connection url on success, null on failure
      */
     public function gethomepageurl($qcl, $rcl, $login, $currentlang) {
         // If we have already generated an access url for this user then reuse it.
@@ -504,7 +493,7 @@ class wims_comms_wrapper {
      * @param string $login       the user's login (sometimes refered to as their user name)
      * @param string $currentlang Language
      *
-     * @return string|null fully qualified connection url on success, null on failure (with error information in $linedata)
+     * @return string|null fully qualified connection url on success, null on failure
      */
     public function getscorepageurl($qcl, $rcl, $login, $currentlang) {
         $url = $this->gethomepageurl($qcl, $rcl, $login, $currentlang);
@@ -525,7 +514,7 @@ class wims_comms_wrapper {
      * @param string $currentlang Language
      * @param string $sheet       the identifier of the worksheet to connect to
      *
-     * @return string|null fully qualified connection url on success, null on failure (with error information in $linedata)
+     * @return string|null fully qualified connection url on success, null on failure
      */
     public function getworksheeturl($qcl, $rcl, $login, $currentlang, $sheet) {
         $url = $this->gethomepageurl($qcl, $rcl, $login, $currentlang);
@@ -546,7 +535,7 @@ class wims_comms_wrapper {
      * @param string $currentlang Language
      * @param string $exam        the identifier of the exam to connect to
      *
-     * @return string|null fully qualified connection url on success, null on failure (with error information in $linedata)
+     * @return string|null fully qualified connection url on success, null on failure
      */
     public function getexamurl($qcl, $rcl, $login, $currentlang, $exam) {
         $url = $this->gethomepageurl($qcl, $rcl, $login, $currentlang);
@@ -563,7 +552,7 @@ class wims_comms_wrapper {
      * @param string $rcl a unique identifier derived from properties of the MOODLE module
      *                    instance that the WIMS class is bound to
      *
-     * @return array|null result as array of lines on success, null on failure (with error information in $linedata)
+     * @return array|null result as array of lines on success, null on failure
      */
     public function getclassconfig($qcl, $rcl) {
         $this->qclass = $qcl;
@@ -589,7 +578,7 @@ class wims_comms_wrapper {
      *                      instance that the WIMS class is bound to
      * @param string $login the user's login (sometimes refered to as their user name)
      *
-     * @return array|null result as array of lines on success, null on failure (with error information in $linedata)
+     * @return array|null result as array of lines on success, null on failure
      */
     public function getuserconfig($qcl, $rcl, $login) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
@@ -689,7 +678,7 @@ class wims_comms_wrapper {
      * @param string $sheet the WIMS worksheet identifier
      * @param string $data1 a multi-line text block containing various course-related parameters
      *
-     * @return bool|null true on success, null on failure (with error information available in $linedata)
+     * @return bool|null true on success, null on failure
      */
     public function updateworksheetproperties($qcl, $rcl, $sheet, $data1) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
@@ -791,7 +780,7 @@ class wims_comms_wrapper {
      * @param string $exam  the WIMS exam identifier
      * @param string $data1 a multi-line text block containing various course-related parameters
      *
-     * @return bool|null true on success, null on failure (with error information available in $linedata)
+     * @return bool|null true on success, null on failure
      */
     public function updateexamproperties($qcl, $rcl, $exam, $data1) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
@@ -822,8 +811,8 @@ class wims_comms_wrapper {
       and so has been commented out
 
     public function help(){
-        // this primitive does not reply 'OK' at the first line so we call executewims() and not executewimsandcheckok()
-        $this->_executewims("help");
+        // this primitive does not reply 'OK' at the first line so we call _executeraw() and not _executejson()
+        $this->_executeraw('moodlejson', "help");
         return $this->data;
     }
 
@@ -846,8 +835,8 @@ class wims_comms_wrapper {
         $params.= "&option=".$this->_wimsencode($option)."&format=tsv";
 
         // this primitive does not reply 'OK' at the first line, since it's designed
-        // to output a valid csv file so we call executewims() and not executewimsandcheckok()
-        $this->_executewims("getcsv", $params);
+        // to output a valid csv file so we call _executeraw() and not _executejson()
+        $this->_executeraw("moodlejson", "getcsv", $params);
         return $this->data;
     }
     */

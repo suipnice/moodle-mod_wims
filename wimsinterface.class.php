@@ -443,7 +443,7 @@ class wims_interface{
      * - title string containing the item title
      * - the string containing state flag provided by WIMS
      *
-     * @param object $cm the course module that the wims class is bound to
+     * @param object $cm the course module that the WIMS class is bound to
      *
      * @return array of arrays of objects on success, null on failure
      */

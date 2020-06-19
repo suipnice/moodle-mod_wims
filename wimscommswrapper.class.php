@@ -325,7 +325,7 @@ class wims_comms_wrapper {
         $silent = ($extended === true) ? true : null;
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
-        $result = $this->_executejson($cmd, $params, $silent);
+        $this->_executejson($cmd, $params, $silent);
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -349,7 +349,7 @@ class wims_comms_wrapper {
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
-        $result = $this->_executejson('checkuser', $params);
+        $this->_executejson('checkuser', $params);
         return ($this->status == 'OK') ? true : null;
     }
 

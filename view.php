@@ -96,7 +96,11 @@ $wims = new wims_interface($config, $config->debugviewpage);
 
 // Start by connecting to the course on the WIMS server (and instantiate the course if required).
 $wimsresult = $wims->selectclassformodule($course, $cm, $config);
-($wimsresult == true)||raisewimserror(get_string('wims_class_select_failed', 'wims'), $wims->errormsgs);
+if ($wimsresult !== true) {
+    $wims->errormsgs[] = get_string('class_select_failed_title', 'wims');
+    $wims->errormsgs[] = get_string('class_select_failed_desc', 'wims');
+    raisewimserror($wims->errormsgs);
+}
 
 // If we're a teacher then we need the supervisor url otherwise we need the student url.
 $sitelang = current_language();

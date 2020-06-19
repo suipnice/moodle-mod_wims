@@ -76,7 +76,8 @@ $string['adminnamedebugsettings']      = 'Activer l&rsquo;affichage d&rsquo;info
 $string['admindescdebugsettings']      = '';
 
 // Messages d'erreurs
-$string['wims_class_select_failed']    = 'Impossible d&rsquo;accéder à la classe WIMS. Le serveur est probablement indisponible. Merci de retester dans quelques minutes, ou informez en l&rsquo;administrateur.' ;
+$string['class_select_failed_title']   = 'Impossible d&rsquo;accéder à la classe WIMS.';
+$string['class_select_failed_desc']    = 'Le serveur est probablement indisponible. Merci de retester dans quelques minutes, ou informez-en l&rsquo;administrateur.';
 
 // Configuration des instances de modules WIMS.
 $string['name']                        = 'Nom de l&rsquo;activité';

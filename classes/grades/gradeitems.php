@@ -44,8 +44,8 @@ class gradeitems implements itemnumber_mapping {
      */
     public static function get_itemname_mapping_for_component(): array {
         return [
-            0 => 'GRADE ITEM ZERO ?',
-            1 => 'GRADE ITEM UNO (une feuille ??)',
+            0 => 'GRADEITEM_ZERO',
+            1 => 'GRADEITEM_UNO',
         ];
     }
 

@@ -18,18 +18,16 @@ The configuration files must be put in the WIMS server in the directory:
 
 The files are called:
 
-* moodle
-* moodlehttps
 * moodlejson
 * moodlejsonhttps
 
 In these files, one needs to specify a number of parameters by hand including:
 
 * **ident_site** => which must include the ip address that the Moodle server connects from
-* **ident_password** => which should be a real password and will need to be provided as a parameter to the moodle plugin
+* **ident_password** => which should be a real password and will need to be provided as a parameter to the Moodle plugin
 
 
-MOODLE Configuration
+Moodle Configuration
 --------------------
 
 1. Login as administration to install the plugin.

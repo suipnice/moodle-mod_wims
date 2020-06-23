@@ -50,7 +50,7 @@ if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
 
 require_course_login($course, false, $cm);
 
-// Lookup configuration from moodle.
+// Lookup configuration from Moodle.
 $config = get_config('wims');
 
 // Construct the arguments for the URL.

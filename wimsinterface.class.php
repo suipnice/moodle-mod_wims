@@ -120,7 +120,7 @@ class wims_interface{
      * Select the class on the wims server with which to work (for a given Moodle WIMS module instance)
      * If the class doesn't exist then this routine will create it.
      *
-     * @param object $course the current moodle course object
+     * @param object $course the current Moodle course object
      * @param object $cm     the course module that the wims class is bound to. It should include:
      *                       integer $cm->id   the course module's unique id
      *                       string  $cm->name the course module instance name
@@ -181,7 +181,7 @@ class wims_interface{
     }
 
     /**
-     * Attempt to access a WIMS class for a given moodle module - to verify whether it is generally accessible
+     * Attempt to access a WIMS class for a given Moodle module - to verify whether it is generally accessible
      *
      * @param object $cm the course module that the wims class is bound to. It should include:
      *                   integer $cm->id the course module's unique id
@@ -200,7 +200,7 @@ class wims_interface{
      * Create a WIMS login from a user record
      *
      * @param object $user including the following:
-     *                     string $user->id        the user's unique id from within moodle
+     *                     string $user->id        the user's unique id from within Moodle
      *                     string $user->firstname the user's first name
      *                     string $user->lastname  the user's last name
      *
@@ -209,7 +209,7 @@ class wims_interface{
     public function generatewimslogin($user) {
         // Lookup our configuration to see whether or not we are supposed to use the user name
         // in the WIMS login. Using the user name in the WIMS login has the advantage of making
-        // the login more readable but the disadvantage of breaking the link between moodle and
+        // the login more readable but the disadvantage of breaking the link between Moodle and
         // WIMS accounts if ever the user's profile is updated in MOODLE.
         if ($this->_config->usenameinlogin == 1) {
             // Start by assembling the basic string parts that we're interested in.
@@ -240,7 +240,7 @@ class wims_interface{
      * @param object $user        including the following:
      *                            string $user->firstname the user's first name
      *                            string $user->lastname the user's last name
-     * @param string $currentlang current language (to force the wims site language to match the moodle language)
+     * @param string $currentlang current language (to force the wims site language to match the Moodle language)
      * @param string $urltype     the type of url required (defaults to 'home page')
      * @param string $arg         the argument to be used for selecting which worksheet or exam page to display,
      *                            depending on $urltype
@@ -643,7 +643,7 @@ class wims_interface{
      * @return string used by WIMS to set which server/course couple can access to the WIMS class.
      */
     private function _constructconnectsline() {
-        return "connections=+moodle/$this->_rcl+ +moodlejson/$this->_rcl+ +moodlehttps/$this->_rcl+ +moodlejsonhttps/$this->_rcl+";
+        return "connections=+moodlejson/$this->_rcl+ +moodlejsonhttps/$this->_rcl+";
     }
 
     /**

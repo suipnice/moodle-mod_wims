@@ -130,7 +130,7 @@ class wims_comms_wrapper {
      *
      * @param string $wimscgiurl                  the URL to the wims server
      * @param string $servicepass                 the password required for us to connect
-     *                                            (see ident_password field in the .../moodle file
+     *                                            (see ident_password field in the .../moodlejson file
      *                                            described in wimsinterface.class.php)
      * @param bool   $allowselfsignedcertificates true if self signed certificates are allowed.
      * @param string $debug_format                indicates if debug must be formatted in HTML or plain text
@@ -173,13 +173,12 @@ class wims_comms_wrapper {
     /**
      * Private utility routine to execute a call to adm/raw module
      *
-     * @param string $baseservice 'moodle' or 'moodlejson'
      * @param string $job         The WIMS job to execute.
      * @param string $params      optional URL parameters
      *
      * @return void
      */
-    private function _executeraw($baseservice, $job, $params = '') {
+    private function _executeraw($job, $params = '') {
         // Reset the status code to 'OK' here as a smart place to allow either coms or subsequent logic to reset to error condition.
         $this->status = 'OK';
 
@@ -188,7 +187,7 @@ class wims_comms_wrapper {
         $this->code = "$code";
 
         // Setup the service name value, applying 'https' suffix if required.
-        $service = $baseservice.$this->protocolmodifier;
+        $service = 'moodlejson'.$this->protocolmodifier;
 
         // Construct the core URL.
         $url = $this->wimsurl."?module=adm/raw&job=".$job."&code=".$this->code."&ident=".$service."&passwd=".$this->servicepass;
@@ -242,7 +241,7 @@ class wims_comms_wrapper {
      * @return void
      */
     private function _executewims($job, $params='') {
-        $this->_executeraw('moodlejson', $which, $params);
+        $this->_executeraw($which, $params);
         if ($this->status == 'OK') {
             $this->linedata = explode("\n", $this->rawdata);
         }
@@ -259,7 +258,7 @@ class wims_comms_wrapper {
      */
     private function _executejson($job, $params='', $silent=false) {
         // Execute the request, requesting a json format response.
-        $this->_executeraw("moodlejson", $job, $params);
+        $this->_executeraw($job, $params);
         if ($this->status != 'OK') {
             $this->debugmsg("WIMS execute failed: status = $this->status");
             return null;
@@ -827,7 +826,7 @@ class wims_comms_wrapper {
 
     public function help(){
         // this primitive does not reply 'OK' at the first line so we call _executeraw() and not _executejson()
-        $this->_executeraw('moodlejson', "help");
+        $this->_executeraw("help");
         return $this->data;
     }
 
@@ -851,7 +850,7 @@ class wims_comms_wrapper {
 
         // this primitive does not reply 'OK' at the first line, since it's designed
         // to output a valid csv file so we call _executeraw() and not _executejson()
-        $this->_executeraw("moodlejson", "getcsv", $params);
+        $this->_executeraw("getcsv", $params);
         return $this->data;
     }
     */

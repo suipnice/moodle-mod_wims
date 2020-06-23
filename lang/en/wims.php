@@ -101,3 +101,10 @@ $string['modulename_link']             = 'mod/wims/view';
 
 // Scheduled tasks.
 $string['updatescores']             = 'Update WIMS scores';
+
+// Grade items.
+$string["grade_name"] = "WIMS Score";
+for ($i = 1; $i < 1000; $i++) {
+    $string["grade_exam_$i_name"] = "Exam #$i score";
+}
+

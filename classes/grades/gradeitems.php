@@ -46,13 +46,13 @@ class gradeitems implements itemnumber_mapping {
      * @return array
      */
     public static function get_itemname_mapping_for_component(): array {
-        return [
-            // For legacy compatability when the itemnumber is 0, the itemname will always be empty. (see core_grades\component_gradeitems)
+        // For legacy compatibility, when the itemnumber is 0, the itemname will always be empty. (see core_grades\component_gradeitems)
+        $mapping = [0 => ''];
 
-            0 => '',
-            // exams have numbers 1-999
-            1 => 'exam_1',
-        ];
+        for ($i = 1; $i < 1000; $i++){
+            $mapping[$i] = "exam_$i";
+        }
+        return $mapping;
     }
 
 }

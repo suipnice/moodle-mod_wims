@@ -101,4 +101,10 @@ $string['page-mod-wims-x']             = 'N&rsquo;importe quelle page du module 
 $string['modulename_link']             = 'mod/wims/view';
 
 // Taches planifiées.
-$string['updatescores']             = 'Mise à jour des notes des activités WIMS';
+$string['updatescores']                = 'Mise à jour des notes des activités WIMS';
+
+// Grade items.
+$string["grade_name"] = "WIMS Score";
+for ($i = 1; $i < 1000; $i++) {
+    $string["grade_exam_$i_name"] = "Exam #$i score";
+}

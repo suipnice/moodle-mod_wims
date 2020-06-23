@@ -50,7 +50,8 @@ class gradeitems implements itemnumber_mapping {
             // For legacy compatability when the itemnumber is 0, the itemname will always be empty. (see core_grades\component_gradeitems)
 
             0 => '',
-            1 => 'worksheet_1',
+            // exams have numbers 1-999
+            1 => 'exam_1',
         ];
     }
 

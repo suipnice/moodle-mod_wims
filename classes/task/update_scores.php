@@ -93,7 +93,7 @@ class update_scores extends \core\task\scheduled_task {
             // Get the sheet index for this wims course.
             $sheetindex = $wims->getsheetindex($cm);
             if ($sheetindex == null) {
-                mtrace('  ERROR: Failed to fetch sheet index for WIMS course: cm='.$cm->id);
+                mtrace('  ERROR: Failed to fetch sheet index for WIMS id: cm='.$cm->id);
                 continue;
             }
 
@@ -136,9 +136,9 @@ class update_scores extends \core\task\scheduled_task {
             }
 
             // Fetch the scores for the required sheets.
-            $sheetscores = $wims->getsheetscores($cm, $requiredsheets);
+            $sheetscores = $wims->getselectedscores($cm, $requiredsheets);
             if ($sheetscores == null) {
-                mtrace(' ERROR: Failed to fetch sheet scores for WIMS course: cm='.$cm->id);
+                mtrace(' ERROR: Failed to fetch selected sheet scores for WIMS id: cm='.$cm->id);
                 continue;
             }
 
@@ -147,6 +147,8 @@ class update_scores extends \core\task\scheduled_task {
             // so we're going to use an offset for worksheets.
             $offsetforsheettype = array('worksheets' => 1000, 'exams' => 0);
 
+            $nb_gradeitems = 0;
+            $nb_ignored = 0;
             // Iterate over the records to setup meta data - ie to assign sheet names to the correct score columns.
             foreach ($sheetscores as $sheettype => $sheets) {
                 $itemnumberoffset = $offsetforsheettype[$sheettype];
@@ -169,10 +171,16 @@ class update_scores extends \core\task\scheduled_task {
                             $sheettype.' '.$sheetid.
                             ' @ itemnumber = '.$itemnumber.' => '.$sheettitle
                         );
+                        $nb_ignored++;
+                    } else {
+                        $nb_gradeitems++;
                     }
                 }
             }
+            mtrace('  $nb_gradeitems grade items updated ($nb_ignored ignored) in course module'.$cm->id);
 
+            $nb_gradeitems = 0;
+            $nb_ignored = 0;
             // Iterate over the sheet scores to write them to the database.
             foreach ($sheetscores as $sheettype => $sheets) {
                 $itemnumberoffset = $offsetforsheettype[$sheettype];
@@ -206,13 +214,17 @@ class update_scores extends \core\task\scheduled_task {
                                 $userid.' = '.$scorevalue.
                                 ' @ itemnumber = '.$itemnumber
                             );
+                            $nb_ignored++;
                             continue;
+                        } else {
+                            $nb_gradeitems++;
                         }
                     }
                 }
             }
+            mtrace('  $nb_gradeitems user grade updated ($nb_ignored ignored) in course module'.$cm->id);
         }
-        mtrace('Synchronising WIMS activity scores to grade book => Done.');
+        mtrace('\nSynchronising WIMS activity scores to grade book => Done.\n');
 
         /* return true; */
     }

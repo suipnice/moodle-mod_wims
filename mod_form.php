@@ -187,7 +187,7 @@ class mod_wims_mod_form extends moodleform_mod {
                     }
 
                     // Open a dedicated section for each sheet.
-                    $headerstr = $sheettypestr.$title.$statusstr;
+                    $headerstr = $sheettypestr." ".$title.$statusstr;
                     $mform->addElement('header', 'sheetheader'.$sheettype.$sheetidx, $headerstr);
 
                     // Add title and 'graded' checkbox.

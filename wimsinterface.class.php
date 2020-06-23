@@ -482,7 +482,7 @@ class wims_interface{
      *
      * @return array of arrays of objects on success, null on failure
      */
-    public function getsheetscores($cm, $requiredsheets) {
+    public function getselectedscores($cm, $requiredsheets) {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
 

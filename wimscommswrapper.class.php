@@ -118,6 +118,13 @@ class wims_comms_wrapper {
     public $accessurls;
 
     /**
+     * String indicating in which format (html / plain text) debug must be formatted in
+     *
+     * @var string
+     */
+    public $debug_format;
+
+    /**
      * Ctor (the class constructor)
      * stores away the supplied parameters but performs no actions
      *
@@ -126,10 +133,11 @@ class wims_comms_wrapper {
      *                                            (see ident_password field in the .../moodle file
      *                                            described in wimsinterface.class.php)
      * @param bool   $allowselfsignedcertificates true if self signed certificates are allowed.
+     * @param string $debug_format                indicates if debug must be formatted in HTML or plain text
      *
      * @return void
      */
-    public function __construct($wimscgiurl, $servicepass, $allowselfsignedcertificates=false) {
+    public function __construct($wimscgiurl, $servicepass, $allowselfsignedcertificates=false, $debug_format='html') {
         $this->wimsurl = $wimscgiurl;
         $this->protocolmodifier = (substr($wimscgiurl, 0, 5) == 'https') ? 'https' : '';
         $this->servicepass = $servicepass;
@@ -139,19 +147,24 @@ class wims_comms_wrapper {
         $this->code = '';
         $this->sslverifypeer = ($allowselfsignedcertificates == false) ? true : false;
         $this->accessurls = array();
+        $this->debug_format = $debug_format;
     }
 
     /**
      * Private utility routine
      * NOTE: We actually expose this method publicly to allow for its use by the wimsinterface class
      *
-     * @param string $msg debug message
+     * @param string $msg  debug message
      *
      * @return void
      */
     public function debugmsg($msg) {
         if ($this->debug > 0) {
-            print("<pre>$msg</pre>\n");
+            if ($this->debug_format == 'html') {
+                print("<pre>$msg</pre>\n");
+            } else {
+                print(" $msg\n");
+            }
         }
         // The following line can be uncommented when debugging to redirect debug messages to apache error log.
         /* error_log($msg); */

@@ -90,11 +90,11 @@ class wims_interface{
      *
      * @return void
      */
-    public function __construct($config, $debug=0) {
+    public function __construct($config, $debug=0, $debug_format='html') {
         $allowselfsignedcertificates =
             (property_exists($config, 'allowselfsigcerts')
             && ($config->allowselfsigcerts == true)) ? true : false;
-        $this->_wims = new wims_comms_wrapper($config->serverurl, $config->serverpassword, $allowselfsignedcertificates);
+        $this->_wims = new wims_comms_wrapper($config->serverurl, $config->serverpassword, $allowselfsignedcertificates, $debug_format);
         $this->_wims->debug = $debug;
         $this->_config = $config;
     }

@@ -81,7 +81,7 @@ $event->trigger();
 function raisewimserror($mainmsg, $errormsgs) {
     echo "<h1>".$mainmsg."</h1>";
     foreach ($errormsgs as $msg) {
-        echo "&gt; $msg<br/>";
+        echo "&rarr; $msg<br/>";
     }
     die();
 }

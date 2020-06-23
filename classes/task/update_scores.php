@@ -59,7 +59,7 @@ class update_scores extends \core\task\scheduled_task {
         mtrace('Synchronising WIMS activity scores to grade book');
         include_once(__DIR__ . "/../../wimsinterface.class.php");
         $config = get_config('wims');
-        $wims = new \wims_interface($config, $config->debugcron);
+        $wims = new \wims_interface($config, $config->debugcron, 'plain/text');
 
         // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
         $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');

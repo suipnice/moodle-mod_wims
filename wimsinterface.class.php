@@ -515,16 +515,18 @@ class wims_interface{
             foreach ($requiredsheets['exams'] as $sheetid) {
                 // Ask WIMS for the exam scores.
                 $sheetdata = $this->_wims->getexamscores($this->_qcl, $this->_rcl, $sheetid);
-                if (!$sheetdata) {
+                if ($sheetdata) {
+                    // Iterate over user score records.
+                    foreach ($sheetdata as $userscore) {
+                        $result['exams'][$sheetid][$userscore->id] = $userscore->score;
+                    }
+                } else {
                     $this->_wims->debugmsg(
                         __FILE__.':'.__LINE__.
                         ': getexamscores returning NULL'
                     );
-                    return null;
-                }
-                // Iterate over user score records.
-                foreach ($sheetdata as $userscore) {
-                    $result['exams'][$sheetid][$userscore->id] = $userscore->score;
+                    // If there is no score yet, $sheetdata can be empty
+                    //return null;
                 }
             }
         }

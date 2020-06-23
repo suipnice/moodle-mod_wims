@@ -10,7 +10,7 @@ Information regarding extended configuration for the WIMS server required for th
 WIMS Configuration files
 ------------------------
 
-You will find in the "wims-config-templates" directory a set of 4 configuration files that need to be setup on the WIMS server to enable connections from Moodle.
+You will find in the "wims-config-templates" directory a set of 2 configuration files that need to be setup on the WIMS server to enable connections from Moodle.
 
 The configuration files must be put in the WIMS server in the directory:
 

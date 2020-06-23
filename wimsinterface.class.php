@@ -381,7 +381,7 @@ class wims_interface{
         if ($classdata != "") {
             $result = $this->_wims->updateclass($this->_qcl, $this->_rcl, $classdata);
             if ($result == null) {
-                $this->_wims->debugmsg(__FILE__.':'.__LINE__.': wims interface returning NULL due to comms wrapper null result');
+                $this->_wims->debugmsg(__FILE__.':'.__LINE__.': updateclass returning NULL');
                 return null;
             }
         }
@@ -394,7 +394,7 @@ class wims_interface{
         if ($userdata != "") {
             $result = $this->_wims->updateclasssupervisor($this->_qcl, $this->_rcl, $userdata);
             if ($result == null) {
-                $this->_wims->debugmsg(__FILE__.':'.__LINE__.': wims interface returning NULL due to comms wrapper null result');
+                $this->_wims->debugmsg(__FILE__.':'.__LINE__.': updateclasssupervisor returning NULL');
                 return null;
             }
         }
@@ -410,7 +410,7 @@ class wims_interface{
                 if ($result == null) {
                     $this->_wims->debugmsg(
                         __FILE__.':'.__LINE__.
-                        ': wims interface returning NULL due to comms wrapper null result'
+                        ': updateworksheetproperties returning NULL'
                     );
                     return null;
                 }
@@ -428,7 +428,7 @@ class wims_interface{
                 if ($result == null) {
                     $this->_wims->debugmsg(
                         __FILE__.':'.
-                        __LINE__.': wims interface returning NULL due to comms wrapper null result'
+                        __LINE__.': updateexamproperties returning NULL'
                     );
                     return null;
                 }
@@ -457,7 +457,7 @@ class wims_interface{
         // Ask WIMS for a list of worksheets.
         $sheetlist = $this->_wims->getworksheetlist($this->_qcl, $this->_rcl);
         if ($sheetlist === null) {
-            $this->_wims->debugmsg(__FILE__.':'.__LINE__.': wims interface returning NULL due to comms wrapper null result');
+            $this->_wims->debugmsg(__FILE__.':'.__LINE__.': getworksheetlist returning NULL');
             return null;
         }
         $result['worksheets'] = $sheetlist;
@@ -465,7 +465,7 @@ class wims_interface{
         // Ask WIMS for a list of exams.
         $examlist = $this->_wims->getexamlist($this->_qcl, $this->_rcl);
         if ($examlist === null) {
-            $this->_wims->debugmsg(__FILE__.':'.__LINE__.': wims interface returning NULL due to comms wrapper null result');
+            $this->_wims->debugmsg(__FILE__.':'.__LINE__.': getexamlist returning NULL');
             return null;
         }
         $result['exams'] = $examlist;
@@ -498,7 +498,7 @@ class wims_interface{
                 if (!$sheetdata) {
                     $this->_wims->debugmsg(
                         __FILE__.':'.__LINE__.
-                        ': wims interface returning NULL due to comms wrapper null result'
+                        ': getworksheetscores returning NULL'
                     );
                     return null;
                 }
@@ -518,7 +518,7 @@ class wims_interface{
                 if (!$sheetdata) {
                     $this->_wims->debugmsg(
                         __FILE__.':'.__LINE__.
-                        ': wims interface returning NULL due to comms wrapper null result'
+                        ': getexamscores returning NULL'
                     );
                     return null;
                 }

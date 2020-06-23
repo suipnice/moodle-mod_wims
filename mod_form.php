@@ -160,12 +160,16 @@ class mod_wims_mod_form extends moodleform_mod {
                 foreach ($this->configfromwims[$sheettype] as $sheetidx => $sheetprops) {
                     // Work out the sheet status.
                     switch($sheetprops['status']) {
-                        case '1': $statusstr = '';
+                        case '1':
+                            // Active.
+                            $statusstr = '';
                             break;
                         case '2':
+                            // Expired.
                             $statusstr = get_string('wimsstatus2', 'wims');
                             break;
                         default :
+                            // Inactive.
                             $statusstr = get_string('wimsstatusx', 'wims');
                             break;
                     }
@@ -248,7 +252,7 @@ class mod_wims_mod_form extends moodleform_mod {
         $config = get_config('wims');
         $this->_updatedefaultvalue($defaultvalues, $user, "firstname", "anonymous");
         $this->_updatedefaultvalue($defaultvalues, $user, "lastname", "supervisor");
-        $this->_updatedefaultvalue($defaultvalues, $user, "email", "noreply@wims.com");
+        $this->_updatedefaultvalue($defaultvalues, $user, "email", "noreply@wimsedu.info");
         $this->_updatedefaultvalue($defaultvalues, $user, "institution", $config->defaultinstitution);
 
         // Try to contact the WIMS server and see if the course already exists.

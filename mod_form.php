@@ -42,10 +42,10 @@ class mod_wims_mod_form extends moodleform_mod {
     /**
      * __construct
      *
-     * @param unknown $current current
-     * @param unknown $section section
-     * @param object  $cm      course module object
-     * @param unknown $course  course
+     * @param mixed $current Current data
+     * @param int   $section Section of course that module instance will be put in or is in
+     * @param mixed $cm      course module object
+     * @param mixed $course  Current course.
      *
      * @return void
      */
@@ -139,6 +139,8 @@ class mod_wims_mod_form extends moodleform_mod {
         $this->_addtextfield('userlastname', 63);
         $this->_addtextfield('useremail', 255);
         $this->_addtextfield('userinstitution', 127);
+
+        $this->standard_coursemodule_elements();
     }
 
     /**
@@ -147,7 +149,8 @@ class mod_wims_mod_form extends moodleform_mod {
      * @return void
      */
     public function definition_after_data() {
-        $mform = $this->_form;
+        parent::definition_after_data();
+        $mform =& $this->_form;
 
         // If we have data from WIMS then use it.
         if (property_exists($this, 'configfromwims') === true) {
@@ -212,7 +215,6 @@ class mod_wims_mod_form extends moodleform_mod {
             }
         }
 
-        $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }
 

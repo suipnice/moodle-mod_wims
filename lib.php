@@ -32,26 +32,30 @@ defined('MOODLE_INTERNAL') || die;
  *
  * @param string $feature FEATURE_xx constant for requested feature
  *
+ * @uses FEATURE_GROUPS
+ * @uses FEATURE_GROUPINGS
+ * @uses FEATURE_GROUPMEMBERSONLY
+ * @uses FEATURE_MOD_INTRO
+ * @uses FEATURE_COMPLETION_TRACKS_VIEWS
+ * @uses FEATURE_GRADE_HAS_GRADE
+ * @uses FEATURE_GRADE_OUTCOMES
+ * @uses FEATURE_BACKUP_MOODLE2
+ * @uses FEATURE_SHOW_DESCRIPTION
+ *
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
 function wims_supports($feature) {
     switch($feature) {
         case FEATURE_GROUPS:
-            return false;
         case FEATURE_GROUPINGS:
-            return false;
         case FEATURE_GROUPMEMBERSONLY:
-            return false;
         case FEATURE_MOD_INTRO:
-            return false;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return false;
         case FEATURE_GRADE_HAS_GRADE:
             return true;
         case FEATURE_GRADE_OUTCOMES:
-            return false;
         case FEATURE_BACKUP_MOODLE2:
-            return false;
         case FEATURE_SHOW_DESCRIPTION:
             return false;
 

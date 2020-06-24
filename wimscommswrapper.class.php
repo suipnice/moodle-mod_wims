@@ -122,7 +122,7 @@ class wims_comms_wrapper {
      *
      * @var string
      */
-    public $debug_format;
+    public $debugformat;
 
     /**
      * Ctor (the class constructor)
@@ -133,11 +133,11 @@ class wims_comms_wrapper {
      *                                            (see ident_password field in the .../moodlejson file
      *                                            described in wimsinterface.class.php)
      * @param bool   $allowselfsignedcertificates true if self signed certificates are allowed.
-     * @param string $debug_format                indicates if debug must be formatted in HTML or plain text
+     * @param string $debugformat                 indicates if debug must be formatted in HTML or plain text
      *
      * @return void
      */
-    public function __construct($wimscgiurl, $servicepass, $allowselfsignedcertificates=false, $debug_format='html') {
+    public function __construct($wimscgiurl, $servicepass, $allowselfsignedcertificates=false, $debugformat='html') {
         $this->wimsurl = $wimscgiurl;
         $this->protocolmodifier = (substr($wimscgiurl, 0, 5) == 'https') ? 'https' : '';
         $this->servicepass = $servicepass;
@@ -147,7 +147,7 @@ class wims_comms_wrapper {
         $this->code = '';
         $this->sslverifypeer = ($allowselfsignedcertificates == false) ? true : false;
         $this->accessurls = array();
-        $this->debug_format = $debug_format;
+        $this->debugformat = $debugformat;
     }
 
     /**
@@ -160,7 +160,7 @@ class wims_comms_wrapper {
      */
     public function debugmsg($msg) {
         if ($this->debug > 0) {
-            if ($this->debug_format == 'html') {
+            if ($this->debugformat == 'html') {
                 print("<pre>$msg</pre>\n");
             } else {
                 print(" $msg\n");

@@ -147,8 +147,8 @@ class update_scores extends \core\task\scheduled_task {
             // so we're going to use an offset for worksheets.
             $offsetforsheettype = array('worksheets' => 1000, 'exams' => 0);
 
-            $nb_gradeitems = 0;
-            $nb_ignored = 0;
+            $nbgradeitems = 0;
+            $nbfailed = 0;
             // Iterate over the records to setup meta data - ie to assign sheet names to the correct score columns.
             foreach ($sheetscores as $sheettype => $sheets) {
                 $itemnumberoffset = $offsetforsheettype[$sheettype];
@@ -171,16 +171,16 @@ class update_scores extends \core\task\scheduled_task {
                             $sheettype.' '.$sheetid.
                             ' @ itemnumber = '.$itemnumber.' => '.$sheettitle
                         );
-                        $nb_ignored++;
+                        $nbfailed++;
                     } else {
-                        $nb_gradeitems++;
+                        $nbgradeitems++;
                     }
                 }
             }
-            mtrace('  $nb_gradeitems grade items updated ($nb_ignored ignored) in course module'.$cm->id);
+            mtrace("$nbgradeitems grade items updated ($nbfailed failed)");
 
-            $nb_gradeitems = 0;
-            $nb_ignored = 0;
+            $nbgradeitems = 0;
+            $nbfailed = 0;
             // Iterate over the sheet scores to write them to the database.
             foreach ($sheetscores as $sheettype => $sheets) {
                 $itemnumberoffset = $offsetforsheettype[$sheettype];
@@ -214,15 +214,15 @@ class update_scores extends \core\task\scheduled_task {
                                 $userid.' = '.$scorevalue.
                                 ' @ itemnumber = '.$itemnumber
                             );
-                            $nb_ignored++;
+                            $nbfailed++;
                             continue;
                         } else {
-                            $nb_gradeitems++;
+                            $nbgradeitems++;
                         }
                     }
                 }
             }
-            mtrace('  $nb_gradeitems user grade updated ($nb_ignored ignored) in course module'.$cm->id);
+            mtrace("$nbgradeitems user grade updated ($nbfailed failed) from course module ".$cm->id);
         }
         mtrace('\nSynchronising WIMS activity scores to grade book => Done.\n');
 

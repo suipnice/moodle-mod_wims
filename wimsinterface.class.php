@@ -85,16 +85,22 @@ class wims_interface{
      * Ctor (the class constructor)
      * stores away the supplied parametersbut performs no actions
      *
-     * @param object  $config the WIMS configuration object
-     * @param integer $debug  enables verbose output when set true
+     * @param object  $config       the WIMS configuration object
+     * @param integer $debug        enables verbose output when set true
+     * @param string  $debugformat indicates in which format (html / plain text) debug must be formatted in
      *
      * @return void
      */
-    public function __construct($config, $debug=0, $debug_format='html') {
+    public function __construct($config, $debug=0, $debugformat='html') {
         $allowselfsignedcertificates =
             (property_exists($config, 'allowselfsigcerts')
             && ($config->allowselfsigcerts == true)) ? true : false;
-        $this->_wims = new wims_comms_wrapper($config->serverurl, $config->serverpassword, $allowselfsignedcertificates, $debug_format);
+        $this->_wims = new wims_comms_wrapper(
+            $config->serverurl,
+            $config->serverpassword,
+            $allowselfsignedcertificates,
+            $debugformat
+        );
         $this->_wims->debug = $debug;
         $this->_config = $config;
     }
@@ -526,7 +532,7 @@ class wims_interface{
                         ': getexamscores returning NULL'
                     );
                     // If there is no score yet, $sheetdata can be empty
-                    //return null;
+                    // return null;
                 }
             }
         }

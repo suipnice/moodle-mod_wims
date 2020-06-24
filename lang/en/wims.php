@@ -74,7 +74,7 @@ $string['admindescdebugcron']          = '';
 $string['adminnamedebugsettings']      = 'SETTINGS debug output';
 $string['admindescdebugsettings']      = '';
 
-// Errors Msgs
+// Errors Msgs.
 $string['class_select_failed_title']   = 'Unable to access the WIMS classroom';
 $string['class_select_failed_desc']    = 'The server is probably unavailable. Please retest in a few minutes, or notify the site administrator.';
 
@@ -103,8 +103,7 @@ $string['modulename_link']             = 'mod/wims/view';
 $string['updatescores']             = 'Update WIMS scores';
 
 // Grade items.
-$string["grade_name"] = "WIMS Score";
+$string['grade_name'] = 'WIMS Score';
 for ($i = 1; $i < 1000; $i++) {
-    $string["grade_exam_$i_name"] = "Exam #$i score";
+    $string['grade_exam_'.$i.'_name'] = 'Exam #$i score';
 }
-

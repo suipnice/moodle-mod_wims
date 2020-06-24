@@ -75,7 +75,7 @@ $string['admindescdebugcron']          = '';
 $string['adminnamedebugsettings']      = 'Activer l&rsquo;affichage d&rsquo;information de debug: SETTINGS';
 $string['admindescdebugsettings']      = '';
 
-// Messages d'erreurs
+// Messages d'erreurs.
 $string['class_select_failed_title']   = 'Impossible d&rsquo;accéder à la classe WIMS.';
 $string['class_select_failed_desc']    = 'Le serveur est probablement indisponible. Merci de retester dans quelques minutes, ou informez-en l&rsquo;administrateur.';
 

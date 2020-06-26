@@ -213,10 +213,10 @@ class wims_interface{
      * @return string login for use in wims
      */
     public function generatewimslogin($user) {
-        // Lookup our configuration to see whether or not we are supposed to use the user name
-        // in the WIMS login. Using the user name in the WIMS login has the advantage of making
+        // Lookup our configuration to see whether or not we are supposed to use the user name in the WIMS login.
+        // Using the user name in the WIMS login has the advantage of making
         // the login more readable but the disadvantage of breaking the link between Moodle and
-        // WIMS accounts if ever the user's profile is updated in MOODLE.
+        // WIMS accounts if ever the user's profile is updated in Moodle.
         if ($this->_config->usenameinlogin == 1) {
             // Start by assembling the basic string parts that we're interested in.
             $initial  = ($user->firstname) ? $user->firstname[0] : '';

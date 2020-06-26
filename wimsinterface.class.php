@@ -123,6 +123,24 @@ class wims_interface{
     }
 
     /**
+     * Build a lookup table to get Moodle user ids from wimslogin.
+     *
+     * @return array the lookup table
+     */
+    public function builduserlookuptable() {
+        global $DB;
+        // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
+        $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');
+
+        $userlookup = array();
+        foreach ($userrecords as $userinfo) {
+            $wimslogin = $wims->generatewimslogin($userinfo);
+            $userlookup[$wimslogin] = $userinfo->id;
+        }
+        return $userlookup;
+    }
+
+    /**
      * Select the class on the wims server with which to work (for a given Moodle WIMS module instance)
      * If the class doesn't exist then this routine will create it.
      *
@@ -527,12 +545,11 @@ class wims_interface{
                         $result['exams'][$sheetid][$userscore->id] = $userscore->score;
                     }
                 } else {
+                    // If there is no score yet, $sheetdata can be empty.
                     $this->_wims->debugmsg(
                         __FILE__.':'.__LINE__.
                         ': getexamscores returning NULL'
                     );
-                    // If there is no score yet, $sheetdata can be empty
-                    // return null;
                 }
             }
         }

@@ -61,15 +61,8 @@ class update_scores extends \core\task\scheduled_task {
         $config = get_config('wims');
         $wims = new \wims_interface($config, $config->debugcron, 'plain/text');
 
-        // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
-        $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');
-
         // Build a lookup table to get Moodle user ids from wimslogin.
-        $userlookup = array();
-        foreach ($userrecords as $userinfo) {
-            $wimslogin = $wims->generatewimslogin($userinfo);
-            $userlookup[$wimslogin] = $userinfo->id;
-        }
+        $userlookup = $wims->builduserlookuptable();
 
         // Iterate over the set of WIMS activities in the system.
         $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
@@ -222,9 +215,9 @@ class update_scores extends \core\task\scheduled_task {
                     }
                 }
             }
-            mtrace("$nbgradeitems user grade updated ($nbfailed failed) from course module ".$cm->id);
+            mtrace($nbgradeitems.' user grade updated ($nbfailed failed)');
         }
-        mtrace('\nSynchronising WIMS activity scores to grade book => Done.\n');
+        mtrace("\nSynchronising WIMS activity scores to grade book => Done.\n");
 
         /* return true; */
     }

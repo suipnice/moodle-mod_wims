@@ -72,14 +72,16 @@ function xmldb_wims_addfield($dbman, $table, $name, $type=null,
  * Drop a field in DB on upgrade
  *
  * @param object             $dbman     Moodle DB manager (see  https://docs.moodle.org/dev/Data_definition_API)
- * @param string|xmldb_table $table     The table to be searched (string name or xmldb_table instance).
- * @param string             $name      of field
+ * @param string|xmldb_table $tablename The table to be searched (string name or xmldb_table instance).
+ * @param string             $fieldname name of field to be deleted
  *
  * @return void
  */
-function xmldb_wims_dropfield($dbman, $table, $name) {
+function xmldb_wims_dropfield($dbman, $tablename, $fieldname) {
     // If the field exist in the given table then delete it.
-    if (!$dbman->field_exists($table, $name)) {
+    $table = new xmldb_table($tablename);
+    $field = new xmldb_field($fieldname);
+    if ($dbman->field_exists($table, $field)) {
         $dbman->drop_field($table, $field);
     }
 }

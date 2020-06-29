@@ -106,3 +106,18 @@ $string['updatescores']             = 'Update WIMS scores';
 for ($i = 1; $i < 150; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Exam #'.$i.' score';
 }
+
+// Privacy.
+$string['privacy:metadata:core_grades']                  = 'The WIMS activity stores grades of users that have answered WIMS content.';
+
+$string['privacy:metadata:wims_classes:id']              = '';
+$string['privacy:metadata:wims_classes:course']          = '';
+$string['privacy:metadata:wims_classes:name']            = 'Classroom title specified by the creator';
+$string['privacy:metadata:wims_classes:userinstitution'] = 'Institution name specified by the class creator is sent from Moodle to the external WIMS classroom.';
+$string['privacy:metadata:wims_classes:userfirstname']   = 'First name specified by the class creator, used to create the classroom on the WIMS server';
+$string['privacy:metadata:wims_classes:userlastname']    = 'Last name specified by the class creator, used to create the classroom on the WIMS server';
+$string['privacy:metadata:wims_classes:useremail']       = 'Email specified by the class creator, used to create the classroom on the WIMS server.';
+
+$string['privacy:metadata:wims_server']                  = 'In order to integrate with a remote WIMS classroom, user data needs to be exchanged with that classroom.';
+$string['privacy:metadata:wims_server:userid']           = 'The user id is sent from Moodle to the external WIMS classroom.';
+$string['privacy:metadata:wims_server:fullname']         = 'The user full name is sent from Moodle to the external WIMS classroom.';

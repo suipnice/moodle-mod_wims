@@ -558,6 +558,89 @@ class wims_interface{
         return $result;
     }
 
+    /**
+     * Fetch the list of users from the WIMS server (for a given Moodle WIMS module instance)
+     *
+     * @param object $cm the course module that the wims class is bound to
+     *
+     * @return array|null array of WIMS login
+     */
+    public function getuserlist($cm) {
+
+        // Start by determining the identifiers for the class.
+        $this->_initforcm($cm);
+
+        // Try to fetch the class config.
+        $classconfig = $this->_wims->getclassconfig($this->_qcl, $this->_rcl);
+        if ($classconfig == null) {
+            return null;
+        }
+
+        return $classconfig['userlist'];
+    }
+
+    /**
+     * Check if a userlogin exist in a WIMS virtual classroom
+     *
+     * @param object $cm        course module object where to search
+     * @param string $wimslogin user to search for
+     *
+     * @return bool true if user exists in currect WIMS class
+     */
+    public function checkuser($cm, $wimslogin) {
+        // Start by determining the identifiers for the class.
+        $this->_initforcm($cm);
+
+        // Check if the user exists within the given course.
+        return $this->_wims->checkuser($this->_qcl, $this->_rcl, $login);
+    }
+
+    /**
+     * Remove all participants and their work in the WIMS classroom associated to $cm
+     *
+     * @param object $cm course module object
+     *
+     * @return bool true on success
+     */
+    public function cleanclass($cm) {
+        // Start by determining the identifiers for the class.
+        $this->_initforcm($cm);
+        // Then ask WIMS to clean the specified classroom.
+        return $this->_wims->cleanclass($this->_qcl, $this->_rcl);
+    }
+
+    /**
+     * Remove one participant and all its work in the WIMS classroom associated to $cm
+     *
+     * @param object $cm    course module object
+     * @param string $quser WIMS user ID to delete
+     *
+     * @return bool true on success
+     */
+    public function deluser($cm, $quser) {
+        // Start by determining the identifiers for the class.
+        $this->_initforcm($cm);
+        // Then ask WIMS to clean specified classroom.
+        return $this->_wims->deluser($this->_qcl, $this->_rcl, $quser);
+    }
+
+    /**
+     * Fetch a user data from the WIMS server (for a given Moodle WIMS module instance)
+     *
+     * @param object $cm    the course module that the wims class is bound to
+     * @param string $quser WIMS user ID
+     *
+     * @return array|null associative array user property values on success or null on fail
+     */
+    public function getuserdata($cm, $quser) {
+        // Start by determining the identifiers for the class.
+        $this->_initforcm($cm);
+
+        // Try to fetch the supervisor user config.
+        return $this->_wims->getuserconfig($this->_qcl, $this->_rcl, $quser);
+    }
+
+
     /* ##### Private utility routines ##### */
 
     /**

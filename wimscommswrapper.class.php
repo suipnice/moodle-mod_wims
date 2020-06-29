@@ -805,7 +805,21 @@ class wims_comms_wrapper {
     }
 
     /**
-     * Get scores of one user
+     * Remove all participants and their work in the $qcl WIMS classroom
+     *
+     * @param string $qcl The WIMS class identifier
+     * @param string $rcl An unique identifier derived from properties of the Moodle module instance
+     *
+     * @return bool true on success
+     */
+    public function cleanclass($qcl, $rcl) {
+        $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
+        $this->_executejson('cleanclass', $params);
+        return ($this->status == 'OK');
+    }
+
+    /**
+     * Remove one participant and its work in the $qcl WIMS classroom
      *
      * @param string $qcl The WIMS class identifier
      * @param string $rcl An unique identifier derived from properties of the Moodle module instance
@@ -813,9 +827,25 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
-        $params = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
-        $params.= "&quser=".$login;
+    public function deluser($qcl, $rcl, $quser) {
+        $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
+        $params .= '&quser='.$quser;
+        $this->_executejson('deluser', $params);
+        return ($this->status == 'OK');
+    }
+
+    /**
+     * Get scores of one user
+     *
+     * @param string $qcl   The WIMS class identifier
+     * @param string $rcl   An unique identifier derived from properties of the Moodle module instance
+     * @param string $quser WIMS user ID to be deleted
+     *
+     * @return bool true on success
+     */
     public function getscore($qcl, $rcl, $quser) {
+        $params  = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
+        $params .= "&quser=".$login;
         $this->_executejson("getscore", $params);
         return ($this->status == 'OK');
     }

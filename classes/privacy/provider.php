@@ -26,8 +26,10 @@ use \core_privacy\local\request\contextlist;
 use \core_privacy\local\request\approved_contextlist;
 use \core_privacy\local\request\deletion_criteria;
 use \core_privacy\local\request\userlist;
+use \core_privacy\local\request\approved_userlist;
 use \core_privacy\local\request\helper as request_helper;
 use \core_privacy\local\metadata\collection;
+use \mod_wims\wims_interface;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -99,7 +101,7 @@ class provider implements
      *
      * @return contextlist The list of contexts where the user has attempted a WIMS activity.
      */
-    public static function get_contexts_for_userid($userid) {
+    public static function get_contexts_for_userid(int $userid) : contextlist {
         $cmids = array();
 
         $wims = new \wims_interface(get_config('wims'));

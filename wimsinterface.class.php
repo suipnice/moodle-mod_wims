@@ -157,7 +157,7 @@ class wims_interface{
 
         // Work out what language to use
         // by default we use the config language
-        // but if the course includes an ovveride then we need to use it.
+        // but if the course includes an override then we need to use it.
         $this->lang = (property_exists($course, "lang")&&($course->lang != "")) ? $course->lang : $this->_config->lang;
 
         // Try to connect and drop out if we managed it.

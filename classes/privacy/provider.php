@@ -104,7 +104,7 @@ class provider implements
     public static function get_contexts_for_userid(int $userid) : contextlist {
         $cmids = array();
 
-        $wims = new \wims_interface(get_config('wims'));
+        $wims = new wims_interface(get_config('wims'));
 
         /* get WIMS user ID */
         $userinfo = $DB->get_record('user', array('userid' => $userid ), 'id, firstname, lastname');
@@ -159,7 +159,7 @@ class provider implements
 
         $user = $contextlist->get_user();
         $wimslogin = $wims->generatewimslogin($user);
-        $wims = new \wims_interface(get_config('wims'));
+        $wims = new wims_interface(get_config('wims'));
 
         // Export data with context.
         foreach ($contextlist->get_contexts() as $context) {
@@ -207,7 +207,7 @@ class provider implements
             return;
         }
 
-        $wims = new \wims_interface(get_config('wims'));
+        $wims = new wims_interface(get_config('wims'));
 
         // Delete all user data in WIMS virtual Classroom associated to the $cm.
         $wims->cleanclass($cm);
@@ -227,7 +227,7 @@ class provider implements
         }
 
         $user = $contextlist->get_user();
-        $wims = new \wims_interface(get_config('wims'));
+        $wims = new wims_interface(get_config('wims'));
         $wimslogin = $wims->generatewimslogin($user);
         foreach ($contextlist->get_contexts() as $context) {
             $cm = get_coursemodule_from_id('wims', $context->instanceid);
@@ -252,7 +252,7 @@ class provider implements
         }
 
         $cm = get_coursemodule_from_id('wims', $context->instanceid);
-        $wims = new \wims_interface(get_config('wims'));
+        $wims = new wims_interface(get_config('wims'));
 
         // Make sure the classroom is correctly accessible.
         $isaccessible = $wims->verifyclassaccessible($cm);
@@ -301,7 +301,7 @@ class provider implements
 
         $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
 
-        $wims = new \wims_interface(get_config('wims'));
+        $wims = new wims_interface(get_config('wims'));
 
         foreach ($userids as $userid) {
 

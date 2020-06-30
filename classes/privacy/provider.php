@@ -46,7 +46,7 @@ class provider implements
     \core_privacy\local\metadata\provider,
 
     // This plugin currently implements the original plugin_provider interface.
-    \core_privacy\local\request\plugin\provider
+    \core_privacy\local\request\plugin\provider,
 
     \core_privacy\local\request\core_userlist_provider
 {
@@ -92,6 +92,8 @@ class provider implements
 
     /**
      * Get the list of contexts where the specified user has attempted a WIMS activity
+     * To test this function, you can call
+     * php admin/tool/task/cli/adhoc_task.php --execute="\tool_dataprivacy\task\process_data_request_task"
      *
      * @param int $userid The user to search.
      *

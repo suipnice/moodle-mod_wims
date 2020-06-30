@@ -23,6 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_wims;
 defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__)."/wimscommswrapper.class.php");

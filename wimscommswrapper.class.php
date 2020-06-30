@@ -34,6 +34,7 @@
  *   $servicepass is the value of the 'ident_password' field in the WIMS configuration files (see README for more details)
  */
 
+namespace mod_wims;
 defined('MOODLE_INTERNAL') || die;
 
 /**

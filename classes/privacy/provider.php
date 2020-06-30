@@ -21,6 +21,10 @@
 
 namespace mod_wims\privacy;
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/mod/wims/wimsinterface.class.php');
+
 use \core_privacy\local\request\writer;
 use \core_privacy\local\request\contextlist;
 use \core_privacy\local\request\approved_contextlist;
@@ -30,8 +34,6 @@ use \core_privacy\local\request\approved_userlist;
 use \core_privacy\local\request\helper as request_helper;
 use \core_privacy\local\metadata\collection;
 use \mod_wims\wims_interface;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Privacy implementation for WIMS plugin.
@@ -102,12 +104,13 @@ class provider implements
      * @return contextlist The list of contexts where the user has attempted a WIMS activity.
      */
     public static function get_contexts_for_userid(int $userid) : contextlist {
+        global $DB;
         $cmids = array();
 
         $wims = new wims_interface(get_config('wims'));
 
         /* get WIMS user ID */
-        $userinfo = $DB->get_record('user', array('userid' => $userid ), 'id, firstname, lastname');
+        $userinfo = $DB->get_record('user', array('id' => $userid ), 'id, firstname, lastname');
         $wimslogin = $wims->generatewimslogin($userinfo);
 
         /* Get all WIMS activities in Moodle Courses */

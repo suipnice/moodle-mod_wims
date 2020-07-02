@@ -278,7 +278,7 @@ class wims_interface{
 
         // Check if the user exists within the given course.
         $checkresult = $this->_wims->checkuser($this->_qcl, $this->_rcl, $login);
-        if ($checkresult == null) {
+        if (!$checkresult) {
             // The user doesn't exist so try to create them.
             $firstname = $user->firstname;
             $lastname = $user->lastname;
@@ -593,7 +593,7 @@ class wims_interface{
         $this->_initforcm($cm);
 
         // Check if the user exists within the given course.
-        return $this->_wims->checkuser($this->_qcl, $this->_rcl, $login);
+        return $this->_wims->checkuser($this->_qcl, $this->_rcl, $wimslogin);
     }
 
     /**

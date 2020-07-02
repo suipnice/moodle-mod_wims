@@ -130,19 +130,22 @@ class provider implements
             }
         }
 
-        $params = ['modulename' => 'wims',
-                   'contextlevel' => CONTEXT_MODULE,
-                   'cmids' => implode(',', $cmids) ];
-
-        $sql = "SELECT ctx.id
-                FROM {course_modules} cm
-                WHERE cm.id IN :cmids
-                JOIN {modules} m ON cm.module = m.id AND m.name = :modulename
-                JOIN {wims} w ON cm.instance = w.id
-                JOIN {context} ctx ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel";
-
         $contextlist = new contextlist();
-        $contextlist->add_from_sql($sql, $params);
+
+        if (count($cmids) > 0) {
+            $params = ['modulename' => 'wims',
+                       'contextlevel' => CONTEXT_MODULE,
+                       'cmids' => '('.implode(',', $cmids).')' ];
+
+            $sql = "SELECT ctx.id
+                    FROM {course_modules} cm
+                    JOIN {modules} m ON cm.module = m.id AND m.name = :modulename
+                    JOIN {wims} w ON cm.instance = w.id
+                    JOIN {context} ctx ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel
+                    WHERE cm.id IN :cmids";
+            mtrace('  - SQL= '.$sql);
+            $contextlist->add_from_sql($sql, $params);
+        }
 
         return $contextlist;
     }

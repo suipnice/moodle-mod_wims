@@ -187,7 +187,7 @@ class provider implements
             $data->wimslogin = $wimslogin;
             $data->userconfig = $wims->getuserdata($cm, $wimslogin);
             $data->userscores = $wims->getscore($cm, $wimslogin);
-            writer::with_context($context)->export_data([get_string('user_data', 'mod_wims')], $data);
+            writer::with_context($context)->export_data([get_string('privacy:metadata:wims_classes:userdata', 'mod_wims')], $data);
         }
 
     }

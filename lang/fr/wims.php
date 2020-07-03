@@ -118,6 +118,7 @@ $string['privacy:metadata:wims_classes:userinstitution'] = 'Institution name spe
 $string['privacy:metadata:wims_classes:userfirstname']   = 'First name specified by the class creator, used to create the classroom on the WIMS server';
 $string['privacy:metadata:wims_classes:userlastname']    = 'Last name specified by the class creator, used to create the classroom on the WIMS server';
 $string['privacy:metadata:wims_classes:useremail']       = 'Email specified by the class creator, used to create the classroom on the WIMS server.';
+$string['privacy:metadata:wims_classes:userdata']        = 'Données utilisateur';
 
 $string['privacy:metadata:wims_server']                  = 'In order to integrate with a remote WIMS classroom, user data needs to be exchanged with that classroom.';
 $string['privacy:metadata:wims_server:userid']           = 'The user id is sent from Moodle to the external WIMS classroom.';

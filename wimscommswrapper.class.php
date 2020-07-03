@@ -853,7 +853,7 @@ class wims_comms_wrapper {
      */
     public function getscore($qcl, $rcl, $quser) {
         $params  = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
-        $params .= "&quser=".$login;
+        $params .= "&quser=".$quser;
         $jsondata = $this->_executejson("getscore", $params);
         if ($jsondata === null) {
             return array("status" => "ERROR", "message" => "getscore returned null");

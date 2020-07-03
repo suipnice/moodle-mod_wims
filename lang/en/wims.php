@@ -22,6 +22,7 @@
  * @copyright 2015 Edunao SAS <contact@edunao.com>
  * @author    Sadge <daniel@edunao.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -117,6 +118,7 @@ $string['privacy:metadata:wims_classes:userinstitution'] = 'Institution name spe
 $string['privacy:metadata:wims_classes:userfirstname']   = 'First name specified by the class creator, used to create the classroom on the WIMS server';
 $string['privacy:metadata:wims_classes:userlastname']    = 'Last name specified by the class creator, used to create the classroom on the WIMS server';
 $string['privacy:metadata:wims_classes:useremail']       = 'Email specified by the class creator, used to create the classroom on the WIMS server.';
+$string['privacy:metadata:wims_classes:userdata']        = 'User data';
 
 $string['privacy:metadata:wims_server']                  = 'In order to integrate with a remote WIMS classroom, user data needs to be exchanged with that classroom.';
 $string['privacy:metadata:wims_server:userid']           = 'The user id is sent from Moodle to the external WIMS classroom.';

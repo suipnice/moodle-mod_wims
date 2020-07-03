@@ -278,10 +278,17 @@ class wims_comms_wrapper {
         }
 
         if (($this->jsondata->status == 'OK'
-            && $this->jsondata->code == $this->code)
-            || ($this->jsondata->status == 'ERROR'
-            && $this->jsondata->code == $this->code
-            && $this->jsondata->message == 'nothing done')
+                && $this->jsondata->code == $this->code)
+            ||
+            ($this->jsondata->status == 'ERROR'
+                && $this->jsondata->code == $this->code
+                && (
+                    // In case of modclass/modexam/modsheet/moduser...
+                    $this->jsondata->message == 'nothing done'
+                    // In case of checkuser.
+                    || strpos($this->jsondata->message, 'not in this class')
+                    )
+                )
         ) {
             // Done!
             $this->debugmsg("JSON: status = OK");
@@ -351,7 +358,7 @@ class wims_comms_wrapper {
      *                      instance that the WIMS class is bound to
      * @param string $login the login of the user (which must respect WIMS user identifier rules)
      *
-     * @return true on success, null on failure
+     * @return true on success
      */
     public function checkuser($qcl, $rcl, $login) {
         // If we have already generated an access url for this user then no need to recheck them as they must be OK.
@@ -363,7 +370,7 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
         $this->_executejson('checkuser', $params);
-        return ($this->status == 'OK') ? true : null;
+        return ($this->status == 'OK');
     }
 
     /**
@@ -847,8 +854,13 @@ class wims_comms_wrapper {
     public function getscore($qcl, $rcl, $quser) {
         $params  = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
         $params .= "&quser=".$login;
-        $this->_executejson("getscore", $params);
-        return ($this->status == 'OK');
+        $jsondata = $this->_executejson("getscore", $params);
+        if ($jsondata === null) {
+            return array("status" => "ERROR", "message" => "getscore returned null");
+        } else {
+            return $jsondata;
+        }
+
     }
 
     /*

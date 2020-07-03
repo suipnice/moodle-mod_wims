@@ -641,6 +641,21 @@ class wims_interface{
         return $this->_wims->getuserconfig($this->_qcl, $this->_rcl, $quser);
     }
 
+    /**
+     * Attempt to get scores of one user in a WIMS class for a given Moodle module
+     *
+     * @param object $cm    the course module that the WIMS class is bound to
+     * @param string $quser WIMS user ID
+     *
+     * @return array user scores
+     */
+    public function getscore($cm, $quser) {
+        // Start by determining the identifiers for the class.
+        $this->_initforcm($cm);
+
+        // Delegate to the wims comms wrapper to do the work.
+        return $this->_wims->getscore($this->_qcl, $this->_rcl, $quser);
+    }
 
     /* ##### Private utility routines ##### */
 

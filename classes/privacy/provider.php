@@ -114,7 +114,9 @@ class provider implements
         $wimslogin = $wims->generatewimslogin($userinfo);
 
         /* Get all WIMS activities in Moodle Courses */
-        $coursemodules = $DB->get_records('course_modules', array('module' => 'wims'), 'id', 'id,course,instance,section');
+        $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
+        $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
+
         foreach ($coursemodules as $cm) {
             // Make sure the classroom is correctly accessible.
             $isaccessible = $wims->verifyclassaccessible($cm);
@@ -133,16 +135,14 @@ class provider implements
         $contextlist = new contextlist();
 
         if (count($cmids) > 0) {
-            $params = ['modulename' => 'wims',
-                       'contextlevel' => CONTEXT_MODULE,
-                       'cmids' => '('.implode(',', $cmids).')' ];
-
+            $params = ['contextlevel' => CONTEXT_MODULE,
+                       'moduleid' => $moduleinfo->id ];
+            $cmids = implode(',', $cmids);
             $sql = "SELECT ctx.id
                     FROM {course_modules} cm
-                    JOIN {modules} m ON cm.module = m.id AND m.name = :modulename
-                    JOIN {wims} w ON cm.instance = w.id
                     JOIN {context} ctx ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel
-                    WHERE cm.id IN :cmids";
+                    WHERE cm.id IN ($cmids)
+                    AND cm.module = :moduleid";
             mtrace('  - SQL= '.$sql);
             $contextlist->add_from_sql($sql, $params);
         }
@@ -164,8 +164,8 @@ class provider implements
         }
 
         $user = $contextlist->get_user();
-        $wimslogin = $wims->generatewimslogin($user);
         $wims = new wims_interface(get_config('wims'));
+        $wimslogin = $wims->generatewimslogin($user);
 
         // Export data with context.
         foreach ($contextlist->get_contexts() as $context) {

@@ -135,7 +135,7 @@ class wims_interface{
 
         $userlookup = array();
         foreach ($userrecords as $userinfo) {
-            $wimslogin = $wims->generatewimslogin($userinfo);
+            $wimslogin = $this->generatewimslogin($userinfo);
             $userlookup[$wimslogin] = $userinfo->id;
         }
         return $userlookup;

@@ -813,9 +813,9 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
+    public function getscore($qcl, $rcl, $quser) {
         $params = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
         $params.= "&quser=".$login;
-    public function getscore($qcl, $rcl, $quser) {
         $this->_executejson("getscore", $params);
         return ($this->status == 'OK');
     }

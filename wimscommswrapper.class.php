@@ -37,6 +37,8 @@
 namespace mod_wims;
 defined('MOODLE_INTERNAL') || die;
 
+use \stdClass;
+
 /**
  * Low level communication library for interfacing to a WIMS server
  *

@@ -30,6 +30,7 @@ require(__DIR__.'/../../config.php');
 require_once(dirname(__FILE__).'/wimsinterface.class.php');
 require_once($CFG->libdir . '/completionlib.php');
 
+use \mod_wims\wims_interface;
 
 // GET / _POST parameters.
 

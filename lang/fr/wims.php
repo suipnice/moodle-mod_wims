@@ -103,6 +103,9 @@ $string['modulename_link']             = 'mod/wims/view';
 // Taches planifiées.
 $string['updatescores']                = 'Mise à jour des notes des activités WIMS';
 
+// Calendar events.
+$string['calendardue']             = '{$a} est attendu';
+
 // Grade items.
 for ($i = 1; $i < 150; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Score de l&rsquo;examen '.$i;

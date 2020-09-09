@@ -407,8 +407,72 @@ function mod_wims_core_calendar_provide_event_action(calendar_event $event,
     return $factory->create_instance(
         get_string('view'),
         new \moodle_url('/mod/wims/view.php', ['id' => $cm->id]),
-        1,
-        true
+        1, // Number of items that require action (eg. Need to write 3 posts).
+        true // is actionable.
     );
 }
 
+/**
+ * Callback function that determines whether an action event should be showing its item count on block_myoverview
+ * based on the event type and the item count.
+ *
+ * @param calendar_event $event The calendar event.
+ * @param int $itemcount The item count associated with the action event.
+ * @return bool
+ */
+function mod_wims_core_calendar_event_action_shows_item_count(calendar_event $event, $itemcount = 0) {
+    // Always show item count if item count is greater than 1.
+    // If only one action is required than it is obvious and we don't show it for other modules.
+    return $itemcount > 1;
+}
+
+/**
+ * This callback is required to be implemented by any activity that wishes to have it’s action events draggable in the calendar.
+ * It handles updating the activity instance based on the changed action event.
+ *
+ * @throws \moodle_exception
+ * @param \calendar_event $event The updated calendar event
+ * @param stdClass $wims The corresponding activity instance
+ */
+function mod_wims_core_calendar_event_timestart_updated(\calendar_event $event, \stdClass $wims) {
+    global $CFG, $DB;
+
+    require_once($CFG->dirroot . '/mod/wims/locallib.php');
+
+    if ($event->eventtype != WIMS_EVENT_TYPE_DUE) {
+        return;
+    }
+
+    $courseid = $event->courseid;
+    $modulename = $event->modulename;
+    $instanceid = $event->instance;
+
+    // Something weird going on. The event is for a different module so
+    // we should ignore it.
+    if ($modulename != 'wims') {
+        return;
+    }
+
+    if ($wims->id != $instanceid) {
+        return;
+    }
+
+    $coursemodule = get_fast_modinfo($courseid)->instances[$modulename][$instanceid];
+    $context = context_module::instance($coursemodule->id);
+
+    // The user does not have the capability to modify this activity.
+    if (!has_capability('moodle/course:manageactivities', $context)) {
+        return;
+    }
+
+    if ($event->eventtype == WIMS_EVENT_TYPE_DUE) {
+        if ($wims->duedate != $event->timestart) {
+            $wims->duedate = $event->timestart;
+            $wims->timemodified = time();
+            // Persist the instance changes.
+            $DB->update_record('wims', $wims);
+            $event = \core\event\course_module_updated::create_from_cm($coursemodule, $context);
+            $event->trigger();
+        }
+    }
+}

@@ -22,6 +22,7 @@
  * @copyright 2015 Edunao SAS <contact@edunao.com>
  * @author    Sadge <daniel@edunao.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -102,6 +103,8 @@ $string['modulename_link']             = 'mod/wims/view';
 // Scheduled tasks.
 $string['updatescores']             = 'Update WIMS scores';
 
+// Calendar events.
+$string['calendardue']              = '{$a} is due';
 // Grade items.
 for ($i = 1; $i < 150; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Exam #'.$i.' score';

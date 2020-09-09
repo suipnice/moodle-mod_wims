@@ -41,48 +41,8 @@ define('WIMS_EVENT_TYPE_DUE', 'due');
 function wims_update_calendar($data, $cmid) {
     global $DB, $CFG;
 
-    require_once($CFG->dirroot.'/calendar/lib.php');
-
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
     \core_completion\api::update_completion_date_event($data->coursemodule, 'wims', $data->id, $completiontimeexpected);
-
-    $event = new \stdClass();
-
-    if (!empty($data->duedate)) {
-        $event->eventtype = WIMS_EVENT_TYPE_DUE; // Can be any string value you want.
-        $event->type = CALENDAR_EVENT_TYPE_ACTION; // Action events are displayed on the block_myoverview.
-        // $event->type = CALENDAR_EVENT_TYPE_STANDARD; // Events not needed on the block_myoverview.
-        $event->name = get_string('calendardue', 'wims', $data->name);
-        $event->description = format_module_intro('wims', $data, $cmid, false);
-        $event->format = FORMAT_HTML;
-        $event->courseid = $data->course;
-        $event->groupid = 0;
-        $event->userid = 0;
-        $event->modulename = 'wims';
-        $event->instance = $data->id;
-        $event->timestart = $data->duedate;
-        $event->timesort = $data->duedate;
-        $event->timeduration = 0;
-        $event->visible = instance_is_visible('wims', $data);
-        $event->priority = null; // NULL for non-override events.
-    }
-
-    $event->id = $DB->get_field('event', 'id',
-            array('modulename' => 'wims', 'instance' => $data->id, 'eventtype' => WIMS_EVENT_TYPE_DUE));
-
-    // Calendar event exists so update it.
-    if ($event->id) {
-        $calendarevent = calendar_event::load($event->id);
-        if (!empty($data->duedate)) {
-            $calendarevent->update($event);
-        } else {
-            // Calendar event is no longer needed.
-            $calendarevent->delete();
-        }
-    } else if (!empty($data->duedate)) {
-        // Event doesn't exist so create one.
-        calendar_event::create($event);
-    }
 
     return true;
 }

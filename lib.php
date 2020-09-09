@@ -117,15 +117,19 @@ function wims_get_post_actions() {
 /**
  * Add wims instance into the database.
  *
- * @param object $data  data
- * @param object $mform The form
+ * @param stdClass          $data  An object from the form in mod_form.php.
+ * @param mod_wims_mod_form $mform The form
  *
  * @return int new url instance id
  */
 function wims_add_instance($data, $mform = null) {
     global $CFG, $DB;
+
+    require_once($CFG->dirroot.'/mod/wims/locallib.php');
+
     $data->timecreated = time();
     $data->id = $DB->insert_record('wims', $data);
+    wims_update_calendar($data, $data->coursemodule);
 
     return $data->id;
 }
@@ -133,13 +137,15 @@ function wims_add_instance($data, $mform = null) {
 /**
  * Updates an instance of the mod_wims in the database.
  *
- * @param object            $data  An object from the form in mod_form.php.
+ * @param stdClass          $data  An object from the form in mod_form.php.
  * @param mod_wims_mod_form $mform The form.
  *
  * @return bool True if successful, false otherwise.
  */
 function wims_update_instance($data, $mform) {
     global $CFG, $DB;
+
+    require_once($CFG->dirroot.'/mod/wims/locallib.php');
 
     $parameters = array();
     for ($i = 0; $i < 100; $i++) {
@@ -156,12 +162,13 @@ function wims_update_instance($data, $mform) {
     $data->id           = $data->instance;
 
     $DB->update_record('wims', $data);
+    wims_update_calendar($data, $data->coursemodule);
 
     return true;
 }
 
 /**
- * Delete wims instance.
+ * Delete WIMS instance.
  *
  * @param int $id instance id
  *
@@ -175,7 +182,15 @@ function wims_delete_instance($id) {
     }
 
     // Note: all context files are deleted automatically.
-    $DB->delete_records('wims', array('id' => $url->id));
+    $DB->delete_records('wims', array('id' => $id));
+
+    wims_grade_item_delete($instance);
+
+    $events = $DB->get_records('event', array('modulename' => 'wims', 'instance' => $id));
+    foreach ($events as $event) {
+        $event = calendar_event::load($event);
+        $event->delete();
+    }
 
     return true;
 }
@@ -352,3 +367,48 @@ function wims_update_grades($moduleinstance, $userid = 0) {
     // WIMS doesn't have its own grade table so the only thing to do is update the grade item.
     return wims_grade_item_update($moduleinstance);
 }
+
+
+/**
+ * This function receives a calendar event and returns the action associated with it, or null if there is none.
+ *
+ * This is used by block_myoverview in order to display the event appropriately. If null is returned then the event
+ * is not displayed on the block.
+ *
+ * @param calendar_event $event
+ * @param \core_calendar\action_factory $factory
+ * @param int $userid User id to use for all capability checks, etc. Set to 0 for current user (default).
+ * @return \core_calendar\local\event\entities\action_interface|null
+ */
+function mod_wims_core_calendar_provide_event_action(calendar_event $event,
+                                                      \core_calendar\action_factory $factory,
+                                                      int $userid = 0) {
+    global $USER;
+
+    if (empty($userid)) {
+        $userid = $USER->id;
+    }
+
+    $cm = get_fast_modinfo($event->courseid, $userid)->instances['wims'][$event->instance];
+
+    if (!$cm->uservisible) {
+        // The module is not visible to the user for any reason.
+        return null;
+    }
+
+    $completion = new \completion_info($cm->get_course());
+
+    $completiondata = $completion->get_data($cm, false, $userid);
+
+    if ($completiondata->completionstate != COMPLETION_INCOMPLETE) {
+        return null;
+    }
+
+    return $factory->create_instance(
+        get_string('view'),
+        new \moodle_url('/mod/wims/view.php', ['id' => $cm->id]),
+        1,
+        true
+    );
+}
+

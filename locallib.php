@@ -43,6 +43,9 @@ function wims_update_calendar($data, $cmid) {
 
     require_once($CFG->dirroot.'/calendar/lib.php');
 
+    $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
+    \core_completion\api::update_completion_date_event($data->coursemodule, 'wims', $data->id, $completiontimeexpected);
+
     $event = new \stdClass();
 
     if (!empty($data->duedate)) {

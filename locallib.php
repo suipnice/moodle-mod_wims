@@ -46,9 +46,9 @@ function wims_update_calendar($data, $cmid) {
     $event = new \stdClass();
 
     if (!empty($data->duedate)) {
-        $event->eventtype = WIMS_EVENT_TYPE_DUE; // Constant defined somewhere in your code - this can be any string value you want. It is a way to identify the event.
-        $event->type = CALENDAR_EVENT_TYPE_ACTION; // Action events are displayed on the block_myoverview which by default is on users' dashboard.
-        //$event->type = CALENDAR_EVENT_TYPE_STANDARD; // This is used for events we only want to display on the calendar, and are not needed on the block_myoverview.
+        $event->eventtype = WIMS_EVENT_TYPE_DUE; // Can be any string value you want.
+        $event->type = CALENDAR_EVENT_TYPE_ACTION; // Action events are displayed on the block_myoverview.
+        // $event->type = CALENDAR_EVENT_TYPE_STANDARD; // Events not needed on the block_myoverview.
         $event->name = get_string('calendardue', 'wims', $data->name);
         $event->description = format_module_intro('wims', $data, $cmid, false);
         $event->format = FORMAT_HTML;

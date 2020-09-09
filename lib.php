@@ -50,7 +50,6 @@ function wims_supports($feature) {
         case FEATURE_GROUPINGS:
         case FEATURE_GROUPMEMBERSONLY:
         case FEATURE_MOD_INTRO:
-        case FEATURE_COMPLETION_TRACKS_VIEWS:
             return false;
 
         case FEATURE_GRADE_HAS_GRADE:
@@ -59,6 +58,11 @@ function wims_supports($feature) {
         case FEATURE_GRADE_OUTCOMES:
         case FEATURE_BACKUP_MOODLE2:
         case FEATURE_SHOW_DESCRIPTION:
+            return false;
+
+        case FEATURE_COMPLETION_TRACKS_VIEWS:// Marked complete as soon as a user clicks on it.
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:// Custom completion rules.
             return false;
 
         default:

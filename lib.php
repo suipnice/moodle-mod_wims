@@ -372,3 +372,152 @@ function wims_update_grades($moduleinstance, $userid = 0) {
     return wims_grade_item_update($moduleinstance);
 }
 
+
+/**
+ * This function receives a calendar event and returns the action associated with it, or null if there is none.
+ *
+ * This is used by block_myoverview in order to display the event appropriately. If null is returned then the event
+ * is not displayed on the block.
+ *
+ * @param calendar_event $event
+ * @param \core_calendar\action_factory $factory
+ * @param int $userid User id to use for all capability checks, etc. Set to 0 for current user (default).
+ * @return \core_calendar\local\event\entities\action_interface|null
+ */
+/*function mod_wims_core_calendar_provide_event_action(calendar_event $event,
+                                                      \core_calendar\action_factory $factory,
+                                                      int $userid = 0) {
+    global $USER;
+
+    if (empty($userid)) {
+        $userid = $USER->id;
+    }
+
+    $cm = get_fast_modinfo($event->courseid, $userid)->instances['wims'][$event->instance];
+
+    if (!$cm->uservisible) {
+        // The module is not visible to the user for any reason.
+        return null;
+    }
+
+    $completion = new \completion_info($cm->get_course());
+
+    $completiondata = $completion->get_data($cm, false, $userid);
+
+    if ($completiondata->completionstate != COMPLETION_INCOMPLETE) {
+        return null;
+    }
+
+    return $factory->create_instance(
+        get_string('view'),
+        new \moodle_url('/mod/wims/view.php', ['id' => $cm->id]),
+        1, // Number of items that require action (eg. Need to write 3 posts).
+        true // is actionable.
+    );
+}
+
+/**
+ * Callback function that determines whether an action event should be showing its item count on block_myoverview
+ * based on the event type and the item count.
+ *
+ * @param calendar_event $event The calendar event.
+ * @param int $itemcount The item count associated with the action event.
+ * @return bool
+ */
+/*function mod_wims_core_calendar_event_action_shows_item_count(calendar_event $event, $itemcount = 0) {
+    // Always show item count if item count is greater than 1.
+    // If only one action is required than it is obvious and we don't show it for other modules.
+    return $itemcount > 1;
+}
+
+/**
+ * This callback is required to be implemented by any activity that wishes to have it’s action events draggable in the calendar.
+ * It handles updating the activity instance based on the changed action event.
+ *
+ * @throws \moodle_exception
+ * @param \calendar_event $event The updated calendar event
+ * @param stdClass $wims The corresponding activity instance
+ */
+/*function mod_wims_core_calendar_event_timestart_updated(\calendar_event $event, \stdClass $wims) {
+    global $CFG, $DB;
+
+    require_once($CFG->dirroot . '/mod/wims/locallib.php');
+
+    if ($event->eventtype != WIMS_EVENT_TYPE_DUE) {
+        return;
+    }
+
+    $courseid = $event->courseid;
+    $modulename = $event->modulename;
+    $instanceid = $event->instance;
+
+    // Something weird going on. The event is for a different module so
+    // we should ignore it.
+    if ($modulename != 'wims') {
+        return;
+    }
+
+    if ($wims->id != $instanceid) {
+        return;
+    }
+
+    $coursemodule = get_fast_modinfo($courseid)->instances[$modulename][$instanceid];
+    $context = context_module::instance($coursemodule->id);
+
+    // The user does not have the capability to modify this activity.
+    if (!has_capability('moodle/course:manageactivities', $context)) {
+        return;
+    }
+
+    if ($event->eventtype == WIMS_EVENT_TYPE_DUE) {
+        if ($wims->duedate != $event->timestart) {
+            $wims->duedate = $event->timestart;
+            $wims->timemodified = time();
+            // Persist the instance changes.
+            $DB->update_record('wims', $wims);
+            $event = \core\event\course_module_updated::create_from_cm($coursemodule, $context);
+            $event->trigger();
+        }
+    }
+}
+
+/**
+ * This function calculates the minimum and maximum cutoff values for the timestart of
+ * the given event.
+ *
+ * It will return an array with two values, the first being the minimum cutoff value and
+ * the second being the maximum cutoff value. Either or both values can be null, which
+ * indicates there is no minimum or maximum, respectively.
+ *
+ * If a cutoff is required then the function must return an array containing the cutoff
+ * timestamp and error string to display to the user if the cutoff value is violated.
+ *
+ * A minimum and maximum cutoff return value will look like:
+ * [
+ *     [1505704373, 'The date must be after this date'],
+ *     [1506741172, 'The date must be before this date']
+ * ]
+ *
+ * @param calendar_event $event The calendar event to get the time range for
+ * @param stdClass $wims The module instance to get the range from
+ * @return array Returns an array with min and max date.
+ */
+/*function mod_wims_core_calendar_get_valid_event_timestart_range(\calendar_event $event, \stdClass $wims) {
+    global $CFG;
+
+    require_once($CFG->dirroot . '/mod/wims/locallib.php');
+
+    $mindate = null;
+    $maxdate = null;
+
+    /*if ($event->eventtype == WIMS_EVENT_TYPE_DUE) {
+        if (!empty($wims->cutoffdate)) {
+            $maxdate = [
+                $wims->cutoffdate,
+                get_string('cutoffdatevalidation', 'wims'),
+            ];
+        }
+    }*/
+
+/*    return [$mindate, $maxdate];
+}*/

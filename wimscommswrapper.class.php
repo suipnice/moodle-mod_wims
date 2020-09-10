@@ -837,28 +837,21 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
-<<<<<<< HEAD
     public function deluser($qcl, $rcl, $quser) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$quser;
         $this->_executejson('deluser', $params);
-=======
-    public function getscore($qcl, $rcl, $quser) {
-        $params = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
-        $params.= "&quser=".$login;
-        $this->_executejson("getscore", $params);
->>>>>>> develop
         return ($this->status == 'OK');
     }
 
     /**
-     * Get scores of one user
+     * Get scores of one user in a WIMS classroom
      *
      * @param string $qcl   The WIMS class identifier
      * @param string $rcl   An unique identifier derived from properties of the Moodle module instance
      * @param string $quser WIMS user ID to be deleted
      *
-     * @return bool true on success
+     * @return array scores of $quser user in $qcl classroom
      */
     public function getscore($qcl, $rcl, $quser) {
         $params  = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);

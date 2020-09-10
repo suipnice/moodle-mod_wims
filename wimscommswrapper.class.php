@@ -837,10 +837,17 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
+<<<<<<< HEAD
     public function deluser($qcl, $rcl, $quser) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$quser;
         $this->_executejson('deluser', $params);
+=======
+    public function getscore($qcl, $rcl, $quser) {
+        $params = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
+        $params.= "&quser=".$login;
+        $this->_executejson("getscore", $params);
+>>>>>>> develop
         return ($this->status == 'OK');
     }
 

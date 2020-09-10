@@ -50,7 +50,6 @@ function wims_supports($feature) {
         case FEATURE_GROUPINGS:
         case FEATURE_GROUPMEMBERSONLY:
         case FEATURE_MOD_INTRO:
-        case FEATURE_COMPLETION_TRACKS_VIEWS:
             return false;
 
         case FEATURE_GRADE_HAS_GRADE:
@@ -59,6 +58,11 @@ function wims_supports($feature) {
         case FEATURE_GRADE_OUTCOMES:
         case FEATURE_BACKUP_MOODLE2:
         case FEATURE_SHOW_DESCRIPTION:
+            return false;
+
+        case FEATURE_COMPLETION_TRACKS_VIEWS:// Marked complete as soon as a user clicks on it.
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:// Custom completion rules.
             return false;
 
         default:
@@ -117,15 +121,19 @@ function wims_get_post_actions() {
 /**
  * Add wims instance into the database.
  *
- * @param object $data  data
- * @param object $mform The form
+ * @param stdClass          $data  An object from the form in mod_form.php.
+ * @param mod_wims_mod_form $mform The form
  *
  * @return int new url instance id
  */
 function wims_add_instance($data, $mform = null) {
     global $CFG, $DB;
+
+    require_once($CFG->dirroot.'/mod/wims/locallib.php');
+
     $data->timecreated = time();
     $data->id = $DB->insert_record('wims', $data);
+    wims_update_calendar($data, $data->coursemodule);
 
     return $data->id;
 }
@@ -133,13 +141,15 @@ function wims_add_instance($data, $mform = null) {
 /**
  * Updates an instance of the mod_wims in the database.
  *
- * @param object            $data  An object from the form in mod_form.php.
+ * @param stdClass          $data  An object from the form in mod_form.php.
  * @param mod_wims_mod_form $mform The form.
  *
  * @return bool True if successful, false otherwise.
  */
 function wims_update_instance($data, $mform) {
     global $CFG, $DB;
+
+    require_once($CFG->dirroot.'/mod/wims/locallib.php');
 
     $parameters = array();
     for ($i = 0; $i < 100; $i++) {
@@ -156,12 +166,13 @@ function wims_update_instance($data, $mform) {
     $data->id           = $data->instance;
 
     $DB->update_record('wims', $data);
+    wims_update_calendar($data, $data->coursemodule);
 
     return true;
 }
 
 /**
- * Delete wims instance.
+ * Delete WIMS instance.
  *
  * @param int $id instance id
  *
@@ -175,7 +186,15 @@ function wims_delete_instance($id) {
     }
 
     // Note: all context files are deleted automatically.
-    $DB->delete_records('wims', array('id' => $url->id));
+    $DB->delete_records('wims', array('id' => $id));
+
+    wims_grade_item_delete($instance);
+
+    $events = $DB->get_records('event', array('modulename' => 'wims', 'instance' => $id));
+    foreach ($events as $event) {
+        $event = calendar_event::load($event);
+        $event->delete();
+    }
 
     return true;
 }
@@ -352,3 +371,4 @@ function wims_update_grades($moduleinstance, $userid = 0) {
     // WIMS doesn't have its own grade table so the only thing to do is update the grade item.
     return wims_grade_item_update($moduleinstance);
 }
+

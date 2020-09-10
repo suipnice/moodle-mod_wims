@@ -50,14 +50,12 @@ if ($id) {
 }
 
 // Sanity tests.
-
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/wims:view', $context);
 
 
 // Moodle event logging & state update.
-
 $params = array(
     'context' => $context,
     'objectid' => $instance->id
@@ -68,6 +66,9 @@ $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('wims', $instance);
 $event->trigger();
 
+// Mark the activity completed.
+$completion = new completion_info($course);
+$completion->set_module_viewed($cm);
 
 // Work Code.
 

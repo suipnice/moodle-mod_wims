@@ -15,19 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * WIMS module version information
+ * Library of functions for WIMS outside of the core api
  *
  * @package   mod_wims
- * @copyright 2015 Edunao SAS <contact@edunao.com>
- * @author    Sadge <daniel@edunao.com>
+ * @copyright 2020 UCA <univ-cotedazur.fr>
+ * @author    Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'mod_wims';   // Full name of the plugin (used for diagnostics)
-$plugin->release  = '0.3.2';      // Don't forget to update the version too.
-$plugin->version  = 2020090903;    // The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2018120300;    // Requires this Moodle version (3.6)
-$plugin->maturity = MATURITY_BETA; // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
-$plugin->cron     = 0;             // Limit the frequency at which the CRON gets called.
+require_once($CFG->dirroot . '/mod/wims/lib.php');
+
+// Define Event types.
+define('WIMS_EVENT_TYPE_DUE', 'due');
+
+/**
+ * Update the calendar entries for the current wims activity.
+ * See @link{https://docs.moodle.org/dev/Calendar_API}
+ *
+ * @param stdClass $data The row from the database table wims.
+ * @param int      $cmid The coursemodule id
+ * @return bool
+ */
+function wims_update_calendar($data, $cmid) {
+    global $DB, $CFG;
+
+    $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
+    \core_completion\api::update_completion_date_event($data->coursemodule, 'wims', $data->id, $completiontimeexpected);
+
+    return true;
+}

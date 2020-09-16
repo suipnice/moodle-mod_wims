@@ -257,7 +257,7 @@ class wims_comms_wrapper {
      * @param string $params optional URL parameters
      * @param bool   $silent make a var_dump or not
      *
-     * @return array|null
+     * @return StdClass|null
      */
     private function _executejson($job, $params='', $silent=false) {
         // Execute the request, requesting a json format response.
@@ -300,7 +300,7 @@ class wims_comms_wrapper {
             foreach ($badkeys as $key) {
                 unset($this->arraydata[$key]);
             }
-            return $this->arraydata;
+            return (object) $this->arraydata;
         } else {
             $this->status = 'WIMS_FAIL';
             $this->debugmsg(
@@ -482,7 +482,7 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
         $urlparam = '&data1='.$_SERVER['REMOTE_ADDR'];
-        $jsondata = $this->_executejson('authuser', $params.$urlparam);
+        $this->_executejson('authuser', $params.$urlparam);
         if ($this->status == 'COMMS_FAIL') {
             // Failed to communcate witht he wims server so there's no possibility of recovery.
             return null;
@@ -501,14 +501,14 @@ class wims_comms_wrapper {
             );
             // Our error message did match the regex so try again, substituting in the deducd IP address.
             $urlparam = '&data1='.$matches[1];
-            $jsondata = $this->_executejson('authuser', $params.$urlparam);
+            $this->_executejson('authuser', $params.$urlparam);
             if ($this->status != 'OK') {
                 // OK so after a second attempt we've still failed. Time to call it a day!
                 return null;
             }
         }
         // Store away the generated url and return it.
-        $this->accessurls[$fulluserid] = $jsondata->home_url;
+        $this->accessurls[$fulluserid] = $this->jsondata->home_url;
         return $this->accessurls[$fulluserid].'&lang='.$currentlang;
     }
 

@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
+use \mod_wims\wims_interface;
 
 /**
  * Mod wims mod form class

@@ -294,7 +294,13 @@ class wims_comms_wrapper {
         ) {
             // Done!
             $this->debugmsg("JSON: status = OK");
-            return $this->jsondata;
+            // Copy the json data to an array and remove entries that are not pertinent.
+            $this->arraydata = (array)$this->jsondata;
+            $badkeys = array("code", "job");
+            foreach ($badkeys as $key) {
+                unset($this->arraydata[$key]);
+            }
+            return $this->arraydata;
         } else {
             $this->status = 'WIMS_FAIL';
             $this->debugmsg(
@@ -580,13 +586,11 @@ class wims_comms_wrapper {
     public function getclassconfig($qcl, $rcl) {
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
-        $jsondata = $this->_executejson('getclass', $params);
-        if ($jsondata == null) {
+        if ($this->_executejson('getclass', $params) === null) {
             return null;
         }
-        // Copy the json data to an array and remove entries that are not pertinent.
-        $this->arraydata = (array)$jsondata;
-        $badkeys = array("status", "code", "job", "query_class", "rclass", "password");
+        // Remove entries that are not pertinent.
+        $badkeys = array("status", "query_class", "rclass", "password");
         foreach ($badkeys as $key) {
             unset($this->arraydata[$key]);
         }
@@ -606,13 +610,11 @@ class wims_comms_wrapper {
     public function getuserconfig($qcl, $rcl, $login) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
-        $jsondata = $this->_executejson('getuser', $params);
-        if ($jsondata == null) {
+        if ($this->_executejson('getuser', $params) === null) {
             return null;
         }
-        // Copy the json data to an array and remove entries that are not pertinent.
-        $this->arraydata = (array)$jsondata;
-        $badkeys = array("status", "code", "job", "query_class", "queryuser");
+        // Remove entries that are not pertinent.
+        $badkeys = array("status", "query_class", "queryuser");
         foreach ($badkeys as $key) {
             unset($this->arraydata[$key]);
         }
@@ -856,11 +858,15 @@ class wims_comms_wrapper {
     public function getscore($qcl, $rcl, $quser) {
         $params  = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
         $params .= "&quser=".$quser;
-        $jsondata = $this->_executejson("getscore", $params);
-        if ($jsondata === null) {
+        if ($this->_executejson("getscore", $params) === null) {
             return array("status" => "ERROR", "message" => "getscore returned null");
         } else {
-            return $jsondata;
+            // Remove entries that are not pertinent.
+            $badkeys = array("status", "query_class", "query_user");
+            foreach ($badkeys as $key) {
+                unset($this->arraydata[$key]);
+            }
+            return $this->arraydata;
         }
 
     }

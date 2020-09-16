@@ -514,6 +514,9 @@ class wims_interface{
         // Setup a result object.
         $result = array();
 
+        // Pour optimiser, on pourrait d'abord demander s'il y a des
+        // participants dans la classe, et ne pas demander les scores sinon.
+
         // Iterate over worksheets.
         if (array_key_exists('worksheets', $requiredsheets)) {
             $result['worksheets'] = array();
@@ -551,6 +554,9 @@ class wims_interface{
                         __FILE__.':'.__LINE__.
                         ': getexamscores returning NULL'
                     );
+                    // ATTENTION : ici c'est domage de faire un 'return null', juste parce qu'un seul des exams n'a rien fourni.
+                    // Ca peut etre un souci de désynchro (du genre "Exam #4 must be active")
+                    // ==> afficher le retour de WIMS dans debugmsg !!
                 }
             }
         }

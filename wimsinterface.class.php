@@ -555,7 +555,7 @@ class wims_interface{
                     );
                     // ATTENTION : ici c'est domage de faire un 'return null', juste parce qu'un seul des exams n'a rien fourni.
                     // Ca peut etre un souci de désynchro (du genre "Exam #4 must be active")
-                    // ==> afficher le retour de WIMS dans debugmsg !!
+                    // Ca peut également venir d'un retour "there is no user in this class".
                 }
             }
         }

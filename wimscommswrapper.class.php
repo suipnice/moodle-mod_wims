@@ -791,7 +791,7 @@ class wims_comms_wrapper {
         $params .= '&qexam='.$exam;
         $jsondata = $this->_executejson('getexamscores', $params);
         if ($this->status != 'OK') {
-            $this->_wims->debugmsg("getexamscores: ".$jsondata->message);
+            $this->debugmsg("getexamscores: ".$jsondata->message);
             return null;
         }
         return $jsondata->data_scores;

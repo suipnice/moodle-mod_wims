@@ -16,7 +16,12 @@
 
 /**
  * Privacy implementation for WIMS Plugin.
+ *
  * See {@link https://docs.moodle.org/dev/Privacy_API}.
+ *
+ * @package   mod_wims
+ * @copyright 2020 UCA
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_wims\privacy;
@@ -106,7 +111,6 @@ class provider implements
     public static function get_contexts_for_userid(int $userid) : contextlist {
         global $DB;
         $cmids = array();
-
         $wims = new wims_interface(get_config('wims'));
 
         /* get WIMS user ID */
@@ -143,7 +147,7 @@ class provider implements
                     JOIN {context} ctx ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel
                     WHERE cm.id IN ($cmids)
                     AND cm.module = :moduleid";
-            mtrace('  - SQL= '.$sql);
+
             $contextlist->add_from_sql($sql, $params);
         }
 

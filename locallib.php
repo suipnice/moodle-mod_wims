@@ -32,7 +32,7 @@ define('WIMS_EVENT_TYPE_DUE', 'due');
 
 /**
  * Update the calendar entries for the current wims activity.
- * See @link{https://docs.moodle.org/dev/Calendar_API}
+ * See {@link https://docs.moodle.org/dev/Calendar_API}
  *
  * @param stdClass $data The row from the database table wims.
  * @param int      $cmid The coursemodule id

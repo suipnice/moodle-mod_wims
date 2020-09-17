@@ -277,8 +277,7 @@ class wims_interface{
         $login = $this->generatewimslogin($user);
 
         // Check if the user exists within the given course.
-        $checkresult = $this->_wims->checkuser($this->_qcl, $this->_rcl, $login);
-        if (!$checkresult) {
+        if (!$this->_wims->checkuser($this->_qcl, $this->_rcl, $login)) {
             // The user doesn't exist so try to create them.
             $firstname = $user->firstname;
             $lastname = $user->lastname;

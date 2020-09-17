@@ -25,6 +25,8 @@ namespace mod_wims\task;
 
 defined('MOODLE_INTERNAL') || die();
 
+use \mod_wims\wims_interface;
+
 /**
  * The mod_wims updating scores task class
  *
@@ -59,7 +61,7 @@ class update_scores extends \core\task\scheduled_task {
         mtrace('Synchronising WIMS activity scores to grade book');
         include_once(__DIR__ . "/../../wimsinterface.class.php");
         $config = get_config('wims');
-        $wims = new \wims_interface($config, $config->debugcron, 'plain/text');
+        $wims = new wims_interface($config, $config->debugcron, 'plain/text');
 
         // Build a lookup table to get Moodle user ids from wimslogin.
         $userlookup = $wims->builduserlookuptable();

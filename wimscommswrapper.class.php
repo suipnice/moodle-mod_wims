@@ -378,7 +378,7 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
         $this->_executejson('checkuser', $params);
-        return ($this->status == 'OK');
+        return ($this->jsondata->status == 'OK');
     }
 
     /**

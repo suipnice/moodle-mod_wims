@@ -565,6 +565,56 @@ class wims_interface{
     }
 
     /**
+     * create the set of worksheets and exams where score is needed
+     *
+     * @param $sheetindex
+     *
+     * @return StdClass containing 2 arrays (requiredsheets & sheettitles)
+     */
+    public function getrequiredsheets($sheetindex) {
+
+        // Iterate over the contents of the sheet index, storing pertinent entries in the 'required sheets' array.
+        $ret = new \StdClass();
+        $ret->ids = array();
+        $ret->titles = array();
+        foreach ($sheetindex as $sheettype => $sheets) {
+            $ret->ids[$sheettype] = array();
+            $ret->titles[$sheettype] = array();
+            foreach ($sheets as $sheetid => $sheetsummary) {
+                // Ignore sheets that are in preparation as WIMS complains if one tries to access their scores.
+                if ($sheetsummary->state == 0) {
+                    mtrace(
+                        '  - Ignoring: '.$sheettype.' '.
+                        $sheetid.': "'.$title.
+                        '" [state='.$sheetsummary->state.'] - due to STATE'
+                    );
+                    continue;
+                }
+                $title = $sheetsummary->title;
+                // If the sheet name is tagged with a '*' then strip it off and process the sheet.
+                if (substr($title, -1) === '*') {
+                    $title = trim(substr($title, 0, -1));
+                } else {
+                    // We don't have a * so if we're not an exam then drop our.
+                    if ($sheettype !== 'exams') {
+                        mtrace(
+                            '  - Ignoring: '.$sheettype.
+                            ' '.$sheetid.': "'.$title.
+                            '" [state='.$sheetsummary->state.'] - due to Lack of *'
+                        );
+                        continue;
+                    }
+                }
+                // We're ready to process the sheet.
+                mtrace('  * Keeping: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.']');
+                $ret->ids[$sheettype][] = $sheetid;
+                $ret->titles[$sheettype][$sheetid] = $title;
+            }
+        }
+        return $ret;
+    }
+
+    /**
      * Fetch the list of users from the WIMS server (for a given Moodle WIMS module instance)
      *
      * @param object $cm the course module that the wims class is bound to

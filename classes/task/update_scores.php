@@ -92,46 +92,10 @@ class update_scores extends \core\task\scheduled_task {
                 continue;
             }
 
-            // Iterate over the contents of the sheet index, storing pertinent entries in the 'required sheets' array.
-            $requiredsheets = array();
-            $sheettitles = array();
-            foreach ($sheetindex as $sheettype => $sheets) {
-                $requiredsheets[$sheettype] = array();
-                $sheettitles[$sheettype] = array();
-                foreach ($sheets as $sheetid => $sheetsummary) {
-                    // Ignore sheets that are in preparation as WIMS complains if one tries to access their scores.
-                    if ($sheetsummary->state == 0) {
-                        mtrace(
-                            '  - Ignoring: '.$sheettype.' '.
-                            $sheetid.': "'.$title.
-                            '" [state='.$sheetsummary->state.'] - due to STATE'
-                        );
-                        continue;
-                    }
-                    $title = $sheetsummary->title;
-                    // If the sheet name is tagged with a '*' then strip it off and process the sheet.
-                    if (substr($title, -1) === '*') {
-                        $title = trim(substr($title, 0, -1));
-                    } else {
-                        // We don't have a * so if we're not an exam then drop our.
-                        if ($sheettype !== 'exams') {
-                            mtrace(
-                                '  - Ignoring: '.$sheettype.
-                                ' '.$sheetid.': "'.$title.
-                                '" [state='.$sheetsummary->state.'] - due to Lack of *'
-                            );
-                            continue;
-                        }
-                    }
-                    // We're ready to process the sheet.
-                    mtrace('  * Keeping: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.']');
-                    $requiredsheets[$sheettype][] = $sheetid;
-                    $sheettitles[$sheettype][$sheetid] = $title;
-                }
-            }
+            $requiredsheets = $wims->getrequiredsheets($cm);
 
             // Fetch the scores for the required sheets.
-            $sheetscores = $wims->getselectedscores($cm, $requiredsheets);
+            $sheetscores = $wims->getselectedscores($cm, $requiredsheets->ids);
             if ($sheetscores == null) {
                 mtrace(' ERROR: Failed to fetch selected sheet scores for WIMS id: cm='.$cm->id);
                 continue;
@@ -151,7 +115,7 @@ class update_scores extends \core\task\scheduled_task {
                     // Generate the key identifier that allows us to differentiate scores within a single exercise.
                     $itemnumber = $itemnumberoffset + $sheetid;
                     // Construct the grade column definition object (with the name of the exercise, score ranges, etc).
-                    $sheettitle = $sheettitles[$sheettype][$sheetid];
+                    $sheettitle = $requiredsheets->titles[$sheettype][$sheetid];
                     // See {@link https://docs.moodle.org/dev/Grades#grade_items} for grade item props.
                     $params = array(
                         'itemname' => $sheettitle,

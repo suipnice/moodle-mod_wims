@@ -691,6 +691,7 @@ class wims_comms_wrapper {
         if ($this->status != 'OK') {
             return null;
         }
+        // Should we return also $jsondata->sheet_formula ?
         return $jsondata->data_scores;
     }
 

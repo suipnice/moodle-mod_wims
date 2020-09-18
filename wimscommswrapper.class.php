@@ -235,20 +235,6 @@ class wims_comms_wrapper {
         curl_close($curl);
     }
 
-    /**
-     * Private utility routine, to handle request in old wims format
-     *
-     * @param string $job  The WIMS job to execute.
-     * @param string $params optional URL parameters
-     *
-     * @return void
-     */
-    private function _executewims($job, $params='') {
-        $this->_executeraw($which, $params);
-        if ($this->status == 'OK') {
-            $this->linedata = explode("\n", $this->rawdata);
-        }
-    }
 
     /**
      * Call WIMS API, which respond in JSON

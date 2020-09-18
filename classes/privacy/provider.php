@@ -199,7 +199,10 @@ class provider implements
 
     /**
      * Delete all data for all users in the specified context (if context is wims).
+     *
      * See {@link https://docs.moodle.org/dev/Privacy_API#Delete_for_a_context}.
+     * This will be called when the retention period for the context has expired
+     * to adhere to the privacy by design requirement
      *
      * @param \context $context The specific context to delete data for.
      *

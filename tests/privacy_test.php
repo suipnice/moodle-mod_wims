@@ -89,32 +89,33 @@ class mod_wims_privacy_testcase extends provider_testcase {
         $this->getDataGenerator()->enrol_user($user1->id, $course->id, 'student');
         $this->getDataGenerator()->enrol_user($user2->id, $course->id, 'student');
         $this->getDataGenerator()->enrol_user($teacher->id, $course->id, 'editingteacher');
-        $wims = $this->create_instance([
+        $instance = $this->create_instance([
             'course' => $course,
             'name' => 'Classe WIMS 01',
         ]);
 
-        $context = $wims->context;
-        $cm = $wims->cm;
+        $context = $instance->context;
+        $cm = $instance->cm;
+        $wims = $instance->wims;
+        $config = $instance->config;
 
+        // Start by creating a class on the WIMS server connected to the course.
+        $this->assertTrue($wims->selectclassformodule($course, $cm, $config));
+
+        $sitelang = current_language();
         // Connect $user1 to the WIMS class.
-
+        $wims->getstudenturl($user1, $sitelang);
         // Connect $user2 to the WIMS class.
+        $wims->getstudenturl($user2, $sitelang);
 
         // Check if the users exists within the given course.
-        $wimslogin1 = $wims->generatewimslogin($user1);
-        $this->assertTrue($wims->wims->checkuser($cm, $wimslogin1));
-        $wimslogin2 = $wims->generatewimslogin($user2);
-        $this->assertTrue($wims->wims->checkuser($cm, $wimslogin2));
-        $this->assertCount(2, $wims->wims->getuserlist($cm));
+        $this->assertCount(2, $wims->getuserlist($cm));
 
         // Delete all user data for this assignment.
         provider::delete_data_for_all_users_in_context($context);
 
-        // Check if the user still exists within the given course.
-        $this->assertFalse($wims->wims->checkuser($cm, $wimslogin1));
-        $this->assertFalse($wims->wims->checkuser($cm, $wimslogin2));
-        $this->assertCount(0, $wims->wims->getuserlist($cm));
+        // Check if the users still exists within the given course.
+        $this->assertCount(0, $wims->getuserlist($cm));
     }
 
 

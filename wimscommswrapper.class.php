@@ -128,6 +128,13 @@ class wims_comms_wrapper {
     public $debugformat;
 
     /**
+     * Object containing returned json from WIMS server
+     *
+     * @var StdClass
+     */
+    public $jsondata;
+
+    /**
      * Ctor (the class constructor)
      * stores away the supplied parameters but performs no actions
      *
@@ -151,6 +158,7 @@ class wims_comms_wrapper {
         $this->sslverifypeer = ($allowselfsignedcertificates == false) ? true : false;
         $this->accessurls = array();
         $this->debugformat = $debugformat;
+        $this->jsondata = new StdClass();
     }
 
     /**

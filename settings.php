@@ -36,7 +36,7 @@ if ($ADMIN->fulltree) {
 
     // WIMS server settings.
     addwimsadminheading($settings, "serversettings");
-    addwimsadminsetting($settings, "serverurl", "https://192.168.0.1/wims/wims.cgi");
+    addwimsadminsetting($settings, "serverurl", "http://192.168.0.1/wims/");
     addwimsadminsetting($settings, "allowselfsigcerts", 0, ADMIN_SETTING_TYPE_CHECKBOX);
     addwimsadminsetting($settings, "serverpassword", "password");
     addwimsadminsetting($settings, "qcloffset", "100000");

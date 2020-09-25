@@ -188,7 +188,9 @@ class wims_interface{
 
         // Ensure that everything went to plan.
         if ($addresult !== true) {
-            $this->errormsgs = $this->_wims->jsondata->message;
+            if (property_exists($this->_wims->jsondata, 'message')) {
+                $this->errormsgs = $this->_wims->jsondata->message;
+            }
             return null;
         }
 

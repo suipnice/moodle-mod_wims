@@ -50,4 +50,21 @@ class mod_wims_generator extends testing_module_generator {
 
         return parent::create_instance($record, (array)$options);
     }
+
+    public function get_config_for_tests() {
+        $defaultwimssettings = array(
+           'allowselfsigcerts' => '0',
+           'debugcron' => '1',
+           'debugsettings' => '1',
+           'debugviewpage' => '0',
+           'defaultinstitution' => 'Moodle/WIMS',
+           'lang' => 'fr',
+           'qcloffset' => '100000',
+           'serverpassword' => 'password',
+           'serverurl' => 'http://192.168.56.5/wims/',
+           'usegradepage' => '0',
+           'usenameinlogin' => '0',
+        );
+        return (object) $defaultwimssettings;
+    }
 }

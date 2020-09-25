@@ -32,9 +32,9 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
 }
 
-require_once($CFG->dirroot . '/mod/wims/wimsinterface.class.php');
-
 global $CFG;
+
+require_once($CFG->dirroot . '/mod/wims/wimsinterface.class.php');
 
 use \core_privacy\tests\provider_testcase;
 use \core_privacy\local\request\writer;
@@ -67,7 +67,8 @@ class mod_wims_privacy_testcase extends provider_testcase {
         $instance = $generator->create_instance($params);
         $ret->cm = get_coursemodule_from_instance('wims', $instance->id);
         $ret->context = \context_module::instance($ret->cm->id);
-        $ret->wims = new \wims($ret->context, $ret->cm, $params['course']);
+        $ret->config = $generator->get_config_for_tests();
+        $ret->wims = new wims_interface($ret->config);
         return $ret;
     }
 

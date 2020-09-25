@@ -363,8 +363,12 @@ class wims_comms_wrapper {
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
-        $this->_executejson('checkuser', $params);
-        return ($this->jsondata->status == 'OK');
+        if ($this->_executejson('checkuser', $params)) {
+            return ($this->jsondata->status == 'OK');
+        } else {
+            // Communication problem with WIMS server ?
+            return null;
+        }
     }
 
     /**
@@ -814,7 +818,14 @@ class wims_comms_wrapper {
     public function cleanclass($qcl, $rcl) {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $this->_executejson('cleanclass', $params);
-        return ($this->status == 'OK');
+
+        if ($this->status == 'OK') {
+            // Reset eventual previously accessed url in this session.
+            $this->accessurls = array();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

@@ -28,9 +28,13 @@ class mod_wims_generator extends testing_module_generator {
     public function create_instance($record = null, array $options = null) {
         global $CFG;
 
+        global $_SERVER;
+        // Set the server adress that will be communicated to WIMS external service.
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+
         $record = (object)(array)$record;
 
-        $defaultwimssettings = array(
+        $defaultclasssettings = array(
             'name'             => "Test Classroom",
             'userfirstname'    => "Anonymous",
             'userlastname'     => "Supervisor",
@@ -38,7 +42,7 @@ class mod_wims_generator extends testing_module_generator {
             'userinstitution'  => "Moodle/WIMS"
         );
 
-        foreach ($defaultwimssettings as $name => $value) {
+        foreach ($defaultclasssettings as $name => $value) {
             if (!isset($record->{$name})) {
                 $record->{$name} = $value;
             }

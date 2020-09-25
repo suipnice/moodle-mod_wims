@@ -632,7 +632,7 @@ class wims_interface{
             return null;
         }
 
-        return $classconfig['userlist'];
+        return array_filter($classconfig['userlist']);
     }
 
     /**

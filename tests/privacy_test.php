@@ -17,6 +17,10 @@
 /**
  * Unit tests for mod/wims/classes/privacy.
  *
+ * See https://docs.moodle.org/dev/Writing_PHPUnit_tests
+ *
+ * To run from Moodle root dir : vendor/bin/phpunit mod/wims/tests/privacy_test.php
+ *
  * @package   mod_wims
  * @copyright 2020 UCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -24,7 +28,11 @@
 
 namespace mod_wims\tests;
 
-defined('MOODLE_INTERNAL') || die();
+if (!defined('MOODLE_INTERNAL')) {
+    die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
+}
+
+require_once($CFG->dirroot . '/mod/wims/wimsinterface.class.php');
 
 global $CFG;
 
@@ -32,6 +40,7 @@ use \core_privacy\tests\provider_testcase;
 use \core_privacy\local\request\writer;
 use \core_privacy\local\request\approved_contextlist;
 use \mod_wims\privacy\provider;
+use \mod_wims\wims_interface;
 
 /**
  * Unit tests for mod/wims/classes/privacy/

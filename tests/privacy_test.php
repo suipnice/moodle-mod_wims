@@ -99,6 +99,8 @@ class mod_wims_privacy_testcase extends provider_testcase {
         $wims = $instance->wims;
         $config = $instance->config;
 
+        // We set an expiration date at today, so WIMS will automatically delete it tomorrow.
+        $course->expiration = date('yymd');
         // Start by creating a class on the WIMS server connected to the course.
         $this->assertTrue($wims->selectclassformodule($course, $cm, $config));
 

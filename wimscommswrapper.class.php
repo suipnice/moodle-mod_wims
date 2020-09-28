@@ -344,10 +344,9 @@ class wims_comms_wrapper {
      */
     public function checkclass($qcl, $rcl, $extended=false) {
         $cmd = ($extended === true) ? 'getclass' : 'checkclass';
-        $silent = ($extended === true) ? true : null;
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
-        $this->_executejson($cmd, $params, $silent);
+        $this->_executejson($cmd, $params, true);
         return ($this->status == 'OK') ? true : null;
     }
 

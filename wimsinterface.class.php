@@ -179,6 +179,14 @@ class wims_interface{
             "password=Pwd$randomvalue1"."\n".
             "lang=$this->lang"."\n".
             "secure=all"."\n";
+
+        // What expiration date to use
+        // by default we let WIMS set this automatically (1 year after creation)
+        // but if the course includes an override then we need to use it.
+        if (property_exists($course, "expiration")&&($course->expiration != "")) {
+            $data1 .= "expiration=".$course->expiration."\n";
+        }
+
         $randomvalue2 = rand(100000, 999999);
         $data2 =
             "lastname=$wimsinfo->userlastname"."\n".

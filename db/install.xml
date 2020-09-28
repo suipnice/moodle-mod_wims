@@ -15,7 +15,7 @@
         <!-- module instance name -->
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
 
-        <!-- Fields to cache course creator info incase course is instantiated late in WIMS -->
+        <!-- Fields to cache course creator info in case course is instantiated late in WIMS -->
         <FIELD NAME="userinstitution" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="userfirstname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="userlastname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false"/>

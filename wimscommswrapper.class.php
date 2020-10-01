@@ -273,7 +273,19 @@ class wims_comms_wrapper {
             }
             throw new Exception('WIMS server returned invalid JSON: $job:'.$this->rawdata);
         }
-        $this->message = $this->jsondata->message;
+        // Some WIMS jobs, like "authuser", don't send back a specific message.
+        if (property_exists($this->jsondata, 'message')) {
+            $this->message = $this->jsondata->message;
+        }
+
+        if ($this->jsondata->status == 'ERROR'
+             && $this->jsondata->code == $this->code
+             && strpos($this->message, 'illegal job') >= 0) {
+            $this->message = "Your Moodle server is not allowed to do that job on this WIMS server.\
+            Ask WIMS admin to allow job '$job'.";
+            $this->debugmsg($this->message);
+            return null;
+        }
 
         if (($this->jsondata->status == 'OK'
                 && $this->jsondata->code == $this->code)
@@ -304,7 +316,7 @@ class wims_comms_wrapper {
                 ": WIMS JSON OK response not matched: (for code $this->code):\n"
             );
             if ($silent !== true) {
-                echo "<div>SENDED PARAMS: ".urldecode($params)."</div>";
+                echo "<div>job:$job - SENDED PARAMS: ".urldecode($params)."</div>";
                 var_dump($this->jsondata);
             }
             return null;
@@ -458,6 +470,13 @@ class wims_comms_wrapper {
         $params .= '&quser='.$login;
         $params .= '&data1='.$this->_wimsencode($data1);
         $this->_executejson('adduser', $params);
+
+        // If the user is in classroom's trash, use recuser instead.
+        if ($this->jsondata->status == 'ERROR'
+            && strpos($this->message, 'Deleted user found') >= 0) {
+            $this->_executejson('recuser', $params);
+        }
+
         return ($this->status == 'OK') ? true : null;
     }
 
@@ -850,7 +869,16 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$quser;
         $this->_executejson('deluser', $params);
-        return ($this->status == 'OK');
+        if ($this->status == 'OK') {
+            // Reset eventual previously accessed url in this session.
+            $fulluserid = $qcl.'/'.$rcl.'/'.$quser;
+            if (array_key_exists($fulluserid, $this->accessurls)) {
+                unset($this->accessurls[$fulluserid]);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

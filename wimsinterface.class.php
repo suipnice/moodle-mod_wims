@@ -684,7 +684,7 @@ class wims_interface{
     public function deluser($cm, $quser) {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
-        // Then ask WIMS to clean specified classroom.
+        // Then ask WIMS to remove the specified user from the classroom.
         return $this->_wims->deluser($this->_qcl, $this->_rcl, $quser);
     }
 

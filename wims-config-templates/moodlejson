@@ -1,7 +1,7 @@
 # This is an identification file for connection to a Moodle platform. (json)
 # It is used for platform authentification.
 
-# Type here youre Moodle server IP
+# Type here your Moodle server IP
 # Accept several sites, but no wildcard.
 ident_site=127.0.0.1
 
@@ -29,4 +29,4 @@ back_password=ABCD123
 
 # allowed or disabled requests. At most one of the two should be active.
 # ident_allow=
-ident_deny=deluser delclass
+# ident_deny=

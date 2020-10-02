@@ -148,7 +148,8 @@ class mod_wims_privacy_testcase extends provider_testcase {
             $this->_cm = $instance->cm;
             $this->_context = $instance->context;
             $config = $instance->config;
-            $this->_wims = new wims_interface($config);
+            // Change 0 to 1 to debug.
+            $this->_wims = new wims_interface($config, 0, 'plain');
         }
         if (!$this->_wimsstatus) {
             // We set an expiration date at today, so WIMS will automatically delete it tomorrow.

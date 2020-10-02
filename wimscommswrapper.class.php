@@ -93,7 +93,7 @@ class wims_comms_wrapper {
     public $qclass;
 
     /**
-     * Can be "OK", "COMMS_FAIL", or "WIMS_FAIL"
+     * Can be "OK", "COMMS_FAIL", "NOT_ALLOWED" or "WIMS_FAIL"
      *
      * @var string
      */
@@ -280,10 +280,11 @@ class wims_comms_wrapper {
 
         if ($this->jsondata->status == 'ERROR'
              && $this->jsondata->code == $this->code
-             && strpos($this->message, 'illegal job') >= 0) {
+             && (strpos($this->message, 'illegal job') !== false)) {
             $this->message = "Your Moodle server is not allowed to do that job on this WIMS server.\
             Ask WIMS admin to allow job '$job'.";
             $this->debugmsg($this->message);
+            $this->status = 'NOT_ALLOWED';
             return null;
         }
 
@@ -368,7 +369,7 @@ class wims_comms_wrapper {
      * Connect to the WIMS server and verify that a user with the given login exists within the
      * given WIMS course
      *
-     * @param string $qcl   the WIMS class identifier (must be WIMS_FAIL an integer with a value > 9999 )
+     * @param string $qcl   the WIMS class identifier (must be an integer with a value > 9999 )
      * @param string $rcl   a unique identifier derived from properties of the MOODLE module
      *                      instance that the WIMS class is bound to
      * @param string $login the login of the user (which must respect WIMS user identifier rules)
@@ -469,11 +470,11 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
         $params .= '&data1='.$this->_wimsencode($data1);
-        $this->_executejson('adduser', $params);
+        $this->_executejson('adduser', $params, true);
 
         // If the user is in classroom's trash, use recuser instead.
         if ($this->jsondata->status == 'ERROR'
-            && strpos($this->message, 'Deleted user found') >= 0) {
+            && (strpos($this->message, 'Deleted user found') !== false)) {
             $this->_executejson('recuser', $params);
         }
 
@@ -500,30 +501,12 @@ class wims_comms_wrapper {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
         $urlparam = '&data1='.$_SERVER['REMOTE_ADDR'];
-        $this->_executejson('authuser', $params.$urlparam);
-        if ($this->status == 'COMMS_FAIL') {
-            // Failed to communcate witht he wims server so there's no possibility of recovery.
+
+        if (!$this->_executejson('authuser', $params.$urlparam)) {
+            // Even failed to communicate with the WIMS server,
+            // or the user can have started an exam session from another IP and must use the same IP.
+            // nb: this can be disabled by teacher in his class).
             return null;
-        } else if ($this->status == 'WIMS_FAIL') {
-            // Check for a recoverable failed attempt case.
-            $matches = array();
-            $matched = preg_match('/.*IP \(([0123456789.]*) !=.*/', $this->message, $matches);
-            if (($matched !== 1) || (count($matches) !== 2)) {
-                // The error message doesn't match our regex so give up.
-                $this->debugmsg('authuser failed - and regex not matched so give up without retry');
-                return null;
-            }
-            $this->debugmsg(
-                'authuser - retrying after first refusal => applying URL '.
-                $matches[1].' FROM '.$this->message
-            );
-            // Our error message did match the regex so try again, substituting in the deducd IP address.
-            $urlparam = '&data1='.$matches[1];
-            $this->_executejson('authuser', $params.$urlparam);
-            if ($this->status != 'OK') {
-                // OK so after a second attempt we've still failed. Time to call it a day!
-                return null;
-            }
         }
         // Store away the generated url and return it.
         $this->accessurls[$fulluserid] = $this->jsondata->home_url;

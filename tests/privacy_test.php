@@ -235,7 +235,7 @@ class mod_wims_privacy_testcase extends provider_testcase {
 
         // Check if user 2 still exists in the given Wims class.
         $wimslogin = $wims->generatewimslogin($user2);
-        $this->assertFalse($wims->checkuser($this->_cm, $wimslogin));
+        $this->assertFalse($wims->checkuser($this->_cm, $wimslogin, false));
 
     }
 }

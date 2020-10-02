@@ -648,15 +648,16 @@ class wims_interface{
      *
      * @param object $cm        course module object where to search
      * @param string $wimslogin user to search for
+     * @param bool   $cache     if true, don't ask WIMS if user already in _wims->accessurls[]
      *
      * @return bool true if user exists in currect WIMS class
      */
-    public function checkuser($cm, $wimslogin) {
+    public function checkuser($cm, $wimslogin, $cache=true) {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
 
         // Check if the user exists within the given course.
-        return $this->_wims->checkuser($this->_qcl, $this->_rcl, $wimslogin);
+        return $this->_wims->checkuser($this->_qcl, $this->_rcl, $wimslogin, $cache);
     }
 
     /**

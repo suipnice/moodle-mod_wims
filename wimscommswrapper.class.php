@@ -209,7 +209,7 @@ class wims_comms_wrapper {
         }
 
         // If we're debuggin then log the event.
-        $this->debugmsg("WIMS Execute: $url");
+        $this->debugmsg("\nWIMS Execute: $url");
 
         // Initialise cURL resource.
         $curl = curl_init();
@@ -314,7 +314,8 @@ class wims_comms_wrapper {
             $this->status = 'WIMS_FAIL';
             $this->debugmsg(
                 "ERROR: ".__FILE__.":".__LINE__.
-                ": WIMS JSON OK response not matched: (for code $this->code):\n"
+                ": WIMS JSON OK response not matched: (for code $this->code):\n".
+                "message: ".$this->message
             );
             if ($silent !== true) {
                 echo "<div>job:$job - SENDED PARAMS: ".urldecode($params)."</div>";
@@ -373,14 +374,17 @@ class wims_comms_wrapper {
      * @param string $rcl   a unique identifier derived from properties of the MOODLE module
      *                      instance that the WIMS class is bound to
      * @param string $login the login of the user (which must respect WIMS user identifier rules)
+     * @param bool   $cache if true, don't ask Wims if user already in accessurls[]
      *
      * @return true on success
      */
-    public function checkuser($qcl, $rcl, $login) {
-        // If we have already generated an access url for this user then no need to recheck them as they must be OK.
-        $fulluserid = $qcl.'/'.$rcl.'/'.$login;
-        if (array_key_exists($fulluserid, $this->accessurls)) {
-            return true;
+    public function checkuser($qcl, $rcl, $login, $cache=true) {
+        if ($cache) {
+            // If we have already generated an access url for this user then no need to recheck them as they must be OK.
+            $fulluserid = $qcl.'/'.$rcl.'/'.$login;
+            if (array_key_exists($fulluserid, $this->accessurls)) {
+                return true;
+            }
         }
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);

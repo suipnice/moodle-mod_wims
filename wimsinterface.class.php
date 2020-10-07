@@ -208,7 +208,7 @@ class wims_interface{
         if ($modresult === true) {
             return true;
         } else {
-            $this->errormsgs = $this->_wims->message;
+            $this->errormsgs[] = $this->_wims->message;
             return null;
         }
     }

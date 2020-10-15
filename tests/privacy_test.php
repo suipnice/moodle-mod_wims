@@ -47,7 +47,7 @@ use \mod_wims\wims_interface;
 /**
  * Unit tests for mod/wims/classes/privacy/
  *
- * @category  Tests
+ * @category  test
  * @package   mod_wims
  * @author    Badatos <bado@unice.fr>
  * @copyright 2020 UCA

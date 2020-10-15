@@ -91,8 +91,7 @@ class update_scores extends \core\task\scheduled_task {
                 mtrace('  ERROR: Failed to fetch sheet index for WIMS id: cm='.$cm->id);
                 continue;
             }
-
-            $requiredsheets = $wims->getrequiredsheets($cm);
+            $requiredsheets = $wims->getrequiredsheets($sheetindex);
 
             // Fetch the scores for the required sheets.
             $sheetscores = $wims->getselectedscores($cm, $requiredsheets->ids);

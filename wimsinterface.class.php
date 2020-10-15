@@ -575,7 +575,7 @@ class wims_interface{
     /**
      * create the set of worksheets and exams where score is needed
      *
-     * @param $sheetindex
+     * @param array $sheetindex associative arrays of id=>info for worksheets and exams (from getsheetindex())
      *
      * @return StdClass containing 2 arrays (requiredsheets & sheettitles)
      */

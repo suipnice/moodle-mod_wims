@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * WIMS module test data generator.
+ *
+ * @package   mod_wims
+ * @copyright 2020 UCA
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -25,6 +33,14 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mod_wims_generator extends testing_module_generator {
 
+    /**
+     * Create a WIMS activity instance.
+     *
+     * @param array|stdClass $record data for module being generated. Requires 'course' key (id or full object).
+     * @param null | array  $options  general options for course module.
+     *
+     * @return stdClass  record from module-defined table with additional field cmid (corresponding id in course_modules table)
+     */
     public function create_instance($record = null, array $options = null) {
         global $CFG;
 
@@ -51,6 +67,11 @@ class mod_wims_generator extends testing_module_generator {
         return parent::create_instance($record, (array)$options);
     }
 
+    /**
+     * return some options adapted to testing purpose.
+     *
+     * @return stdClass
+     */
     public function get_config_for_tests() {
         $defaultwimssettings = array(
            'allowselfsigcerts' => '0',

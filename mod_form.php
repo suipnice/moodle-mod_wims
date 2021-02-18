@@ -127,7 +127,6 @@ class mod_wims_mod_form extends moodleform_mod {
      * @return void
      */
     public function definition() {
-        /* global $CFG; */
 
         $mform = $this->_form;
 
@@ -231,12 +230,13 @@ class mod_wims_mod_form extends moodleform_mod {
      */
     private function _updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback) {
         $localkey = "user".$propname;
-        if (array_key_exists($localkey, $defaultvalues) && $defaultvalues[$localkey] != "") {
-            // We have a non-empty value so don't change it.
-        } else if ($user->$propname != "") {
-            $defaultvalues[$localkey] = $user->$propname;
-        } else {
-            $defaultvalues[$localkey] = $fallback;
+        if (!array_key_exists($localkey, $defaultvalues) || $defaultvalues[$localkey] == "") {
+            // We have an empty value, so change it.
+            if ($user->$propname != "") {
+                $defaultvalues[$localkey] = $user->$propname;
+            } else {
+                $defaultvalues[$localkey] = $fallback;
+            }
         }
     }
 

@@ -34,8 +34,8 @@ use \mod_wims\wims_interface;
 
 // GET / _POST parameters.
 
-$id         = optional_param('id', 0, PARAM_INT);                     // Course module ID
-$urltype    = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // type of page to view in wims
+$id         = optional_param('id', 0, PARAM_INT);                     // Course module ID.
+$urltype    = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // Type of page to view in WIMS.
 $urlarg     = optional_param('wimsidx', null, PARAM_INT);             // Index of the page to view.
 
 

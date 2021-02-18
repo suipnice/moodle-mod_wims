@@ -125,6 +125,13 @@ class wims_comms_wrapper {
     public $debugformat;
 
     /**
+     * String containing returned message from WIMS server
+     *
+     * @var string
+     */
+    public $message;
+
+    /**
      * Ctor (the class constructor)
      * stores away the supplied parameters but performs no actions
      *
@@ -148,6 +155,7 @@ class wims_comms_wrapper {
         $this->sslverifypeer = ($allowselfsignedcertificates == false) ? true : false;
         $this->accessurls = array();
         $this->debugformat = $debugformat;
+        $this->message = '';
     }
 
     /**
@@ -260,7 +268,8 @@ class wims_comms_wrapper {
         // Execute the request, requesting a json format response.
         $this->_executeraw($job, $params);
         if ($this->status != 'OK') {
-            $this->debugmsg("WIMS execute failed: status = $this->status");
+            $this->message = "WIMS execute failed: status = $this->status";
+            $this->debugmsg($this->message);
             return null;
         }
 
@@ -275,12 +284,13 @@ class wims_comms_wrapper {
             }
             throw new Exception('WIMS server returned invalid JSON: $job:'.$this->rawdata);
         }
+        $this->message = $this->jsondata->message;
 
         if (($this->jsondata->status == 'OK'
             && $this->jsondata->code == $this->code)
             || ($this->jsondata->status == 'ERROR'
             && $this->jsondata->code == $this->code
-            && $this->jsondata->message == 'nothing done')
+            && $this->message == 'nothing done')
         ) {
             // Done!
             $this->debugmsg("JSON: status = OK");
@@ -473,7 +483,7 @@ class wims_comms_wrapper {
         } else if ($this->status == 'WIMS_FAIL') {
             // Check for a recoverable failed attempt case.
             $matches = array();
-            $matched = preg_match('/.*IP \(([0123456789.]*) !=.*/', $this->jsondata->message, $matches);
+            $matched = preg_match('/.*IP \(([0123456789.]*) !=.*/', $this->message, $matches);
             if (($matched !== 1) || (count($matches) !== 2)) {
                 // The error message doesn't match our regex so give up.
                 $this->debugmsg('authuser failed - and regex not matched so give up without retry');
@@ -481,7 +491,7 @@ class wims_comms_wrapper {
             }
             $this->debugmsg(
                 'authuser - retrying after first refusal => applying URL '.
-                $matches[1].' FROM '.$this->jsondata->message
+                $matches[1].' FROM '.$this->message
             );
             // Our error message did match the regex so try again, substituting in the deducd IP address.
             $urlparam = '&data1='.$matches[1];
@@ -779,7 +789,7 @@ class wims_comms_wrapper {
         $params .= '&qexam='.$exam;
         $jsondata = $this->_executejson('getexamscores', $params);
         if ($this->status != 'OK') {
-            $this->_wims->debugmsg("getexamscores: ".$jsondata->message);
+            $this->debugmsg("getexamscores: ".$jsondata->message);
             return null;
         }
         return $jsondata->data_scores;

@@ -187,7 +187,7 @@ class wims_interface{
 
         // Ensure that everything went to plan.
         if ($addresult !== true) {
-            $this->errormsgs = $this->_wims->jsondata->message;
+            $this->errormsgs[] = $this->_wims->message;
             return null;
         }
 
@@ -199,7 +199,7 @@ class wims_interface{
         if ($modresult === true) {
             return true;
         } else {
-            $this->errormsgs = $this->_wims->jsondata->message;
+            $this->errormsgs[] = $this->_wims->message;
             return null;
         }
     }
@@ -284,7 +284,7 @@ class wims_interface{
             $addresult = $this->_wims->adduser($this->_qcl, $this->_rcl, $firstname, $lastname, $login);
             if ($addresult == null) {
                 // If the call to adduser failed then deal with it.
-                $this->errormsgs = $this->_wims->jsondata->message;
+                $this->errormsgs[] = $this->_wims->message;
                 return null;
             }
         }
@@ -590,7 +590,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->jsondata->message;
+            $this->errormsgs[] = $this->_wims->message;
         }
 
         // Construct the result URL.
@@ -611,7 +611,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->jsondata->message;
+            $this->errormsgs[] = $this->_wims->message;
         }
 
         // Construct the result URL.
@@ -633,7 +633,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->jsondata->message;
+            $this->errormsgs[] = $this->_wims->message;
         }
 
         // Construct the result URL.
@@ -655,7 +655,7 @@ class wims_interface{
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs = $this->_wims->jsondata->message;
+            $this->errormsgs[] = $this->_wims->message;
         }
 
         // Construct the result URL.

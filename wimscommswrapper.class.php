@@ -274,6 +274,9 @@ class wims_comms_wrapper {
             throw new Exception('WIMS server returned invalid JSON: $job:'.$this->rawdata);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3d7680a11a512ace159ed71eb6942efa81616cd5
         // Some WIMS jobs, like "authuser", don't send back a specific message.
         if (property_exists($this->jsondata, 'message')) {
             $this->message = $this->jsondata->message;
@@ -301,6 +304,7 @@ class wims_comms_wrapper {
                     || strpos($this->message, 'not in this class')
                     )
                 )
+<<<<<<< HEAD
 =======
         $this->message = $this->jsondata->message;
 
@@ -310,6 +314,8 @@ class wims_comms_wrapper {
             && $this->jsondata->code == $this->code
             && $this->message == 'nothing done')
 >>>>>>> develop
+=======
+>>>>>>> 3d7680a11a512ace159ed71eb6942efa81616cd5
         ) {
             // Done!
             $this->debugmsg("JSON: status = OK");
@@ -522,6 +528,7 @@ class wims_comms_wrapper {
             // nb: this can be disabled by teacher in his class).
             return null;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         } else if ($this->status == 'WIMS_FAIL') {
             // Check for a recoverable failed attempt case.
@@ -544,6 +551,8 @@ class wims_comms_wrapper {
                 return null;
             }
 >>>>>>> develop
+=======
+>>>>>>> 3d7680a11a512ace159ed71eb6942efa81616cd5
         }
         // Store away the generated url and return it.
         $this->accessurls[$fulluserid] = $this->jsondata->home_url;

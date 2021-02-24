@@ -111,7 +111,7 @@ class wims_interface{
      *
      * @return null|true if the connection attempt succeeded, null if it failed
      */
-    public function testconnection() {
+    public function testconnection(): ?bool {
         // Try connecting to the server using adm/raw WIMS API.
 
         // If both of the connection tests succeeded then we're done.
@@ -128,7 +128,7 @@ class wims_interface{
      *
      * @return array the lookup table
      */
-    public function builduserlookuptable() {
+    public function builduserlookuptable(): array {
         global $DB;
         // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
         $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');
@@ -152,7 +152,7 @@ class wims_interface{
      *
      * @return true on success, null if one failed
      */
-    public function selectclassformodule($course, $cm) {
+    public function selectclassformodule($course, $cm): ?bool {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
 
@@ -221,7 +221,7 @@ class wims_interface{
      *
      * @return true on success, null if on failure
      */
-    public function verifyclassaccessible($cm) {
+    public function verifyclassaccessible($cm): ?bool {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
 
@@ -239,7 +239,7 @@ class wims_interface{
      *
      * @return string login for use in wims
      */
-    public function generatewimslogin($user) {
+    public function generatewimslogin($user): string {
         // Lookup our configuration to see whether or not we are supposed to use the user name in the WIMS login.
         // Using the user name in the WIMS login has the advantage of making
         // the login more readable but the disadvantage of breaking the link between Moodle and
@@ -280,7 +280,7 @@ class wims_interface{
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
-    public function getstudenturl($user, $currentlang, $urltype=WIMS_HOME_PAGE, $arg=null) {
+    public function getstudenturl($user, $currentlang, $urltype=WIMS_HOME_PAGE, $arg=null): string {
         // Derive the WIMS login from the MOODLE user data record.
         $login = $this->generatewimslogin($user);
 
@@ -323,7 +323,7 @@ class wims_interface{
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
-    public function getteacherurl($currentlang, $urltype=WIMS_HOME_PAGE, $arg=null) {
+    public function getteacherurl($currentlang, $urltype=WIMS_HOME_PAGE, $arg=null): string {
         // The "supervisor" login is a special login bound by WIMS,
         // using it we get the url to the teacher's page and not the student page.
         $login = "supervisor";
@@ -652,7 +652,7 @@ class wims_interface{
      *
      * @return bool true if user exists in currect WIMS class
      */
-    public function checkuser($cm, $wimslogin, $cache=true) {
+    public function checkuser($cm, $wimslogin, $cache=true): bool {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
 
@@ -667,7 +667,7 @@ class wims_interface{
      *
      * @return bool true on success
      */
-    public function cleanclass($cm) {
+    public function cleanclass($cm): bool {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
         // Then ask WIMS to clean the specified classroom.
@@ -682,7 +682,7 @@ class wims_interface{
      *
      * @return bool true on success
      */
-    public function deluser($cm, $quser) {
+    public function deluser($cm, $quser): bool {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
         // Then ask WIMS to remove the specified user from the classroom.
@@ -713,7 +713,7 @@ class wims_interface{
      *
      * @return array user scores
      */
-    public function getscore($cm, $quser) {
+    public function getscore($cm, $quser): array {
         // Start by determining the identifiers for the class.
         $this->_initforcm($cm);
 
@@ -731,7 +731,7 @@ class wims_interface{
      *
      * @return string used by WIMS to set a data value.
      */
-    private function _dataline($data, $prop) {
+    private function _dataline($data, $prop): string {
         if (array_key_exists($prop, $data)) {
             return $prop."=".$data[$prop]."\n";
         } else {
@@ -747,7 +747,7 @@ class wims_interface{
      *
      * @return string $accessurl
      */
-    private function _gethomepageurlforlogin($login, $currentlang) {
+    private function _gethomepageurlforlogin($login, $currentlang): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->gethomepageurl($this->_qcl, $this->_rcl, $login, $currentlang);
 
@@ -768,7 +768,7 @@ class wims_interface{
      *
      * @return string $accessurl
      */
-    private function _getscorepageurlforlogin($login, $currentlang) {
+    private function _getscorepageurlforlogin($login, $currentlang): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->getscorepageurl($this->_qcl, $this->_rcl, $login, $currentlang);
 
@@ -790,7 +790,7 @@ class wims_interface{
      *
      * @return string an access URL to log into the worksheet
      */
-    private function _getworksheeturlforlogin($login, $currentlang, $sheet) {
+    private function _getworksheeturlforlogin($login, $currentlang, $sheet): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->getworksheeturl($this->_qcl, $this->_rcl, $login, $currentlang, $sheet);
 
@@ -812,7 +812,7 @@ class wims_interface{
      *
      * @return string an access URL to log into the exam
      */
-    private function _getexamurlforlogin($login, $currentlang, $exam) {
+    private function _getexamurlforlogin($login, $currentlang, $exam): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->getexamurl($this->_qcl, $this->_rcl, $login, $currentlang, $exam);
 
@@ -830,7 +830,7 @@ class wims_interface{
      *
      * @return string used by WIMS to set which server/course couple can access to the WIMS class.
      */
-    private function _constructconnectsline() {
+    private function _constructconnectsline(): string {
         return "connections=+moodlejson/$this->_rcl+ +moodlejsonhttps/$this->_rcl+";
     }
 
@@ -841,7 +841,7 @@ class wims_interface{
      *
      * @return void
      */
-    private function _initforcm($cm) {
+    private function _initforcm($cm): void {
         // Setup the unique WIMS class identifier.
         $this->_qcl = "".($this->_config->qcloffset + $cm->id);
         // Setup the 'owner' identifier (derived from the Moodle class id).

@@ -59,7 +59,7 @@ function mod_wims_helper_function() {
 function xmldb_wims_addfield($dbman, $table, $name, $type=null,
     $precision=null, $unsigned=null, $notnull=null, $sequence=null,
     $default=null, $previous=null
-) {
+): void {
     // Instantiate a field object.
     $field = new xmldb_field($name, $type, $precision, $unsigned, $notnull, $sequence, $default, $previous);
     // If the field doesn't already exist in the given table then add it.
@@ -77,7 +77,7 @@ function xmldb_wims_addfield($dbman, $table, $name, $type=null,
  *
  * @return void
  */
-function xmldb_wims_dropfield($dbman, $tablename, $fieldname) {
+function xmldb_wims_dropfield($dbman, $tablename, $fieldname): void {
     // If the field exist in the given table then delete it.
     $table = new xmldb_table($tablename);
     $field = new xmldb_field($fieldname);

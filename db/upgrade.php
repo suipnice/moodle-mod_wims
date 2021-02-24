@@ -46,7 +46,7 @@ require_once(__DIR__.'/upgradelib.php');
  *
  * @return bool
  */
-function xmldb_wims_upgrade($oldversion) {
+function xmldb_wims_upgrade($oldversion): bool {
     global $DB;
     $dbman = $DB->get_manager();
     $modulename = 'wims';

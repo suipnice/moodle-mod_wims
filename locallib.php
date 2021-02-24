@@ -38,7 +38,7 @@ define('WIMS_EVENT_TYPE_DUE', 'due');
  * @param int      $cmid The coursemodule id
  * @return bool
  */
-function wims_update_calendar($data, $cmid) {
+function wims_update_calendar($data, $cmid): bool {
     global $DB, $CFG;
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;

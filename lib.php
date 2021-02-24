@@ -44,7 +44,7 @@ defined('MOODLE_INTERNAL') || die;
  *
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
-function wims_supports($feature) {
+function wims_supports($feature): ?bool {
     switch($feature) {
         case FEATURE_GROUPS:
         case FEATURE_GROUPINGS:

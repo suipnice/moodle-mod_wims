@@ -169,7 +169,7 @@ class wims_comms_wrapper {
      *
      * @return void
      */
-    public function debugmsg($msg) {
+    public function debugmsg($msg): void {
         if ($this->debug > 0) {
             if ($this->debugformat == 'html') {
                 print("<pre>$msg</pre>\n");
@@ -189,7 +189,7 @@ class wims_comms_wrapper {
      *
      * @return void
      */
-    private function _executeraw($job, $params = '') {
+    private function _executeraw($job, $params = ''): void {
         // Reset the status code to 'OK' here as a smart place to allow either coms or subsequent logic to reset to error condition.
         $this->status = 'OK';
 
@@ -332,7 +332,7 @@ class wims_comms_wrapper {
      *
      * @return string urlencoded param
      */
-    private function _wimsencode($param) {
+    private function _wimsencode($param): string {
         return urlencode(utf8_decode($param));
     }
 
@@ -341,7 +341,7 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
-    public function checkident() {
+    public function checkident(): bool {
         $this->_executejson('checkident');
         return ($this->status == 'OK');
     }
@@ -358,7 +358,7 @@ class wims_comms_wrapper {
      *
      * @return true on success, null on failure)
      */
-    public function checkclass($qcl, $rcl, $extended=false) {
+    public function checkclass($qcl, $rcl, $extended=false): ?bool {
         $cmd = ($extended === true) ? 'getclass' : 'checkclass';
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
@@ -378,7 +378,7 @@ class wims_comms_wrapper {
      *
      * @return true on success
      */
-    public function checkuser($qcl, $rcl, $login, $cache=true) {
+    public function checkuser($qcl, $rcl, $login, $cache=true): ?bool {
         if ($cache) {
             // If we have already generated an access url for this user then no need to recheck them as they must be OK.
             $fulluserid = $qcl.'/'.$rcl.'/'.$login;
@@ -408,7 +408,7 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
-    public function addclass($qcl, $rcl, $data1, $data2) {
+    public function addclass($qcl, $rcl, $data1, $data2): bool {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&data1='.$this->_wimsencode($data1);
         $params .= '&data2='.$this->_wimsencode($data2);
@@ -426,7 +426,7 @@ class wims_comms_wrapper {
      *
      * @return true on success, null on failure
      */
-    public function updateclass($qcl, $rcl, $data1) {
+    public function updateclass($qcl, $rcl, $data1): ?bool {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&data1='.$this->_wimsencode($data1);
         $this->_executejson('modclass', $params);
@@ -443,7 +443,7 @@ class wims_comms_wrapper {
      *
      * @return bool|null true on success, null on failure
      */
-    public function updateclasssupervisor($qcl, $rcl, $data1) {
+    public function updateclasssupervisor($qcl, $rcl, $data1): ?bool {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&data1='.$this->_wimsencode($data1);
         $params .= '&quser=supervisor';
@@ -463,7 +463,7 @@ class wims_comms_wrapper {
      *
      * @return bool|null true on success, null on failure
      */
-    public function adduser($qcl, $rcl, $firstname, $lastname, $login) {
+    public function adduser($qcl, $rcl, $firstname, $lastname, $login): ?bool {
         // Generate a non-useful password.
         $passvalue = rand(1000, 9999);
         $password = "$passvalue$passvalue";
@@ -496,7 +496,7 @@ class wims_comms_wrapper {
      *
      * @return string|null fully qualified connection url on success, null on failure
      */
-    public function gethomepageurl($qcl, $rcl, $login, $currentlang) {
+    public function gethomepageurl($qcl, $rcl, $login, $currentlang): ?string {
         // If we have already generated an access url for this user then reuse it.
         $fulluserid = $qcl.'/'.$rcl.'/'.$login;
         if (array_key_exists($fulluserid, $this->accessurls)) {
@@ -529,7 +529,7 @@ class wims_comms_wrapper {
      *
      * @return string|null fully qualified connection url on success, null on failure
      */
-    public function getscorepageurl($qcl, $rcl, $login, $currentlang) {
+    public function getscorepageurl($qcl, $rcl, $login, $currentlang): ?string {
         $url = $this->gethomepageurl($qcl, $rcl, $login, $currentlang);
         if ($url == null) {
             return null;
@@ -550,7 +550,7 @@ class wims_comms_wrapper {
      *
      * @return string|null fully qualified connection url on success, null on failure
      */
-    public function getworksheeturl($qcl, $rcl, $login, $currentlang, $sheet) {
+    public function getworksheeturl($qcl, $rcl, $login, $currentlang, $sheet): ?string {
         $url = $this->gethomepageurl($qcl, $rcl, $login, $currentlang);
         if ($url == null) {
             return null;
@@ -571,7 +571,7 @@ class wims_comms_wrapper {
      *
      * @return string|null fully qualified connection url on success, null on failure
      */
-    public function getexamurl($qcl, $rcl, $login, $currentlang, $exam) {
+    public function getexamurl($qcl, $rcl, $login, $currentlang, $exam): ?string {
         $url = $this->gethomepageurl($qcl, $rcl, $login, $currentlang);
         if ($url == null) {
             return null;
@@ -588,7 +588,7 @@ class wims_comms_wrapper {
      *
      * @return array|null result as array of lines on success, null on failure
      */
-    public function getclassconfig($qcl, $rcl) {
+    public function getclassconfig($qcl, $rcl): ?array {
         $this->qclass = $qcl;
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         if ($this->_executejson('getclass', $params) === null) {
@@ -612,7 +612,7 @@ class wims_comms_wrapper {
      *
      * @return array|null result as array of lines on success, null on failure
      */
-    public function getuserconfig($qcl, $rcl, $login) {
+    public function getuserconfig($qcl, $rcl, $login): ?array {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
         if ($this->_executejson('getuser', $params) === null) {
@@ -635,7 +635,7 @@ class wims_comms_wrapper {
      *
      * @return array|null array of sheet description objects on success, null on failure
      */
-    public function getworksheetlist($qcl, $rcl) {
+    public function getworksheetlist($qcl, $rcl): ?array {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $jsondata = $this->_executejson('listsheets', $params);
         if ($this->status != 'OK') {
@@ -664,7 +664,7 @@ class wims_comms_wrapper {
      *
      * @return array|null associative array of properties on success, null on failure
      */
-    public function getworksheetproperties($qcl, $rcl, $sheet) {
+    public function getworksheetproperties($qcl, $rcl, $sheet): ?array {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qsheet='.$sheet;
         $jsondata = $this->_executejson('getsheet', $params);
@@ -689,7 +689,7 @@ class wims_comms_wrapper {
      *
      * @return array|null array of score records on success, null on failure
      */
-    public function getworksheetscores($qcl, $rcl, $sheet) {
+    public function getworksheetscores($qcl, $rcl, $sheet): ?array {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qsheet='.$sheet;
         $jsondata = $this->_executejson('getsheetscores', $params);
@@ -711,7 +711,7 @@ class wims_comms_wrapper {
      *
      * @return bool|null true on success, null on failure
      */
-    public function updateworksheetproperties($qcl, $rcl, $sheet, $data1) {
+    public function updateworksheetproperties($qcl, $rcl, $sheet, $data1): ?bool {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qsheet='.$sheet;
         $params .= '&data1='.$this->_wimsencode($data1);
@@ -728,7 +728,7 @@ class wims_comms_wrapper {
      *
      * @return array|null array of identifiers on success, null on failure
      */
-    public function getexamlist($qcl, $rcl) {
+    public function getexamlist($qcl, $rcl): ?array {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $jsondata = $this->_executejson('listexams', $params);
         if ($this->status != 'OK') {
@@ -757,7 +757,7 @@ class wims_comms_wrapper {
      *
      * @return array|null associative array of properties on success, null on failure
      */
-    public function getexamproperties($qcl, $rcl, $exam) {
+    public function getexamproperties($qcl, $rcl, $exam): ?array {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qexam='.$exam;
         $jsondata = $this->_executejson('getexam', $params);
@@ -792,7 +792,7 @@ class wims_comms_wrapper {
      *
      * @return array|null array of score records on success, null on failure
      */
-    public function getexamscores($qcl, $rcl, $exam) {
+    public function getexamscores($qcl, $rcl, $exam): ?array {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qexam='.$exam;
         $jsondata = $this->_executejson('getexamscores', $params);
@@ -814,7 +814,7 @@ class wims_comms_wrapper {
      *
      * @return bool|null true on success, null on failure
      */
-    public function updateexamproperties($qcl, $rcl, $exam, $data1) {
+    public function updateexamproperties($qcl, $rcl, $exam, $data1): ?bool {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&qexam='.$exam;
         $params .= '&data1='.$this->_wimsencode($data1);
@@ -830,7 +830,7 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
-    public function cleanclass($qcl, $rcl) {
+    public function cleanclass($qcl, $rcl): bool {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $this->_executejson('cleanclass', $params);
 
@@ -852,7 +852,7 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
-    public function deluser($qcl, $rcl, $quser) {
+    public function deluser($qcl, $rcl, $quser): bool {
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$quser;
         $this->_executejson('deluser', $params);
@@ -877,7 +877,7 @@ class wims_comms_wrapper {
      *
      * @return array scores of $quser user in $qcl classroom
      */
-    public function getscore($qcl, $rcl, $quser) {
+    public function getscore($qcl, $rcl, $quser): array {
         $params  = "qclass=".$qcl."&rclass=".$this->_wimsencode($rcl);
         $params .= "&quser=".$quser;
         if ($this->_executejson("getscore", $params) === null) {

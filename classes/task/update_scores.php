@@ -41,9 +41,9 @@ class update_scores extends \core\task\scheduled_task {
     /**
      * Get task name
      *
-     * @return the name of this task
+     * @return string the name of this task
      */
-    public function get_name() {
+    public function get_name(): string {
         return get_string('updatescores', 'mod_wims');
     }
 
@@ -52,7 +52,7 @@ class update_scores extends \core\task\scheduled_task {
      *
      * @return void
      */
-    public function execute() {
+    public function execute(): void {
         global $CFG, $DB;
 
         include_once($CFG->libdir.'/gradelib.php');

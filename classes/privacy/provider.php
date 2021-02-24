@@ -160,7 +160,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist The approved contexts to export information for.
      */
-    public static function export_user_data(approved_contextlist $contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist): void {
         global $DB;
 
         if (!count($contextlist)) {

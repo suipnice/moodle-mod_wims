@@ -80,7 +80,7 @@ $completion->set_module_viewed($cm);
  *
  * @return void
  */
-function raisewimserror($mainmsg, $errormsgs) {
+function raisewimserror($mainmsg, $errormsgs): void {
     echo "<h1>".$mainmsg."</h1>";
     foreach ($errormsgs as $msg) {
         echo "&rarr; $msg<br/>";

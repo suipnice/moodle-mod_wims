@@ -121,7 +121,7 @@ class mod_wims_privacy_testcase extends provider_testcase {
      *
      * @return void
      **/
-    protected function setUp() {
+    protected function setUp(): void {
         if (!PHPUNIT_LONGTEST) {
             $this->markTestSkipped('PHPUNIT_LONGTEST is not defined');
         }
@@ -169,7 +169,7 @@ class mod_wims_privacy_testcase extends provider_testcase {
      *
      * @return void
      **/
-    public function tearDown() {
+    public function tearDown(): void {
         // Delete all user data in this WIMS classroom.
         provider::delete_data_for_all_users_in_context($this->_context);
     }
@@ -178,11 +178,11 @@ class mod_wims_privacy_testcase extends provider_testcase {
      * A test for deleting all user data for a given context.
      * Disabled by now. remove the "disabled" prefix to enable it,
      * but make sure you've modified the defaults in settings.php to point to your wims webserver first.
-     * (before calling php admin/tool/phpunit/cli/init.php)
+     * (before calling 'php admin/tool/phpunit/cli/init.php')
      *
      * @return void
      */
-    public function test_delete_data_for_all_users_in_context() {
+    public function test_delete_data_for_all_users_in_context(): void {
 
         $sitelang = current_language();
         $wims = $this->_wims;
@@ -210,7 +210,7 @@ class mod_wims_privacy_testcase extends provider_testcase {
      *
      * @return void
      */
-    public function test_delete_data_for_user() {
+    public function test_delete_data_for_user(): void {
 
         $coursecontext = \context_course::instance($this->_courseid);
 
@@ -233,7 +233,7 @@ class mod_wims_privacy_testcase extends provider_testcase {
         $approvedlist = new approved_contextlist($user2, 'mod_wims', [$this->_context->id, $coursecontext->id]);
         provider::delete_data_for_user($approvedlist);
 
-        // Check if user 2 still exists in the given Wims class.
+        // Check if user 2 still exists in the given WIMS class.
         $wimslogin = $wims->generatewimslogin($user2);
         $this->assertFalse($wims->checkuser($this->_cm, $wimslogin, false));
 

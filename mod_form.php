@@ -71,7 +71,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _addtextfield($fieldnamebase, $maxlen, $defaultvalue=null, $fieldsuffix='') {
+    private function _addtextfield($fieldnamebase, $maxlen, $defaultvalue=null, $fieldsuffix=''): void {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('text', $fieldname, get_string($fieldnamebase, 'wims'), array('size' => '60'));
@@ -92,7 +92,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _addtextareafield($fieldnamebase, $defaultvalue=null, $fieldsuffix='') {
+    private function _addtextareafield($fieldnamebase, $defaultvalue=null, $fieldsuffix=''): void {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('textarea', $fieldname, get_string($fieldnamebase, 'wims'), array('cols' => '60', 'rows' => '5'));
@@ -111,7 +111,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _addcheckbox($fieldnamebase, $defaultvalue=null, $fieldsuffix='') {
+    private function _addcheckbox($fieldnamebase, $defaultvalue=null, $fieldsuffix=''): void {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('checkbox', $fieldname, get_string($fieldnamebase, 'wims'));
@@ -126,7 +126,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    public function definition() {
+    public function definition(): void {
 
         $mform = $this->_form;
 
@@ -148,7 +148,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    public function definition_after_data() {
+    public function definition_after_data(): void {
         parent::definition_after_data();
         $mform =& $this->_form;
 
@@ -228,7 +228,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback) {
+    private function _updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback): void {
         $localkey = "user".$propname;
         if (!array_key_exists($localkey, $defaultvalues) || $defaultvalues[$localkey] == "") {
             // We have an empty value, so change it.
@@ -247,7 +247,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    public function data_preprocessing(&$defaultvalues) {
+    public function data_preprocessing(&$defaultvalues): void {
         global $DB;
         global $USER;
         // Prime the default values using the database entries that we've stored away.

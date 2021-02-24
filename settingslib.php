@@ -37,7 +37,7 @@ define('ADMIN_SETTING_TYPE_CHECKBOX', 'ADMIN_SETTING_TYPE_CHECKBOX');
  * @param unknown $settings settings
  * @param unknown $name     name
  */
-function addwimsadminheading($settings, $name) {
+function addwimsadminheading($settings, $name): void {
     $settings->add(new admin_setting_heading(
         "wims/".$name,
         get_string($name, "wims"),
@@ -54,7 +54,7 @@ function addwimsadminheading($settings, $name) {
  * @param unknown $settingtype  setting type
  * @param unknown $data         data
  */
-function addwimsadminsetting($settings, $name, $defaultvalue, $settingtype=ADMIN_SETTING_TYPE_TEXT, $data=null) {
+function addwimsadminsetting($settings, $name, $defaultvalue, $settingtype=ADMIN_SETTING_TYPE_TEXT, $data=null): void {
     $uniquename  = "wims/".$name;
     $displayname = get_string("adminname".$name, "wims");
     $displayinfo = get_string("admindesc".$name, "wims");

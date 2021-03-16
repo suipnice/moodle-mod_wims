@@ -37,7 +37,7 @@ class mod_wims_generator extends testing_module_generator {
      * Create a WIMS activity instance.
      *
      * @param array|stdClass $record data for module being generated. Requires 'course' key (id or full object).
-     * @param null | array  $options  general options for course module.
+     * @param null|array  $options  general options for course module.
      *
      * @return stdClass  record from module-defined table with additional field cmid (corresponding id in course_modules table)
      */
@@ -46,6 +46,7 @@ class mod_wims_generator extends testing_module_generator {
 
         global $_SERVER;
         // Set the server adress that will be communicated to WIMS external service.
+        // WIMS use it to determine from which IP a student comes.
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 
         $record = (object)(array)$record;
@@ -69,6 +70,7 @@ class mod_wims_generator extends testing_module_generator {
 
     /**
      * return some options adapted to testing purpose.
+     * (but for some tests, Moodle will still use mod_wims default settings)
      *
      * @return stdClass
      */

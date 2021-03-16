@@ -75,6 +75,10 @@ $string['admindescdebugcron']          = '';
 $string['adminnamedebugsettings']      = 'SETTINGS debug output';
 $string['admindescdebugsettings']      = '';
 
+// Capabilities (roles).
+$string['wims:view']                   = 'Access a WIMS class';
+$string['wims:addinstance']            = 'Add a WIMS class';
+
 // Errors Msgs.
 $string['class_select_failed_title']   = 'Unable to access the WIMS classroom';
 $string['class_select_failed_desc']    = 'The server is probably unavailable. Please retest in a few minutes, or notify the site administrator.';

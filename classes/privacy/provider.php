@@ -63,9 +63,9 @@ class provider implements
     /**
      * Get the list of contexts that contain user information for the specified user.
      *
-     * @param collection $items The collection to add metadata to.
+     * @param  collection $items The collection to add metadata to.
      *
-     * @return collection The array of metadata
+     * @return collection $items The array of metadata
      */
     public static function get_metadata(collection $items) : collection {
         // Here we add more items to the collection.
@@ -78,7 +78,7 @@ class provider implements
         );
 
         // Data stored in wims db table.
-        $collection->add_database_table(
+        $items->add_database_table(
         'wims',
          [
             'name' => 'privacy:metadata:wims:name',
@@ -91,7 +91,7 @@ class provider implements
         );
 
         // Data stored in WIMS server.
-        $collection->add_external_location_link('wims_server', [
+        $items->add_external_location_link('wims_server', [
             'userid' => 'privacy:metadata:wims_server:userid',
             'fullname' => 'privacy:metadata:wims_server:fullname',
         ], 'privacy:metadata:wims_server');
@@ -104,9 +104,9 @@ class provider implements
      * To test this function, you can call
      * php admin/tool/task/cli/adhoc_task.php --execute="\tool_dataprivacy\task\process_data_request_task"
      *
-     * @param int $userid The user to search.
+     * @param  int         $userid      The user to search.
      *
-     * @return contextlist The list of contexts where the user has attempted a WIMS activity.
+     * @return contextlist $contextlist The list of contexts where the user has attempted a WIMS activity.
      */
     public static function get_contexts_for_userid(int $userid) : contextlist {
         global $DB;
@@ -204,7 +204,7 @@ class provider implements
      * This will be called when the retention period for the context has expired
      * to adhere to the privacy by design requirement
      *
-     * @param \context $context The specific context to delete data for.
+     * @param \context $context The specific context to delete data from.
      *
      * @return mixed
      */
@@ -255,7 +255,7 @@ class provider implements
     /**
      * Get the list of users who have attempted a WIMS activity in the specified a context.
      *
-     * @param   userlist    $userlist   The userlist containing the list of users who have data in this context/plugin combination.
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
     public static function get_users_in_context(userlist $userlist) {
 
@@ -300,7 +300,7 @@ class provider implements
     /**
      * Delete multiple users within a single context.
      *
-     * @param  approved_userlist $userlist The approved context and user information to delete information for.
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
         global $DB;

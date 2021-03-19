@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 // Chaînes de caractères générales (notamment utilisées lors de l'ajout d'une activité dans un cours).
 $string['modulename']                  = 'Classe WIMS';
 $string['modulenameplural']            = 'Classes WIMS';
-$string['modulename_help']             = 'Intégrez une Classe d&rsquo;exercices WIMS dans votre cours';
+$string['modulename_help']             = 'Intégrez une classe d’exercices WIMS dans votre cours';
 
 // Administration du module WIMS.
 $string['pluginadministration']        = 'Administration du module WIMS';
@@ -51,28 +51,28 @@ $string['adminnameqcloffset']          = 'Point de départ de la numérotation d
 $string['admindescqcloffset']          = 'Doit être entre 11111 et 10^9';
 
 // Administration - Réglages de l'interface.
-$string['wimssettings']                = 'Réglages de l&rsquo;interface Moodle-Wims';
+$string['wimssettings']                = 'Réglages de l’interface Moodle-Wims';
 $string['adminnamelang']               = 'Langue des classes';
 $string['admindesclang']               = 'Code de langue par défaut des classes WIMS qui seront créées. (valeurs possibles : ca, cn, en, es, fr, it, nl, si, tw, de)';
 
 $string['adminnamedefaultinstitution'] = 'Institution';
-$string['admindescdefaultinstitution'] = 'L&rsquo;établissemnt affiché dans les classes WIMS';
+$string['admindescdefaultinstitution'] = 'L’établissemnt affiché dans les classes WIMS';
 
-$string['adminnameusenameinlogin']     = 'Inclure les noms d&rsquo;utilisateurs dans les login WIMS';
+$string['adminnameusenameinlogin']     = 'Inclure les noms d’utilisateurs dans les login WIMS';
 $string['admindescusenameinlogin']     = '';
 
 $string['adminnameusegradepage']       = 'Rediriger les liens du carnet de notes MOODLE vers la page de notes de WIMS';
 $string['admindescusegradepage']       = '';
 
 // Administration - Réglages de debug.
-$string['wimsdebugsettings']           = 'Réglages de debug de l&rsquo;interface WIMS';
-$string['adminnamedebugviewpage']      = 'Activer l&rsquo;affichage d&rsquo;information de debug: VIEW';
+$string['wimsdebugsettings']           = 'Réglages de debug de l’interface WIMS';
+$string['adminnamedebugviewpage']      = 'Activer l’affichage d’information de debug: VIEW';
 $string['admindescdebugviewpage']      = '';
 
-$string['adminnamedebugcron']          = 'Activer l&rsquo;affichage d&rsquo;information de debug: CRON';
+$string['adminnamedebugcron']          = 'Activer l’affichage d’information de debug: CRON';
 $string['admindescdebugcron']          = '';
 
-$string['adminnamedebugsettings']      = 'Activer l&rsquo;affichage d&rsquo;information de debug: SETTINGS';
+$string['adminnamedebugsettings']      = 'Activer l’affichage d’information de debug: SETTINGS';
 $string['admindescdebugsettings']      = '';
 
 // Capacités (roles).
@@ -80,14 +80,14 @@ $string['wims:view']                   = 'Accéder à une classe WIMS';
 $string['wims:addinstance']            = 'Ajouter une classe WIMS';
 
 // Messages d'erreurs.
-$string['class_select_failed_title']   = 'Impossible d&rsquo;accéder à la classe WIMS.';
-$string['class_select_failed_desc']    = 'Le serveur est probablement indisponible. Merci de retester dans quelques minutes, ou informez-en l&rsquo;administrateur.';
+$string['class_select_failed_title']   = 'Impossible d’accéder à la classe WIMS.';
+$string['class_select_failed_desc']    = 'Le serveur est probablement indisponible. Merci de retester dans quelques minutes, ou informez-en l’administrateur.';
 
 // Configuration des instances de modules WIMS.
-$string['name']                        = 'Nom de l&rsquo;activité';
-$string['userinstitution']             = 'Nom de l&rsquo;établissement';
-$string['userfirstname']               = 'Prénom de l&rsquo;enseignant';
-$string['userlastname']                = 'Nom de famille de l&rsquo;enseignant';
+$string['name']                        = 'Nom de l’activité';
+$string['userinstitution']             = 'Nom de l’établissement';
+$string['userfirstname']               = 'Prénom de l’enseignant';
+$string['userlastname']                = 'Nom de famille de l’enseignant';
 $string['useremail']                   = 'Adresse électronique de contact';
 
 // Configuration des feuilles et examens.
@@ -95,13 +95,13 @@ $string['sheettypeworksheets']         = 'Feuilles :';
 $string['sheettypeexams']              = 'Examens :';
 $string['sheettitle']                  = 'Titre';
 $string['sheetgraded']                 = 'Notes Suivies';
-$string['sheetexpiry']                 = 'Date d&rsquo;expiration';
+$string['sheetexpiry']                 = 'Date d’expiration';
 $string['wimsstatus1']                 = 'Actif';
 $string['wimsstatus2']                 = 'Expiré';
 $string['wimsstatusx']                 = 'Inactif';
 
 // Textes divers.
-$string['page-mod-wims-x']             = 'N&rsquo;importe quelle page du module Wims';
+$string['page-mod-wims-x']             = 'N’importe quelle page du module Wims';
 $string['modulename_link']             = 'mod/wims/view';
 
 // Taches planifiées.
@@ -109,15 +109,17 @@ $string['updatescores']                = 'Mise à jour des notes des activités 
 
 // Grade items.
 for ($i = 1; $i < 150; $i++) {
-    $string['grade_exam_'.$i.'_name'] = 'Score de l&rsquo;examen '.$i;
+    $string['grade_exam_'.$i.'_name'] = 'Score de l’examen '.$i;
 }
 
 // Données personelles.
-$string['privacy:metadata:core_grades'] = 'L&rsquo;activité WIMS enregistre dans le carnet de note Moodle les scores obtenus dans les classes WIMS.';
 
+$string['privacy:metadata:core_grades'] = 'L’activité WIMS enregistre dans le carnet de note Moodle les scores obtenus dans les classes WIMS.';
+
+$string['privacy:metadata:wims'] = 'Informations sur la classe WIMS';
 $string['privacy:metadata:wims_classes:id']              = '';
 $string['privacy:metadata:wims_classes:course']          = '';
-$string['privacy:metadata:wims_classes:name']            = 'Classroom title specified by the creator';
+$string['privacy:metadata:wims_classes:name']            = 'titre de la classe indiqué par son créateur';
 $string['privacy:metadata:wims_classes:userinstitution'] = 'Institution name specified by the class creator is sent from Moodle to the external WIMS classroom.';
 $string['privacy:metadata:wims_classes:userfirstname']   = 'First name specified by the class creator, used to create the classroom on the WIMS server';
 $string['privacy:metadata:wims_classes:userlastname']    = 'Last name specified by the class creator, used to create the classroom on the WIMS server';

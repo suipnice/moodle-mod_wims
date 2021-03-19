@@ -108,13 +108,14 @@ $string['modulename_link']             = 'mod/wims/view';
 $string['updatescores']             = 'Update WIMS scores';
 
 // Grade items.
-for ($i = 1; $i < 150; $i++) {
+/*for ($i = 1; $i < 150; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Exam #'.$i.' score';
-}
+}*/
 
 // Privacy.
 $string['privacy:metadata:core_grades']                  = 'The WIMS activity stores grades of users that have answered WIMS content.';
 
+$string['privacy:metadata:wims']                         = 'Informations on WIMS classroom';
 $string['privacy:metadata:wims_classes:id']              = '';
 $string['privacy:metadata:wims_classes:course']          = '';
 $string['privacy:metadata:wims_classes:name']            = 'Classroom title specified by the creator';

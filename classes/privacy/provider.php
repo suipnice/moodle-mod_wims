@@ -81,11 +81,11 @@ class provider implements
         $items->add_database_table(
         'wims',
          [
-            'name' => 'privacy:metadata:wims:name',
-            'userinstitution' => 'privacy:metadata:wims:userinstitution',
-            'userfirstname' => 'privacy:metadata:wims:userfirstname',
-            'userlastname' => 'privacy:metadata:wims:userlastname',
-            'useremail' => 'privacy:metadata:wims:useremail',
+            'name' => 'name',
+            'userinstitution' => 'userinstitution',
+            'userfirstname' => 'userfirstname',
+            'userlastname' => 'userlastname',
+            'useremail' => 'useremail',
              ],
             'privacy:metadata:wims'
         );
@@ -248,7 +248,9 @@ class provider implements
             if (!$cm) {
                 continue;
             }
-            $wims->deluser($cm, $wimslogin);
+            if (!$wims->deluser($cm, $wimslogin)) {
+                echo "user $wimslogin NOT deleted.";
+            }
         }
     }
 

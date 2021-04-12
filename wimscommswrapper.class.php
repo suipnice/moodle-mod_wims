@@ -504,7 +504,13 @@ class wims_comms_wrapper {
         }
         $params = 'qclass='.$qcl.'&rclass='.$this->_wimsencode($rcl);
         $params .= '&quser='.$login;
-        $urlparam = '&data1='.$_SERVER['REMOTE_ADDR'];
+
+        $useraddr = $_SERVER['REMOTE_ADDR'];
+        // If Moodle is behind a proxy.
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $useraddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        $urlparam = '&data1='.$useraddr;
 
         if (!$this->_executejson('authuser', $params.$urlparam)) {
             // Even failed to communicate with the WIMS server,

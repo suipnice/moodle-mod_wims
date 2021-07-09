@@ -154,7 +154,7 @@ class wims_interface{
      */
     public function selectclassformodule($course, $cm): ?bool {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Work out what language to use
         // by default we use the config language
@@ -201,7 +201,7 @@ class wims_interface{
         }
 
         // Try to modify the class that we just created to set the connection rights.
-        $data1 = $this->_constructconnectsline();
+        $data1 = $this->constructconnectsline();
         $modresult = $this->_wims->updateclass($this->_qcl, $this->_rcl, $data1);
 
         // Ensure that everything went to plan.
@@ -223,7 +223,7 @@ class wims_interface{
      */
     public function verifyclassaccessible($cm): ?bool {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Delegate to the wims comms wrapper to do the work.
         return $this->_wims->checkclass($this->_qcl, $this->_rcl, true) ? true : null;
@@ -300,13 +300,13 @@ class wims_interface{
         // The user should exist now so create the session and return it's access url.
         switch($urltype) {
             case WIMS_HOME_PAGE  :
-                return $this->_gethomepageurlforlogin($login, $currentlang);
+                return $this->gethomepageurlforlogin($login, $currentlang);
             case WIMS_GRADE_PAGE :
-                return $this->_getscorepageurlforlogin($login, $currentlang);
+                return $this->getscorepageurlforlogin($login, $currentlang);
             case WIMS_WORKSHEET  :
-                return $this->_getworksheeturlforlogin($login, $currentlang, $arg);
+                return $this->getworksheeturlforlogin($login, $currentlang, $arg);
             case WIMS_EXAM       :
-                return $this->_getexamurlforlogin($login, $currentlang, $arg);
+                return $this->getexamurlforlogin($login, $currentlang, $arg);
             default :
                 throw new Exception('BUG: Bad urltype parameter '.$urltype);
         }
@@ -329,13 +329,13 @@ class wims_interface{
         $login = "supervisor";
         switch($urltype) {
             case WIMS_HOME_PAGE  :
-                return $this->_gethomepageurlforlogin($login, $currentlang);
+                return $this->gethomepageurlforlogin($login, $currentlang);
             case WIMS_GRADE_PAGE :
-                return $this->_getscorepageurlforlogin($login, $currentlang);
+                return $this->getscorepageurlforlogin($login, $currentlang);
             case WIMS_WORKSHEET  :
-                return $this->_getworksheeturlforlogin($login, $currentlang, $arg);
+                return $this->getworksheeturlforlogin($login, $currentlang, $arg);
             case WIMS_EXAM       :
-                return $this->_getexamurlforlogin($login, $currentlang, $arg);
+                return $this->getexamurlforlogin($login, $currentlang, $arg);
             default:
                 throw new Exception('BUG: Bad urltype parameter '.$urltype);
         }
@@ -352,7 +352,7 @@ class wims_interface{
      */
     public function getclassconfigformodule($cm) {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Try to fetch the class config.
         $classconfig = $this->_wims->getclassconfig($this->_qcl, $this->_rcl);
@@ -400,16 +400,16 @@ class wims_interface{
      */
     public function updateclassconfigformodule($cm, $data) {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Build and apply updated class parameters.
         $classdata = "";
-        $classdata .= $this->_dataline($data, "description");
-        $classdata .= $this->_dataline($data, "institution");
-        $classdata .= $this->_dataline($data, "supervisor");
-        $classdata .= $this->_dataline($data, "email");
-        $classdata .= $this->_dataline($data, "lang");
-        $classdata .= $this->_dataline($data, "expiration");
+        $classdata .= $this->dataline($data, "description");
+        $classdata .= $this->dataline($data, "institution");
+        $classdata .= $this->dataline($data, "supervisor");
+        $classdata .= $this->dataline($data, "email");
+        $classdata .= $this->dataline($data, "lang");
+        $classdata .= $this->dataline($data, "expiration");
         if ($classdata != "") {
             $result = $this->_wims->updateclass($this->_qcl, $this->_rcl, $classdata);
             if ($result == null) {
@@ -420,9 +420,9 @@ class wims_interface{
 
         // Build and apply updated supervisor parameters.
         $userdata = "";
-        $userdata .= $this->_dataline($data, "lastname");
-        $userdata .= $this->_dataline($data, "firstname");
-        $userdata .= $this->_dataline($data, "email");
+        $userdata .= $this->dataline($data, "lastname");
+        $userdata .= $this->dataline($data, "firstname");
+        $userdata .= $this->dataline($data, "email");
         if ($userdata != "") {
             $result = $this->_wims->updateclasssupervisor($this->_qcl, $this->_rcl, $userdata);
             if ($result == null) {
@@ -481,7 +481,7 @@ class wims_interface{
      */
     public function getsheetindex($cm) {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Setup a result object.
         $result = array();
@@ -516,7 +516,7 @@ class wims_interface{
      */
     public function getselectedscores($cm, $requiredsheets) {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Setup a result object.
         $result = array();
@@ -632,7 +632,7 @@ class wims_interface{
     public function getuserlist($cm) {
 
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Try to fetch the class config.
         $classconfig = $this->_wims->getclassconfig($this->_qcl, $this->_rcl);
@@ -654,7 +654,7 @@ class wims_interface{
      */
     public function checkuser($cm, $wimslogin, $cache=true): bool {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Check if the user exists within the given course.
         return $this->_wims->checkuser($this->_qcl, $this->_rcl, $wimslogin, $cache);
@@ -669,7 +669,7 @@ class wims_interface{
      */
     public function cleanclass($cm): bool {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
         // Then ask WIMS to clean the specified classroom.
         return $this->_wims->cleanclass($this->_qcl, $this->_rcl);
     }
@@ -684,7 +684,7 @@ class wims_interface{
      */
     public function deluser($cm, $quser): bool {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
         // Then ask WIMS to remove the specified user from the classroom.
         return $this->_wims->deluser($this->_qcl, $this->_rcl, $quser);
     }
@@ -699,7 +699,7 @@ class wims_interface{
      */
     public function getuserdata($cm, $quser) {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Try to fetch the supervisor user config.
         return $this->_wims->getuserconfig($this->_qcl, $this->_rcl, $quser);
@@ -715,7 +715,7 @@ class wims_interface{
      */
     public function getscore($cm, $quser): array {
         // Start by determining the identifiers for the class.
-        $this->_initforcm($cm);
+        $this->initforcm($cm);
 
         // Delegate to the wims comms wrapper to do the work.
         return $this->_wims->getscore($this->_qcl, $this->_rcl, $quser);
@@ -731,7 +731,7 @@ class wims_interface{
      *
      * @return string used by WIMS to set a data value.
      */
-    private function _dataline($data, $prop): string {
+    private function dataline($data, $prop): string {
         if (array_key_exists($prop, $data)) {
             return $prop."=".$data[$prop]."\n";
         } else {
@@ -747,7 +747,7 @@ class wims_interface{
      *
      * @return string $accessurl
      */
-    private function _gethomepageurlforlogin($login, $currentlang): string {
+    private function gethomepageurlforlogin($login, $currentlang): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->gethomepageurl($this->_qcl, $this->_rcl, $login, $currentlang);
 
@@ -768,7 +768,7 @@ class wims_interface{
      *
      * @return string $accessurl
      */
-    private function _getscorepageurlforlogin($login, $currentlang): string {
+    private function getscorepageurlforlogin($login, $currentlang): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->getscorepageurl($this->_qcl, $this->_rcl, $login, $currentlang);
 
@@ -790,7 +790,7 @@ class wims_interface{
      *
      * @return string an access URL to log into the worksheet
      */
-    private function _getworksheeturlforlogin($login, $currentlang, $sheet): string {
+    private function getworksheeturlforlogin($login, $currentlang, $sheet): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->getworksheeturl($this->_qcl, $this->_rcl, $login, $currentlang, $sheet);
 
@@ -812,7 +812,7 @@ class wims_interface{
      *
      * @return string an access URL to log into the exam
      */
-    private function _getexamurlforlogin($login, $currentlang, $exam): string {
+    private function getexamurlforlogin($login, $currentlang, $exam): string {
         // Attempt to create the WIMS session.
         $accessurl = $this->_wims->getexamurl($this->_qcl, $this->_rcl, $login, $currentlang, $exam);
 
@@ -830,7 +830,7 @@ class wims_interface{
      *
      * @return string used by WIMS to set which server/course couple can access to the WIMS class.
      */
-    private function _constructconnectsline(): string {
+    private function constructconnectsline(): string {
         return "connections=+moodlejson/$this->_rcl+ +moodlejsonhttps/$this->_rcl+";
     }
 
@@ -841,7 +841,7 @@ class wims_interface{
      *
      * @return void
      */
-    private function _initforcm($cm): void {
+    private function initforcm($cm): void {
         // Setup the unique WIMS class identifier.
         $this->_qcl = "".($this->_config->qcloffset + $cm->id);
         // Setup the 'owner' identifier (derived from the Moodle class id).

@@ -72,7 +72,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _addtextfield($fieldnamebase, $maxlen, $defaultvalue=null, $fieldsuffix=''): void {
+    private function addtextfield($fieldnamebase, $maxlen, $defaultvalue=null, $fieldsuffix=''): void {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('text', $fieldname, get_string($fieldnamebase, 'wims'), array('size' => '60'));
@@ -93,7 +93,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _addtextareafield($fieldnamebase, $defaultvalue=null, $fieldsuffix=''): void {
+    private function addtextareafield($fieldnamebase, $defaultvalue=null, $fieldsuffix=''): void {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('textarea', $fieldname, get_string($fieldnamebase, 'wims'), array('cols' => '60', 'rows' => '5'));
@@ -112,7 +112,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _addcheckbox($fieldnamebase, $defaultvalue=null, $fieldsuffix=''): void {
+    private function addcheckbox($fieldnamebase, $defaultvalue=null, $fieldsuffix=''): void {
         $mform = $this->_form;
         $fieldname = $fieldnamebase.$fieldsuffix;
         $mform->addElement('checkbox', $fieldname, get_string($fieldnamebase, 'wims'));
@@ -135,11 +135,11 @@ class mod_wims_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Text fields.
-        $this->_addtextfield('name', 255);
-        $this->_addtextfield('userfirstname', 63);
-        $this->_addtextfield('userlastname', 63);
-        $this->_addtextfield('useremail', 255);
-        $this->_addtextfield('userinstitution', 127);
+        $this->addtextfield('name', 255);
+        $this->addtextfield('userfirstname', 63);
+        $this->addtextfield('userlastname', 63);
+        $this->addtextfield('useremail', 255);
+        $this->addtextfield('userinstitution', 127);
 
         $this->standard_coursemodule_elements();
     }
@@ -195,9 +195,9 @@ class mod_wims_mod_form extends moodleform_mod {
                     $mform->addElement('header', 'sheetheader'.$sheettype.$sheetidx, $headerstr);
 
                     // Add title and 'graded' checkbox.
-                    $this->_addtextfield('sheettitle', 255, $title, $sheettype.$sheetidx);
+                    $this->addtextfield('sheettitle', 255, $title, $sheettype.$sheetidx);
                     if ($sheettype != 'exams') {
-                        $this->_addcheckbox('sheetgraded', $graded, $sheettype.$sheetidx);
+                        $this->addcheckbox('sheetgraded', $graded, $sheettype.$sheetidx);
                     }
 
                     // Add an expiry date field.
@@ -229,7 +229,7 @@ class mod_wims_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    private function _updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback): void {
+    private function updatedefaultvalue(&$defaultvalues, $user, $propname, $fallback): void {
         $localkey = "user".$propname;
         if (!array_key_exists($localkey, $defaultvalues) || $defaultvalues[$localkey] == "") {
             // We have an empty value, so change it.
@@ -254,10 +254,10 @@ class mod_wims_mod_form extends moodleform_mod {
         // Prime the default values using the database entries that we've stored away.
         $user = $DB->get_record('user', array('id' => $USER->id));
         $config = get_config('wims');
-        $this->_updatedefaultvalue($defaultvalues, $user, "firstname", "anonymous");
-        $this->_updatedefaultvalue($defaultvalues, $user, "lastname", "supervisor");
-        $this->_updatedefaultvalue($defaultvalues, $user, "email", "noreply@wimsedu.info");
-        $this->_updatedefaultvalue($defaultvalues, $user, "institution", $config->defaultinstitution);
+        $this->updatedefaultvalue($defaultvalues, $user, "firstname", "anonymous");
+        $this->updatedefaultvalue($defaultvalues, $user, "lastname", "supervisor");
+        $this->updatedefaultvalue($defaultvalues, $user, "email", "noreply@wimsedu.info");
+        $this->updatedefaultvalue($defaultvalues, $user, "institution", $config->defaultinstitution);
 
         // Try to contact the WIMS server and see if the course already exists.
         if (is_object($this->cm)) {

@@ -46,7 +46,7 @@ if ($id) {
     $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $config = get_config('wims');
 } else {
-    print_error(get_string('missingidandcmid', mod_wims));
+    throw new moodle_exception(get_string('missingidandcmid', mod_wims), 'error');
 }
 
 // Sanity tests.

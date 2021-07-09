@@ -42,10 +42,10 @@ $userid     = optional_param('userid', 0, PARAM_INT);
 
 
 if (! $cm = get_coursemodule_from_id('wims', $id)) {
-    print_error('invalidcoursemodule');
+    throw new moodle_exception('invalidcoursemodule', 'error');
 }
 if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
-    print_error('coursemisconf');
+    throw new moodle_exception('coursemisconf', 'error');
 }
 
 require_course_login($course, false, $cm);

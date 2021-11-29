@@ -8,18 +8,16 @@
       <FIELDS>
         <!-- Fields REQUIRED by MOODLE -->
 
-        <!-- primary key for the table -->
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <!-- id of the course that the module instance was instantiated in -->
-        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <!-- module instance name -->
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="primary key for the table"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="id of the course that the module instance was instantiated in"/>
+        <FIELD NAME="class_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="ID of the class object in WIMS server"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="module instance name"/>
 
         <!-- Fields to cache course creator info in case course is instantiated late in WIMS -->
-        <FIELD NAME="userinstitution" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="userfirstname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="userlastname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="useremail" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userinstitution" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false" COMMENT="Class institution"/>
+        <FIELD NAME="userfirstname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false" COMMENT="Teacher first name"/>
+        <FIELD NAME="userlastname" TYPE="char" LENGTH="63" NOTNULL="true" SEQUENCE="false" COMMENT="Teacher last name"/>
+        <FIELD NAME="useremail" TYPE="char" LENGTH="127" NOTNULL="true" SEQUENCE="false" COMMENT="Teacher email"/>
 
       </FIELDS>
       <KEYS>

@@ -400,7 +400,6 @@ class wims_comms_wrapper {
     /**
      * Connect to the server and update the course config data
      *
-     * @param string $qcl   the WIMS class identifier (must be an integer with a value > 9999 )
      * @param string $rcl   a unique identifier derived from properties of the MOODLE module
      *                      instance that the WIMS class is bound to
      * @param string $data1 a multi-line text block containing various course-related parameters
@@ -408,8 +407,8 @@ class wims_comms_wrapper {
      *
      * @return bool true on success
      */
-    public function addclass($qcl, $rcl, $data1, $data2): bool {
-        $params = 'qclass='.$qcl.'&rclass='.$this->wimsencode($rcl);
+    public function addclass($rcl, $data1, $data2): bool {
+        $params = 'rclass='.$this->wimsencode($rcl);
         $params .= '&data1='.$this->wimsencode($data1);
         $params .= '&data2='.$this->wimsencode($data2);
         $this->executejson('addclass', $params);

@@ -47,9 +47,6 @@ $string['admindescallowselfsigcerts']  = '';
 $string['adminnameserverpassword']     = 'WIMS Server connection password';
 $string['admindescserverpassword']     = 'The one you\'ve defined in the files in ".connexions" directory on WIMS server.';
 
-$string['adminnameqcloffset']          = 'WIMS Course Numbering Offset';
-$string['admindescqcloffset']          = 'Between 11111 and 10^9';
-
 // Admin settings - Interface settings.
 $string['wimssettings']                = 'Moodle-Wims Interface Settings';
 $string['adminnamelang']               = 'Course Language (default value)';

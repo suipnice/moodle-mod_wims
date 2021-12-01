@@ -47,9 +47,6 @@ $string['admindescallowselfsigcerts']  = '';
 $string['adminnameserverpassword']     = 'Mot de passe de connexion au serveur WIMS';
 $string['admindescserverpassword']     = 'Doit être le même que celui que vous avez défini dans les fichiers placés dans le répertoire ".connexions" du serveur WIMS.';
 
-$string['adminnameqcloffset']          = 'Point de départ de la numérotation des classes WIMS';
-$string['admindescqcloffset']          = 'Doit être entre 11111 et 10^9';
-
 // Administration - Réglages de l'interface.
 $string['wimssettings']                = 'Réglages de l’interface Moodle-Wims';
 $string['adminnamelang']               = 'Langue des classes';
@@ -108,9 +105,9 @@ $string['modulename_link']             = 'mod/wims/view';
 $string['updatescores']                = 'Mise à jour des notes des activités WIMS';
 
 // Grade items.
-for ($i = 1; $i < 150; $i++) {
+/*for ($i = 1; $i < 150; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Score de l’examen '.$i;
-}
+}*/
 
 // Données personelles.
 

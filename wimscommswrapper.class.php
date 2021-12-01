@@ -177,8 +177,7 @@ class wims_comms_wrapper {
                 print(" $msg\n");
             }
         }
-        // The following line can be uncommented when debugging to redirect debug messages to apache error log.
-        /* error_log($msg); */
+        // Add this when debugging to redirect debug messages to apache error log: "error_log($msg);".
     }
 
     /**
@@ -412,7 +411,11 @@ class wims_comms_wrapper {
         $params .= '&data1='.$this->wimsencode($data1);
         $params .= '&data2='.$this->wimsencode($data2);
         $this->executejson('addclass', $params);
-        return ($this->status == 'OK');
+        if ($this->status == 'OK') {
+            return $this->class_id;
+        } else {
+            return false;
+        }
     }
 
     /**

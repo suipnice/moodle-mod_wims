@@ -96,18 +96,11 @@ function xmldb_wims_upgrade($oldversion): bool {
         foreach ($coursemodules as $cm) {
             // Add a class_id field in each existing wims activity.
             $newvalue = $qcloffset + $cm->id;
-            mtrace(
-                "\n------------\n- PROCESSING: course=".$cm->course.
-                " section=".$cm->section.
-                " cm=".$cm->id.
-                " instance=".$cm->instance.
-                " class_id=".$newvalue
-            );
-            $DB->set_field($table, 'class_id', $newvalue, array('id' => $cm->instance));
+            $DB->set_field('wims', 'class_id', $newvalue, array('id' => $cm->instance));
         }
 
         // Qcloffset is now useless, we remove it from config.
-        unset_config('wims', 'qcloffset');
+        unset_config('qcloffset', 'wims');
         // WIMS savepoint reached.
         upgrade_mod_savepoint(true, $nextversion, $modulename);
     }

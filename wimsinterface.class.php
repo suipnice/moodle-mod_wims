@@ -192,12 +192,15 @@ class wims_interface{
             "lastname=$wimsinfo->userlastname"."\n".
             "firstname=$wimsinfo->userfirstname"."\n".
             "password=Pwd$randomvalue2"."\n";
-        $addresult = $this->_wims->addclass($this->_qcl, $this->_rcl, $data1, $data2);
+        $addresult = $this->_wims->addclass($this->_rcl, $data1, $data2);
 
         // Ensure that everything went to plan.
-        if ($addresult !== true) {
+        if ($addresult === false) {
             $this->errormsgs[] = $this->_wims->message;
             return null;
+        } else {
+            // Ici il faut stocker le rØsultat en tant que class_id.
+            $this->_qcl = $addresult;
         }
 
         // Try to modify the class that we just created to set the connection rights.
@@ -842,8 +845,9 @@ class wims_interface{
      * @return void
      */
     private function initforcm($cm): void {
-        // Setup the unique WIMS class identifier.
-        $this->_qcl = "".($this->_config->qcloffset + $cm->id);
+        global $DB;
+        $wimsinfo = $DB->get_record('wims', array('id' => $cm->instance));
+        $this->_qcl = $wimsinfo->class_id;
         // Setup the 'owner' identifier (derived from the Moodle class id).
         $this->_rcl = "moodle_$cm->id";
     }

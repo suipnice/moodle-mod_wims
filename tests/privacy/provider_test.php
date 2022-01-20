@@ -24,11 +24,12 @@
  * then, run from Moodle root dir : vendor/bin/phpunit mod/wims/tests/privacy_test.php
  *
  * @package   mod_wims
+ * @category  test
  * @copyright 2020 UCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_wims\tests;
+namespace mod_wims\privacy;
 
 // It must be included from a Moodle page.
 defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
@@ -46,14 +47,14 @@ use \mod_wims\wims_interface;
 /**
  * Unit tests for mod/wims/classes/privacy/
  *
- * @category  test
+ * @category  Tests
  * @package   mod_wims
  * @author    Badatos <bado@unice.fr>
  * @copyright 2020 UCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
-class mod_wims_privacy_testcase extends provider_testcase {
+class provider_test extends provider_testcase {
 
     /**
      * Communication library for interfacing to the WIMS server
@@ -148,7 +149,7 @@ class mod_wims_privacy_testcase extends provider_testcase {
             $this->_context = $instance->context;
             $config = $instance->config;
             // Change 0 to 1 to debug.
-            $this->_wims = new wims_interface($config, 0, 'plain');
+            $this->_wims = new wims_interface($config, 1, 'plain');
         }
         if (!$this->_wimsstatus) {
             // We set an expiration date at today, so WIMS will automatically delete it tomorrow.
@@ -202,11 +203,10 @@ class mod_wims_privacy_testcase extends provider_testcase {
 
     /**
      * A test for deleting all data for one user.
-     * remove the "disabled" prefix to enable it.
      *
      * @return void
      */
-    public function disabled_test_delete_data_for_user(): void {
+    public function test_delete_data_for_user(): void {
 
         $coursecontext = \context_course::instance($this->_courseid);
 

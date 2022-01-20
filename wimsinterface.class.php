@@ -44,11 +44,10 @@ define('WIMS_EXAM', 4);
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
-class wims_interface{
+class wims_interface {
 
     /**
      * In the case where an error is encounterd this variable will contain error message as an array of lines.
-     * TODO: is it still used ?
      *
      * @var array  $erromsgs
      */

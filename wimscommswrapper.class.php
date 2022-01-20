@@ -35,7 +35,6 @@
  */
 
 namespace mod_wims;
-defined('MOODLE_INTERNAL') || die;
 
 use \stdClass;
 

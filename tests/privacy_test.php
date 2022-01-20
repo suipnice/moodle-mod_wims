@@ -30,9 +30,8 @@
 
 namespace mod_wims\tests;
 
-if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
-}
+// It must be included from a Moodle page.
+defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
 global $CFG;
 

@@ -57,8 +57,7 @@ class provider implements
     // This plugin currently implements the original plugin_provider interface.
     \core_privacy\local\request\plugin\provider,
 
-    \core_privacy\local\request\core_userlist_provider
-{
+    \core_privacy\local\request\core_userlist_provider {
 
     /**
      * Get the list of contexts that contain user information for the specified user.

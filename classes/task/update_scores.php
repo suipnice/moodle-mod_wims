@@ -23,8 +23,6 @@
 
 namespace mod_wims\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 use \mod_wims\wims_interface;
 
 /**

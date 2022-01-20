@@ -23,8 +23,6 @@
 
 namespace mod_wims\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Event definition for course_module_viewed.
  *

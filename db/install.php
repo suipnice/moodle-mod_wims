@@ -29,7 +29,6 @@
  *   - partially defaults.php
  */
 
-defined('MOODLE_INTERNAL') || die();
 /**
  * Perform DB changes on WIMS plugin install
  */

@@ -25,8 +25,6 @@
 
 // This is lib.php - add code here for interfacing this module to Moodle internals.
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * List of features supported in wims module
  *

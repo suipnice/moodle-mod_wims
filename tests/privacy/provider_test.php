@@ -21,10 +21,9 @@
  *
  * To enable these tests, you must first add this to your moodle/config.php :
  *   define('PHPUNIT_LONGTEST', true);
- * then, run from Moodle root dir : vendor/bin/phpunit mod/wims/tests/privacy_test.php
+ * then, run from Moodle root dir : vendor/bin/phpunit mod/wims/tests/privacy/provider_test.php
  *
  * @package   mod_wims
- * @category  test
  * @copyright 2020 UCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -47,7 +46,7 @@ use \mod_wims\wims_interface;
 /**
  * Unit tests for mod/wims/classes/privacy/
  *
- * @category  Tests
+ * @category  test
  * @package   mod_wims
  * @author    Badatos <bado@unice.fr>
  * @copyright 2020 UCA
@@ -156,11 +155,10 @@ class provider_test extends provider_testcase {
             $params = (object) array('expiration' => date('yymd'));
 
             // Start by creating a class on the WIMS server connected to the course.
-            $this->_wimsstatus = $this->_wims->selectclassformodule($params, $this->_cm, $config);
+            $this->_wimsstatus = $this->_wims->selectclassformodule($params, $this->_cm, $config)["status"];
             if (!$this->_wimsstatus) {
                 $this->markTestSkipped("WIMS server at ".$config->serverurl." can't be reached.");
             }
-            // Est-ce qu'on fait un cleanclass avant chaque test ?
         }
     }
 

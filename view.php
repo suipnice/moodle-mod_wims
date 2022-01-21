@@ -66,14 +66,10 @@ $event->add_record_snapshot('course', $course);
 $event->add_record_snapshot('wims', $instance);
 $event->trigger();
 
-// Mark the activity completed.
-$completion = new completion_info($course);
-$completion->set_module_viewed($cm);
-
 // Work Code.
 
 /**
- * Raise an error.
+ * Raise an error in HTML format.
  *
  * @param string $mainmsg   Error Title
  * @param array  $errormsgs List of errors
@@ -81,39 +77,91 @@ $completion->set_module_viewed($cm);
  * @return void
  */
 function raisewimserror($mainmsg, $errormsgs): void {
-    echo "<h1>".$mainmsg."</h1>";
+    echo "<h2>".$mainmsg."</h2><div class=\"alert alert-danger\">";
     foreach ($errormsgs as $msg) {
         echo "&rarr; $msg<br/>";
     }
-    die();
+    echo "</div>";
 }
 
 
 // Render the output - by executing a redirect to WIMS.
-
 $PAGE->set_url('/mod/wims/view.php', array('id' => $cm->id));
+
+// Check current user role.
+$isteacher = has_capability('moodle/course:manageactivities', $context);
 
 // Instantiate a wims interface.
 $wims = new wims_interface($config, $config->debugviewpage);
 
 // Start by connecting to the course on the WIMS server (and instantiate the course if required).
 $wimsresult = $wims->selectclassformodule($course, $cm, $config);
-if ($wimsresult !== true) {
-    $wims->errormsgs[] = get_string('class_select_failed_desc', 'wims');
-    raisewimserror(get_string('class_select_failed_title', 'wims'), $wims->errormsgs);
-}
+if (!$wimsresult["status"]) {
 
-// If we're a teacher then we need the supervisor url otherwise we need the student url.
-$sitelang = current_language();
-$isteacher = has_capability('moodle/course:manageactivities', $context);
-if ($isteacher) {
-    $url = $wims->getteacherurl($sitelang, $urltype, $urlarg);
+    $PAGE->set_pagelayout('incourse');
+    $pagetitle = strip_tags($course->shortname.': '.format_string($instance->name));
+    $PAGE->set_title($pagetitle);
+    $PAGE->set_heading($instance->name);
+    $PAGE->set_cm($cm, $course);
+
+    // Print the page header.
+    echo $OUTPUT->header();
+
+    if (strpos(end($wims->errormsgs), "not existing") !== false) {
+        if ($isteacher) {
+            echo('<div class="alert alert-danger">'.get_string('class_deleted_with_id', mod_wims, $wimsresult['qcl']).'</div>');
+
+            // List Backups on WIMS server for this class.
+            if ($wimsresult['total'] > 0) {
+                echo('<fieldset><legend>'.get_string('backup_legend', mod_wims).'</legend>');
+
+                echo('<div>'.get_string('backup_found', mod_wims, $wimsresult['total']).'</div>');
+                echo('<div class="form-group row"><label class="col-sm-3 col-form-label" for="class_backup">');
+                echo(get_string('select_backup', mod_wims).'</label> ');
+                echo('<div class="col-sm-9"><select class="form-control" id="class_backup" name="class_backup">');
+                foreach ($wimsresult['restorable'] as $year => $v) {
+                    // We don't need $v, as we requested only backups with id=$qcl.
+                    echo("<option value=\"{$year}\">{$year}</p>");
+                }
+                echo('</select></div></div>');
+                echo('<div class="form-group"><button class="btn btn-primary">');
+                echo(get_string('restore_backup', mod_wims).'</button></div></fieldset>');
+
+            }
+            // Or create a new empty WIMS class.
+            echo('<fieldset><legend>'.get_string('create_new_legend', mod_wims).'</legend>');
+            echo('<div class="form-group"><button class="btn btn-secondary">');
+            echo(get_string('create_new_class', mod_wims).'</button></div></fieldset>');
+        } else {
+            echo('<div class="alert alert-danger">'.get_string('class_deleted', mod_wims, $wimsresult['qcl']).'</div>');
+        }
+
+    } else {
+        $wims->errormsgs[] = get_string('class_select_failed_desc', 'wims');
+        raisewimserror(get_string('class_select_failed_title', 'wims'), $wims->errormsgs);
+    }
+    // Finish the page.
+    echo $OUTPUT->footer();
 } else {
-    $url = $wims->getstudenturl($USER, $sitelang, $urltype, $urlarg);
+    // WIMS Class exist, and server is up.
+
+    // Mark the activity completed.
+    $completion = new completion_info($course);
+    $completion->set_module_viewed($cm);
+
+    // If we're a teacher then we need the supervisor url otherwise we need the student url.
+    $sitelang = current_language();
+    if ($isteacher) {
+        $url = $wims->getteacherurl($sitelang, $urltype, $urlarg);
+    } else {
+        $url = $wims->getstudenturl($USER, $sitelang, $urltype, $urlarg);
+    }
+
+    // If we've failed to get hold of a plausible url then bomb out with an error message.
+    if ($url == null) {
+        raisewimserror("WIMS User Authentication FAILED", $wims->errormsgs);
+    } else {
+        // Do the redirection.
+        redirect($url);
+    }
 }
-
-// If we've failed to get hold of a plausible url then bomb out with an error message.
-($url != null)||raisewimserror("WIMS User Authentication FAILED", $wims->errormsgs);
-
-// Do the redirection.
-redirect($url);

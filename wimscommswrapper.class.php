@@ -354,14 +354,19 @@ class wims_comms_wrapper {
      * @param boolean $extended if true uses getclass call instead of checkclass call to verify
      *                          not only existence of class but also service access rights
      *
-     * @return true on success, null on failure)
+     * @return boolean true on success
      */
-    public function checkclass($qcl, $rcl, $extended=false): ?bool {
-        $cmd = ($extended === true) ? 'getclass' : 'checkclass';
-        $this->qclass = $qcl;
-        $params = 'qclass='.$qcl.'&rclass='.$this->wimsencode($rcl);
-        $this->executejson($cmd, $params, true);
-        return ($this->status == 'OK') ? true : null;
+    public function checkclass($qcl, $rcl, $extended=false): bool {
+        if ($qcl !== null) {
+            $cmd = ($extended === true) ? 'getclass' : 'checkclass';
+            $this->qclass = $qcl;
+            $params = 'qclass='.$qcl.'&rclass='.$this->wimsencode($rcl);
+            $this->executejson($cmd, $params, true);
+            return ($this->jsondata->status == 'OK');
+        } else {
+            // The class has not been created in WIMS yet.
+            return false;
+        }
     }
 
     /**
@@ -403,17 +408,18 @@ class wims_comms_wrapper {
      * @param string $data1 a multi-line text block containing various course-related parameters
      * @param string $data2 a multi-line text block containing various course-creator-related parameters
      *
-     * @return bool true on success
+     * @return integer class_id on success, null on failure
      */
-    public function addclass($rcl, $data1, $data2): bool {
+    public function addclass($rcl, $data1, $data2): ?int {
         $params = 'rclass='.$this->wimsencode($rcl);
         $params .= '&data1='.$this->wimsencode($data1);
         $params .= '&data2='.$this->wimsencode($data2);
         $this->executejson('addclass', $params);
         if ($this->status == 'OK') {
-            return $this->class_id;
+            return $this->jsondata->class_id;
         } else {
-            return false;
+            $this->errormsgs[] = $this->message;
+            return null;
         }
     }
 

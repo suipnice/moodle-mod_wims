@@ -221,14 +221,14 @@ class wims_interface {
      * @param object $cm the course module that the wims class is bound to. It should include:
      *                   integer $cm->id the course module's unique id
      *
-     * @return true on success, null if on failure
+     * @return bool true on success
      */
-    public function verifyclassaccessible($cm): ?bool {
+    public function verifyclassaccessible($cm): bool {
         // Start by determining the identifiers for the class.
         $this->initforcm($cm);
 
         // Delegate to the wims comms wrapper to do the work.
-        return $this->_wims->checkclass($this->_qcl, $this->_rcl, true) ? true : null;
+        return $this->_wims->checkclass($this->_qcl, $this->_rcl, true);
     }
 
     /**

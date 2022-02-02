@@ -22,3 +22,13 @@
  * @package    mod_wims
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+/* Customize Moodle 4+ activity icon */
+/*.modicon_wims.activityiconcontainer {
+    background-color: #FF3333;
+    padding: 0;
+}*/
+.modicon_wims.activityiconcontainer img {
+    width: 30px;
+    height: 30px;
+}

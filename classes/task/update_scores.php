@@ -26,7 +26,10 @@ namespace mod_wims\task;
 use \mod_wims\wims_interface;
 
 /**
- * The mod_wims updating scores task class
+ * The mod_wims updating scores sheduled task class
+ *
+ * To test from command line :
+ * sudo -u apache php admin/cli/scheduled_task.php --execute='\mod_wims\task\update_scores'
  *
  * @category  task
  * @package   mod_wims
@@ -59,6 +62,9 @@ class update_scores extends \core\task\scheduled_task {
         mtrace('Synchronising WIMS activity scores to grade book');
         include_once(__DIR__ . "/../../wimsinterface.class.php");
         $config = get_config('wims');
+        if ($config->debugcron > 0) {
+            mtrace('> DEBUG MODE ON <');
+        }
         $wims = new wims_interface($config, $config->debugcron, 'plain/text');
 
         // Build a lookup table to get Moodle user ids from wimslogin.
@@ -79,7 +85,7 @@ class update_scores extends \core\task\scheduled_task {
             // Make sure the course is correctly accessible.
             $isaccessible = $wims->verifyclassaccessible($cm);
             if (!$isaccessible) {
-                mtrace('  - ALERT: Ignoring class as it is inaccessible - it may not have been setup yet');
+                mtrace('  - ALERT: Ignoring classroom as it is inaccessible - it may not have been setup yet');
                 continue;
             }
 

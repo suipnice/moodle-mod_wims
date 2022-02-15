@@ -52,6 +52,7 @@ use \mod_wims\wims_interface;
  * @copyright 2020 UCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
+ * @coversDefaultClass \mod_wims\privacy\provider
  */
 class provider_test extends provider_testcase {
 
@@ -179,6 +180,7 @@ class provider_test extends provider_testcase {
      * (before calling 'php admin/tool/phpunit/cli/init.php')
      *
      * @return void
+     * @covers ::delete_data_for_all_users_in_context
      */
     public function disabled_test_delete_data_for_all_users_in_context(): void {
 
@@ -203,6 +205,7 @@ class provider_test extends provider_testcase {
      * A test for deleting all data for one user.
      *
      * @return void
+     * @covers ::delete_data_for_user
      */
     public function test_delete_data_for_user(): void {
 

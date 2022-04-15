@@ -74,6 +74,8 @@ class update_scores extends \core\task\scheduled_task {
         $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
         $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
 
+        $errorcount = 0;
+
         foreach ($coursemodules as $cm) {
             mtrace(
                 "\n------------\n- PROCESSING: course=".$cm->course.
@@ -86,6 +88,7 @@ class update_scores extends \core\task\scheduled_task {
             $isaccessible = $wims->verifyclassaccessible($cm);
             if (!$isaccessible) {
                 mtrace('  - ALERT: Ignoring classroom as it is inaccessible - it may not have been setup yet');
+                $errorcount++;
                 continue;
             }
 
@@ -93,6 +96,7 @@ class update_scores extends \core\task\scheduled_task {
             $sheetindex = $wims->getsheetindex($cm);
             if ($sheetindex == null) {
                 mtrace('  ERROR: Failed to fetch sheet index for WIMS id: cm='.$cm->id);
+                $errorcount++;
                 continue;
             }
             $requiredsheets = $wims->getrequiredsheets($sheetindex);
@@ -100,7 +104,9 @@ class update_scores extends \core\task\scheduled_task {
             // Fetch the scores for the required sheets.
             $sheetscores = $wims->getselectedscores($cm, $requiredsheets->ids);
             if ($sheetscores == null) {
-                mtrace(' ERROR: Failed to fetch selected sheet scores for WIMS id: cm='.$cm->id);
+                // Attention : $sheetscores peut etre null si aucun user.
+                mtrace(' ERROR: Failed to fetch selected sheet scores for WIMS id: cm='.$cm->id. ". Is there users in this class?");
+                $errorcount++;
                 continue;
             }
 
@@ -184,10 +190,13 @@ class update_scores extends \core\task\scheduled_task {
                     }
                 }
             }
-            mtrace($nbgradeitems.' user grade updated ($nbfailed failed)');
+            mtrace($nbgradeitems.' user grade updated ('.$nbfailed.' failed)');
         }
-        mtrace("\nSynchronising WIMS activity scores to grade book => Done.\n");
-
-        /* return true; */
+        mtrace("\n============");
+        $nbmodules = count($coursemodules);
+        if ($errorcount >= $nbmodules and $nbmodules > 0 ) {
+            throw new \moodle_exception("Failed to sync every scores.", 'error');
+        }
+        mtrace("Synchronising WIMS activity scores to grade book => Done.\n");
     }
 }

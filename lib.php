@@ -53,16 +53,16 @@ function wims_supports($feature) {
         case FEATURE_GRADE_OUTCOMES:
         case FEATURE_BACKUP_MOODLE2:
         case FEATURE_SHOW_DESCRIPTION:
-        // Custom completion rules.
+            // Custom completion rules.
         case FEATURE_COMPLETION_HAS_RULES:
             return false;
 
         case FEATURE_GRADE_HAS_GRADE:
-        // Marked complete as soon as a user clicks on it.
+            // Marked complete as soon as a user clicks on it.
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
 
-        // Moodle 4+ icons.
+            // Moodle 4+ icons.
         case FEATURE_MOD_PURPOSE:
             return MOD_PURPOSE_ASSESSMENT;
 

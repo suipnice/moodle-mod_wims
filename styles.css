@@ -28,7 +28,16 @@
     background-color: #FF3333;
     padding: 0;
 }*/
-.modicon_wims.activityiconcontainer img {
+/* icon in activity selector */
+.modicon_wims.activityiconcontainer img,
+/* icon in course */
+.modtype_wims img.activityicon {
     width: 30px;
     height: 30px;
+}
+
+/* debug log */
+.debug_wims{
+    background-color: #fff8f0;
+    padding: .5em 1em;
 }

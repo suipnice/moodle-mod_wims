@@ -89,7 +89,7 @@ $string['wrongparamvalue']             = 'The parameter {$a} has a wrong value.'
 $string['restore_or_new']              = 'You can either restore a previous backup or create an empty class.';
 
 $string['backup_legend']               = 'Restore a previous backup';
-$string['backup_found']                = 'There is {$a} backup that can correspond to your class.';
+$string['backup_found']                = 'There is a backup that can correspond to your class.';
 $string['backups_found']               = 'There are {$a} backups that can correspond to your class.';
 
 $string['backup_select']               = 'Choose a backup file';

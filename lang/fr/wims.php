@@ -63,13 +63,13 @@ $string['admindescusegradepage']       = '';
 
 // Administration - Réglages de debug.
 $string['wimsdebugsettings']           = 'Réglages de debug de l’interface WIMS';
-$string['adminnamedebugviewpage']      = 'Activer l’affichage d’information de debug: VIEW';
+$string['adminnamedebugviewpage']      = 'Activer l’affichage d’information de debug : VIEW';
 $string['admindescdebugviewpage']      = '';
 
-$string['adminnamedebugcron']          = 'Activer l’affichage d’information de debug: CRON';
+$string['adminnamedebugcron']          = 'Activer l’affichage d’information de debug : CRON';
 $string['admindescdebugcron']          = '';
 
-$string['adminnamedebugsettings']      = 'Activer l’affichage d’information de debug: SETTINGS';
+$string['adminnamedebugsettings']      = 'Activer l’affichage d’information de debug : SETTINGS';
 $string['admindescdebugsettings']      = '';
 
 // Capacités (roles).
@@ -83,6 +83,7 @@ $string['class_select_refused_title']  = 'Accès à cette classe WIMS refusé.';
 $string['class_select_refused_desc']   = 'La classe WIMS que vous tentez d’atteindre n’autorise pas un accès depuis ce serveur Moodle. Accédez à la classe directement par WIMS ou contacter l’administrateur.';
 $string['class_deleted']               = 'La classe WIMS que vous cherchez n’existe plus sur ce serveur.';
 $string['class_deleted_with_id']       = 'La classe WIMS n°{$a} n’existe plus sur ce serveur.';
+$string['wrongparamvalue']             = 'Le paramètre {$a} a une valeur incorrecte.';
 
 // Sauvegardes de classes.
 $string['restore_or_new']              = 'Vous pouvez au choix restaurer une sauvegarde précédente ou créer une classe vide.';
@@ -135,13 +136,13 @@ $string['privacy:metadata:core_grades'] = 'L’activité WIMS enregistre dans le
 $string['privacy:metadata:wims'] = 'Informations sur la classe WIMS';
 $string['privacy:metadata:wims_classes:id']              = '';
 $string['privacy:metadata:wims_classes:course']          = '';
-$string['privacy:metadata:wims_classes:name']            = 'titre de la classe indiqué par son créateur';
-$string['privacy:metadata:wims_classes:userinstitution'] = 'Institution name specified by the class creator is sent from Moodle to the external WIMS classroom.';
-$string['privacy:metadata:wims_classes:userfirstname']   = 'First name specified by the class creator, used to create the classroom on the WIMS server';
-$string['privacy:metadata:wims_classes:userlastname']    = 'Last name specified by the class creator, used to create the classroom on the WIMS server';
-$string['privacy:metadata:wims_classes:useremail']       = 'Email specified by the class creator, used to create the classroom on the WIMS server.';
+$string['privacy:metadata:wims_classes:name']            = 'Titre de la classe indiqué par son créateur';
+$string['privacy:metadata:wims_classes:userinstitution'] = 'Nom de l’institution spécifié par le créateur de la classe, utilisé pour créer la classe sur le serveur WIMS.';
+$string['privacy:metadata:wims_classes:userfirstname']   = 'Prénom spécifié par le créateur de la classe, utilisé pour créer la classe sur le serveur WIMS.';
+$string['privacy:metadata:wims_classes:userlastname']    = 'Nom spécifié par le créateur de la classe, utilisé pour créer la classe sur le serveur WIMS.';
+$string['privacy:metadata:wims_classes:useremail']       = 'Courriel spécifié par le créateur de la classe, utilisé pour créer la classe sur le serveur WIMS.';
 $string['privacy:metadata:wims_classes:userdata']        = 'Données utilisateur';
 
-$string['privacy:metadata:wims_server']                  = 'In order to integrate with a remote WIMS classroom, user data needs to be exchanged with that classroom.';
-$string['privacy:metadata:wims_server:userid']           = 'The user id is sent from Moodle to the external WIMS classroom.';
-$string['privacy:metadata:wims_server:fullname']         = 'The user full name is sent from Moodle to the external WIMS classroom.';
+$string['privacy:metadata:wims_server']                  = 'Afin de s’intégrer à une classe WIMS distante, les données utilisateur doivent être échangées avec cette classe.';
+$string['privacy:metadata:wims_server:userid']           = 'L’identifiant utilisateur est envoyé de Moodle à classe WIMS externe.';
+$string['privacy:metadata:wims_server:fullname']         = 'Le nom complet de l’utilisateur est envoyé de Moodle à la classe WIMS externe.';

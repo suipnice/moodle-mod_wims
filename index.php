@@ -93,7 +93,7 @@ foreach ($modinfo->instances['wims'] as $cm) {
     $class = $cm->visible ? null : array('class' => 'dimmed');
 
     $row[] = html_writer::link(
-        new moodle_url('view.php', array('id' => $cm->id, 'class' => 'actionlink exportpage')),
+        new moodle_url('view.php', array('id' => $cm->id)),
         $cm->get_formatted_name(), $class
     );
     $table->data[] = $row;

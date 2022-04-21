@@ -158,7 +158,7 @@ if (!$wimsresult["status"]) {
                 if ($wimsresult['total'] > 1) {
                     echo('<p>'.get_string('backups_found', mod_wims, $wimsresult['total']).'</p>');
                 } else {
-                    echo('<p>'.get_string('backup_found', mod_wims, $wimsresult['total']).'</p>');
+                    echo('<p>'.get_string('backup_found', mod_wims).'</p>');
                 }
                 echo('<div class="row form-group"><label class="col-sm-3 col-form-label" for="class_backup">');
                 echo(get_string('backup_select', mod_wims).'</label> ');

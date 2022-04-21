@@ -47,16 +47,13 @@ $string['admindescallowselfsigcerts']  = '';
 $string['adminnameserverpassword']     = 'Mot de passe de connexion au serveur WIMS';
 $string['admindescserverpassword']     = 'Doit être le même que celui que vous avez défini dans les fichiers placés dans le répertoire ".connexions" du serveur WIMS.';
 
-$string['adminnameqcloffset']          = 'Point de départ de la numérotation des classes WIMS';
-$string['admindescqcloffset']          = 'Doit être entre 11111 et 10^9';
-
 // Administration - Réglages de l'interface.
 $string['wimssettings']                = 'Réglages de l’interface Moodle-Wims';
 $string['adminnamelang']               = 'Langue des classes';
 $string['admindesclang']               = 'Code de langue par défaut des classes WIMS qui seront créées. (valeurs possibles : ca, cn, en, es, fr, it, nl, si, tw, de)';
 
-$string['adminnamedefaultinstitution'] = 'Institution';
-$string['admindescdefaultinstitution'] = 'L’établissemnt affiché dans les classes WIMS';
+$string['adminnamedefaultinstitution'] = 'Institution (valeur par défaut)';
+$string['admindescdefaultinstitution'] = 'L’établissement par défaut affiché dans les classes WIMS.';
 
 $string['adminnameusenameinlogin']     = 'Inclure les noms d’utilisateurs dans les login WIMS';
 $string['admindescusenameinlogin']     = '';
@@ -82,6 +79,25 @@ $string['wims:addinstance']            = 'Ajouter une classe WIMS';
 // Messages d'erreurs.
 $string['class_select_failed_title']   = 'Impossible d’accéder à la classe WIMS.';
 $string['class_select_failed_desc']    = 'Le serveur est probablement indisponible. Merci de retester dans quelques minutes, ou informez-en l’administrateur.';
+$string['class_select_refused_title']  = 'Accès à cette classe WIMS refusé.';
+$string['class_select_refused_desc']   = 'La classe WIMS que vous tentez d’atteindre n’autorise pas un accès depuis ce serveur Moodle. Accédez à la classe directement par WIMS ou contacter l’administrateur.';
+$string['class_deleted']               = 'La classe WIMS que vous cherchez n’existe plus sur ce serveur.';
+$string['class_deleted_with_id']       = 'La classe WIMS n°{$a} n’existe plus sur ce serveur.';
+
+// Sauvegardes de classes.
+$string['restore_or_new']              = 'Vous pouvez au choix restaurer une sauvegarde précédente ou créer une classe vide.';
+$string['backup_legend']               = 'Restaurer une précédente sauvegarde';
+$string['backup_found']                = 'Nous avons trouvé une sauvegarde qui correspond à l’identifiant de votre classe.';
+$string['backups_found']               = 'Nous avons trouvé {$a} sauvegardes correspondant à l’identifiant de votre classe.';
+
+$string['backup_select']               = 'Choisissez une sauvegarde';
+$string['backup_restore']              = 'Restaurer';
+$string['backup_help']                 = 'WIMS effectue automatiquement une sauvegarde avant de supprimer une classe. Choisissez l’année de suppression estimée.';
+
+$string['create_new_legend']           = 'Créer une nouvelle classe';
+$string['create_new_class']            = 'Créer une classe vide';
+$string['create_class_desc']           = 'Utilisez le bouton ci-dessous pour créer une classe vierge de tout contenu.';
+
 
 // Configuration des instances de modules WIMS.
 $string['name']                        = 'Nom de l’activité';
@@ -108,9 +124,9 @@ $string['modulename_link']             = 'mod/wims/view';
 $string['updatescores']                = 'Mise à jour des notes des activités WIMS';
 
 // Grade items.
-for ($i = 1; $i < 150; $i++) {
+/*for ($i = 1; $i < 150; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Score de l’examen '.$i;
-}
+}*/
 
 // Données personelles.
 

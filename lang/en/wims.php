@@ -19,8 +19,8 @@
  *
  * @package   mod_wims
  * @category  string
- * @copyright 2015 Edunao SAS <contact@edunao.com>
- * @author    Sadge <daniel@edunao.com>
+ * @copyright 2015 Edunao SAS <contact@edunao.com> / 2020 UCA
+ * @author    Sadge <daniel@edunao.com> / Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -47,16 +47,13 @@ $string['admindescallowselfsigcerts']  = '';
 $string['adminnameserverpassword']     = 'WIMS Server connection password';
 $string['admindescserverpassword']     = 'The one you\'ve defined in the files in ".connexions" directory on WIMS server.';
 
-$string['adminnameqcloffset']          = 'WIMS Course Numbering Offset';
-$string['admindescqcloffset']          = 'Between 11111 and 10^9';
-
 // Admin settings - Interface settings.
 $string['wimssettings']                = 'Moodle-Wims Interface Settings';
 $string['adminnamelang']               = 'Course Language (default value)';
 $string['admindesclang']               = 'Must be one of ca, cn, en, es, fr, it, nl, si, tw, de';
 
 $string['adminnamedefaultinstitution'] = 'Institution Name (default value)';
-$string['admindescdefaultinstitution'] = '';
+$string['admindescdefaultinstitution'] = 'The establishment displayed in the WIMS classes';
 
 $string['adminnameusenameinlogin']     = 'Include user name in WIMS login';
 $string['admindescusenameinlogin']     = '';
@@ -82,6 +79,26 @@ $string['wims:addinstance']            = 'Add a WIMS class';
 // Errors Msgs.
 $string['class_select_failed_title']   = 'Unable to access the WIMS classroom';
 $string['class_select_failed_desc']    = 'The server is probably unavailable. Please retest in a few minutes, or notify the site administrator.';
+$string['class_select_refused_title']  = 'Access to WIMS class denied.';
+$string['class_select_refused_desc']   = 'The WIMS class you are trying to reach does not allow access from this Moodle server. Access the class directly through WIMS or contact the site administrator.';
+$string['class_deleted']               = 'The WIMS class you\'re looking for doesn\'t exist anymore.';
+$string['class_deleted_with_id']       = 'The WIMS class with id {$a} you\'re looking for doesn\'t exist anymore.';
+$string['wrongparamvalue']             = 'The parameter {$a} has a wrong value.';
+
+// Backups & Create New.
+$string['restore_or_new']              = 'You can either restore a previous backup or create an empty class.';
+
+$string['backup_legend']               = 'Restore a previous backup';
+$string['backup_found']                = 'There is {$a} backup that can correspond to your class.';
+$string['backups_found']               = 'There are {$a} backups that can correspond to your class.';
+
+$string['backup_select']               = 'Choose a backup file';
+$string['backup_help']                 = 'WIMS automatically backs up before deleting a class. Choose the estimated deletion year.';
+$string['backup_restore']              = 'Restore';
+
+$string['create_new_legend']           = 'Create a new class';
+$string['create_new_class']            = 'Create a blank class';
+$string['create_class_desc']           = 'Use the button below to create a new empty class.';
 
 // Instance settings.
 $string['name']                        = 'Activity Name';

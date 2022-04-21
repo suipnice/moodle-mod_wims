@@ -35,7 +35,6 @@
  */
 
 namespace mod_wims;
-defined('MOODLE_INTERNAL') || die;
 
 use \stdClass;
 
@@ -128,6 +127,13 @@ class wims_comms_wrapper {
     public $debugformat;
 
     /**
+     * Array containing all debug message in this session.
+     *
+     * @var array
+     */
+    public $debugmsgs;
+
+    /**
      * String containing returned message from WIMS server
      *
      * @var string
@@ -158,6 +164,7 @@ class wims_comms_wrapper {
         $this->sslverifypeer = ($allowselfsignedcertificates == false) ? true : false;
         $this->accessurls = array();
         $this->debugformat = $debugformat;
+        $this->debugmsgs = array();
         $this->message = '';
     }
 
@@ -171,14 +178,17 @@ class wims_comms_wrapper {
      */
     public function debugmsg($msg): void {
         if ($this->debug > 0) {
+
             if ($this->debugformat == 'html') {
-                print("<pre>$msg</pre>\n");
+                // Add msg to $debug_msgs to be displayed later.
+                $this->debugmsgs[] = $msg;
             } else {
-                print(" $msg\n");
+                // Force Moodle debugging mode.
+                set_debugging(DEBUG_ALL, true);
+                debugging($msg);
             }
         }
-        // The following line can be uncommented when debugging to redirect debug messages to apache error log.
-        /* error_log($msg); */
+        // Add this when debugging to redirect debug messages to apache error log: "error_log($msg);".
     }
 
     /**
@@ -267,15 +277,18 @@ class wims_comms_wrapper {
         $this->jsondata = json_decode($this->rawdata);
         if (!$this->jsondata) {
             echo "<pre>\nERROR Invalid JSON response to WIMS request: ".$job."\n".$this->rawdata."\n</pre>";
-            $hmp = "";
+            /* $hmp = "";
             for ($i = 0; $i < strlen($this->rawdata); ++$i) {
                 $hmp .= '/'.ord($this->rawdata[$i]);
-            }
-            throw new Exception('WIMS server returned invalid JSON: $job:'.$this->rawdata);
+            } */
+            throw new Exception("WIMS server returned invalid JSON: $job:".$this->rawdata);
         }
         // Some WIMS jobs, like "authuser", don't send back a specific message.
         if (property_exists($this->jsondata, 'message')) {
             $this->message = $this->jsondata->message;
+        }
+        if ($this->jsondata->status == 'ERROR') {
+            $this->debugmsg($this->jsondata->message);
         }
 
         if ($this->jsondata->status == 'ERROR'
@@ -298,11 +311,16 @@ class wims_comms_wrapper {
                     $this->message == 'nothing done'
                     // In case of checkuser.
                     || strpos($this->message, 'not in this class')
+                    // In case of getsheetscores/getexamscores.
+                    || strpos($this->message, 'no user in this class')
                     )
                 )
         ) {
             // Done!
             $this->debugmsg("JSON: status = OK");
+            if ($job == 'addclass') {
+                $this->debugmsg("New class ID = ".$this->jsondata->class_id);
+            }
             // Copy the json data to an array and remove entries that are not pertinent.
             $this->arraydata = (array)$this->jsondata;
             $badkeys = array("code", "job");
@@ -314,11 +332,11 @@ class wims_comms_wrapper {
             $this->status = 'WIMS_FAIL';
             $this->debugmsg(
                 "ERROR: ".__FILE__.":".__LINE__.
-                ": WIMS JSON OK response not matched: (for code $this->code):\n".
+                ": WIMS JSON OK. Response not matched: (for code $this->code):\n".
                 "message: ".$this->message
             );
             if ($silent !== true) {
-                echo "<div>job:$job - SENDED PARAMS: ".urldecode($params)."</div>";
+                echo "<div>job:$job - SENT PARAMS: ".urldecode($params)."</div>";
                 var_dump($this->jsondata);
             }
             return null;
@@ -356,14 +374,20 @@ class wims_comms_wrapper {
      * @param boolean $extended if true uses getclass call instead of checkclass call to verify
      *                          not only existence of class but also service access rights
      *
-     * @return true on success, null on failure)
+     * @return boolean true on success
      */
-    public function checkclass($qcl, $rcl, $extended=false): ?bool {
-        $cmd = ($extended === true) ? 'getclass' : 'checkclass';
-        $this->qclass = $qcl;
-        $params = 'qclass='.$qcl.'&rclass='.$this->wimsencode($rcl);
-        $this->executejson($cmd, $params, true);
-        return ($this->status == 'OK') ? true : null;
+    public function checkclass($qcl, $rcl, $extended=false): bool {
+        if ($qcl !== null) {
+            $cmd = ($extended === true) ? 'getclass' : 'checkclass';
+            $this->qclass = $qcl;
+            $params = 'qclass='.$qcl.'&rclass='.$this->wimsencode($rcl);
+            $this->executejson($cmd, $params, true);
+            if ($this->jsondata->status == 'OK') {
+                return true;
+            }
+        }
+        // The class has not been created in WIMS yet.
+        return false;
     }
 
     /**
@@ -400,20 +424,28 @@ class wims_comms_wrapper {
     /**
      * Connect to the server and update the course config data
      *
-     * @param string $qcl   the WIMS class identifier (must be an integer with a value > 9999 )
      * @param string $rcl   a unique identifier derived from properties of the MOODLE module
      *                      instance that the WIMS class is bound to
      * @param string $data1 a multi-line text block containing various course-related parameters
      * @param string $data2 a multi-line text block containing various course-creator-related parameters
+     * @param string $qcl   a unique identifier for the class on WIMS server (if null, WIMS will generate one)
      *
-     * @return bool true on success
+     * @return integer class_id on success, null on failure
      */
-    public function addclass($qcl, $rcl, $data1, $data2): bool {
-        $params = 'qclass='.$qcl.'&rclass='.$this->wimsencode($rcl);
+    public function addclass($rcl, $data1, $data2, $qcl=null): ?int {
+        $params = 'rclass='.$this->wimsencode($rcl);
+        if ($qcl !== null) {
+            $params .= '&qclass='.$this->wimsencode($qcl);
+        }
         $params .= '&data1='.$this->wimsencode($data1);
         $params .= '&data2='.$this->wimsencode($data2);
         $this->executejson('addclass', $params);
-        return ($this->status == 'OK');
+        if ($this->status == 'OK') {
+            return $this->jsondata->class_id;
+        } else {
+            $this->errormsgs[] = $this->message;
+            return null;
+        }
     }
 
     /**
@@ -806,7 +838,14 @@ class wims_comms_wrapper {
             $this->debugmsg("getexamscores: ".$jsondata->message);
             return null;
         }
-        return $jsondata->data_scores;
+        $datascores = $jsondata->data_scores;
+        if ($datascores === "") {
+            $this->debugmsg("getexamscores: NO DATASCORES");
+            mtrace("DATASCORES NULL");
+            return null;
+        } else {
+            return $datascores;
+        }
     }
 
     /**
@@ -897,6 +936,34 @@ class wims_comms_wrapper {
             return $this->arraydata;
         }
 
+    }
+
+    /**
+     * Ask to the WIMS server for a list of backup with id=$qcl.
+     *
+     * @param string  $qcl      the WIMS class identifier (must be an integer with a value > 9999 )
+     * @param integer $year     return only backups from this year
+     *
+     * @return boolean true on success
+     */
+    public function listclassbackups($qcl, $year=0): bool {
+        $this->executejson("listclassbackups", 'qclass='.$qcl, true);
+        return ($this->status == 'OK');
+    }
+
+    /**
+     * Ask the WIMS server to restore a backup of the class with id=$qcl saved at year $year.
+     *
+     * @param string  $qcl      the WIMS class identifier (must be an integer with a value > 9999 )
+     * @param integer $year     restore the backup from this year
+     *
+     * @return boolean true on success
+     */
+    public function restoreclassbackup($qcl, $year): bool {
+        $params .= 'qclass='.$qcl;
+        $params .= '&data1='.$year;
+        $this->executejson("restoreclassbackup", $params, true);
+        return ($this->status == 'OK');
     }
 
     /*

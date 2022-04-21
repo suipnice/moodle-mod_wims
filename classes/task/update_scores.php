@@ -23,12 +23,13 @@
 
 namespace mod_wims\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 use \mod_wims\wims_interface;
 
 /**
- * The mod_wims updating scores task class
+ * The mod_wims updating scores sheduled task class
+ *
+ * To test from command line :
+ * sudo -u apache php admin/cli/scheduled_task.php --execute='\mod_wims\task\update_scores'
  *
  * @category  task
  * @package   mod_wims
@@ -61,6 +62,9 @@ class update_scores extends \core\task\scheduled_task {
         mtrace('Synchronising WIMS activity scores to grade book');
         include_once(__DIR__ . "/../../wimsinterface.class.php");
         $config = get_config('wims');
+        if ($config->debugcron > 0) {
+            mtrace('> DEBUG MODE ON <');
+        }
         $wims = new wims_interface($config, $config->debugcron, 'plain/text');
 
         // Build a lookup table to get Moodle user ids from wimslogin.
@@ -69,6 +73,8 @@ class update_scores extends \core\task\scheduled_task {
         // Iterate over the set of WIMS activities in the system.
         $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
         $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
+
+        $errorcount = 0;
 
         foreach ($coursemodules as $cm) {
             mtrace(
@@ -81,7 +87,8 @@ class update_scores extends \core\task\scheduled_task {
             // Make sure the course is correctly accessible.
             $isaccessible = $wims->verifyclassaccessible($cm);
             if (!$isaccessible) {
-                mtrace('  - ALERT: Ignoring class as it is inaccessible - it may not have been setup yet');
+                mtrace('  - ALERT: Ignoring classroom as it is inaccessible - it may not have been setup yet');
+                $errorcount++;
                 continue;
             }
 
@@ -89,6 +96,7 @@ class update_scores extends \core\task\scheduled_task {
             $sheetindex = $wims->getsheetindex($cm);
             if ($sheetindex == null) {
                 mtrace('  ERROR: Failed to fetch sheet index for WIMS id: cm='.$cm->id);
+                $errorcount++;
                 continue;
             }
             $requiredsheets = $wims->getrequiredsheets($sheetindex);
@@ -96,7 +104,9 @@ class update_scores extends \core\task\scheduled_task {
             // Fetch the scores for the required sheets.
             $sheetscores = $wims->getselectedscores($cm, $requiredsheets->ids);
             if ($sheetscores == null) {
-                mtrace(' ERROR: Failed to fetch selected sheet scores for WIMS id: cm='.$cm->id);
+                // Attention : $sheetscores peut etre null si aucun user.
+                mtrace(' ERROR: Failed to fetch selected sheet scores for WIMS id: cm='.$cm->id. ". Is there users in this class?");
+                $errorcount++;
                 continue;
             }
 
@@ -180,10 +190,13 @@ class update_scores extends \core\task\scheduled_task {
                     }
                 }
             }
-            mtrace($nbgradeitems.' user grade updated ($nbfailed failed)');
+            mtrace($nbgradeitems.' user grade updated ('.$nbfailed.' failed)');
         }
-        mtrace("\nSynchronising WIMS activity scores to grade book => Done.\n");
-
-        /* return true; */
+        mtrace("\n============");
+        $nbmodules = count($coursemodules);
+        if ($errorcount >= $nbmodules and $nbmodules > 0 ) {
+            throw new \moodle_exception("Failed to sync every scores.", 'error');
+        }
+        mtrace("Synchronising WIMS activity scores to grade book => Done.\n");
     }
 }

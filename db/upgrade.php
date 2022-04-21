@@ -81,5 +81,29 @@ function xmldb_wims_upgrade($oldversion): bool {
         upgrade_mod_savepoint(true, $nextversion, $modulename);
     }
 
+    $nextversion = 2021112600;
+    if ($oldversion < $nextversion) {
+        $table = new xmldb_table($modulename);
+        // Add "class_id" in db (Now we store WIMS class ident).
+        xmldb_wims_addfield($dbman, $table, 'class_id', XMLDB_TYPE_INTEGER, '10');
+
+        $config = get_config('wims');
+        $qcloffset = $config->qcloffset;
+        // Iterate over the set of WIMS activities in the system.
+        $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
+        $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
+
+        foreach ($coursemodules as $cm) {
+            // Add a class_id field in each existing wims activity.
+            $newvalue = $qcloffset + $cm->id;
+            $DB->set_field('wims', 'class_id', $newvalue, array('id' => $cm->instance));
+        }
+
+        // Qcloffset is now useless, we remove it from config.
+        unset_config('qcloffset', 'wims');
+        // WIMS savepoint reached.
+        upgrade_mod_savepoint(true, $nextversion, $modulename);
+    }
+
     return true;
 }

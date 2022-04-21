@@ -25,8 +25,6 @@
 
 // This is settingslib.php - add code here to handle administration options for the module.
 
-defined('MOODLE_INTERNAL') || die;
-
 define('ADMIN_SETTING_TYPE_TEXT', 'ADMIN_SETTING_TYPE_TEXT');
 define('ADMIN_SETTING_TYPE_SELECT', 'ADMIN_SETTING_TYPE_SELECT');
 define('ADMIN_SETTING_TYPE_CHECKBOX', 'ADMIN_SETTING_TYPE_CHECKBOX');

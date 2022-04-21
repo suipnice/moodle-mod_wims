@@ -22,8 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * WIMS module test data generator class
  *
@@ -82,7 +80,6 @@ class mod_wims_generator extends testing_module_generator {
            'debugviewpage' => '0',
            'defaultinstitution' => 'Moodle/WIMS',
            'lang' => 'fr',
-           'qcloffset' => '100000',
            'serverpassword' => 'password',
            'serverurl' => 'http://192.168.56.5/wims/',
            'usegradepage' => '0',

@@ -21,18 +21,17 @@
  *
  * To enable these tests, you must first add this to your moodle/config.php :
  *   define('PHPUNIT_LONGTEST', true);
- * then, run from Moodle root dir : vendor/bin/phpunit mod/wims/tests/privacy_test.php
+ * then, run from Moodle root dir : vendor/bin/phpunit mod/wims/tests/privacy/provider_test.php
  *
  * @package   mod_wims
  * @copyright 2020 UCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_wims\tests;
+namespace mod_wims\privacy;
 
-if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
-}
+// It must be included from a Moodle page.
+defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
 global $CFG;
 
@@ -53,8 +52,9 @@ use \mod_wims\wims_interface;
  * @copyright 2020 UCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
+ * @coversDefaultClass \mod_wims\privacy\provider
  */
-class mod_wims_privacy_testcase extends provider_testcase {
+class provider_test extends provider_testcase {
 
     /**
      * Communication library for interfacing to the WIMS server
@@ -149,18 +149,17 @@ class mod_wims_privacy_testcase extends provider_testcase {
             $this->_context = $instance->context;
             $config = $instance->config;
             // Change 0 to 1 to debug.
-            $this->_wims = new wims_interface($config, 0, 'plain');
+            $this->_wims = new wims_interface($config, 1, 'plain');
         }
         if (!$this->_wimsstatus) {
             // We set an expiration date at today, so WIMS will automatically delete it tomorrow.
             $params = (object) array('expiration' => date('yymd'));
 
             // Start by creating a class on the WIMS server connected to the course.
-            $this->_wimsstatus = $this->_wims->selectclassformodule($params, $this->_cm, $config);
+            $this->_wimsstatus = $this->_wims->selectclassformodule($params, $this->_cm, $config)["status"];
             if (!$this->_wimsstatus) {
                 $this->markTestSkipped("WIMS server at ".$config->serverurl." can't be reached.");
             }
-            // Est-ce qu'on fait un cleanclass avant chaque test ?
         }
     }
 
@@ -181,6 +180,7 @@ class mod_wims_privacy_testcase extends provider_testcase {
      * (before calling 'php admin/tool/phpunit/cli/init.php')
      *
      * @return void
+     * @covers ::delete_data_for_all_users_in_context
      */
     public function disabled_test_delete_data_for_all_users_in_context(): void {
 
@@ -203,11 +203,11 @@ class mod_wims_privacy_testcase extends provider_testcase {
 
     /**
      * A test for deleting all data for one user.
-     * remove the "disabled" prefix to enable it.
      *
      * @return void
+     * @covers ::delete_data_for_user
      */
-    public function disabled_test_delete_data_for_user(): void {
+    public function test_delete_data_for_user(): void {
 
         $coursecontext = \context_course::instance($this->_courseid);
 

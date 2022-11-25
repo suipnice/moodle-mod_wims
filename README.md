@@ -1,6 +1,6 @@
 # WIMS classroom as Moodle activity #
 ![Licence](https://img.shields.io/github/license/suipnice/moodle-mod_wims)
-
+![Moodle Plugin CI](https://github.com/suipnice/moodle-mod_wims/actions/workflows/moodle-ci.yml/badge.svg)
 
 This plugin allows one to insert WIMS classes in Moodle courses.
 It requires a WIMS server to have been setup and correctly configured.

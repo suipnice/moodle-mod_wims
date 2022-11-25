@@ -156,7 +156,7 @@ function wims_update_instance($data, $mform) {
     for ($i = 0; $i < 100; $i++) {
         $parameter = "parameter_$i";
         $variable  = "variable_$i";
-        if (empty($data->$parameter) or empty($data->$variable)) {
+        if (empty($data->$parameter) || empty($data->$variable)) {
             continue;
         }
         $parameters[$data->$parameter] = $data->$variable;

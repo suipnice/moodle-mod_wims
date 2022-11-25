@@ -194,7 +194,7 @@ class update_scores extends \core\task\scheduled_task {
         }
         mtrace("\n============");
         $nbmodules = count($coursemodules);
-        if ($errorcount >= $nbmodules and $nbmodules > 0 ) {
+        if ($errorcount >= $nbmodules && $nbmodules > 0 ) {
             throw new \moodle_exception("Failed to sync every scores.", 'error');
         }
         mtrace("Synchronising WIMS activity scores to grade book => Done.\n");

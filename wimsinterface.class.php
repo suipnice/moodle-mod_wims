@@ -216,13 +216,13 @@ class wims_interface {
             $response["qcl"] = $this->_qcl;
             $response["status"] = $check;
             // If class exist or if we don't force to create a new one.
-            if ($check or $mode != "create_new") {
+            if ($check || $mode != "create_new") {
                 return $response;
             }
         }
 
         // If class doesn't exist yet, or if it can't be reached and we force to create a new one.
-        if ($this->_qcl == null or ($mode == "create_new" and !$check)) {
+        if ($this->_qcl == null || ($mode == "create_new" && !$check)) {
             // Try to create the WIMS class.
             global $DB;
             $wimsinfo = $DB->get_record('wims', array('id' => $cm->instance));

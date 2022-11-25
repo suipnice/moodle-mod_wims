@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * List of instances of wims module in the course
+ * List of instances of wims modules in the course
  *
  * @package   mod_wims
  * @copyright 2015 Edunao SAS <contact@edunao.com>

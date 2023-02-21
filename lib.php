@@ -155,7 +155,7 @@ function wims_update_instance($data, $mform) {
     $parameters = array();
     for ($i = 0; $i < 100; $i++) {
         $parameter = "parameter_$i";
-        $variable  = "variable_$i";
+        $variable = "variable_$i";
         if (empty($data->$parameter) || empty($data->$variable)) {
             continue;
         }
@@ -164,7 +164,7 @@ function wims_update_instance($data, $mform) {
     $data->parameters = serialize($parameters);
 
     $data->timemodified = time();
-    $data->id           = $data->instance;
+    $data->id = $data->instance;
 
     $DB->update_record('wims', $data);
     wims_update_calendar($data, $data->coursemodule);
@@ -318,11 +318,11 @@ function wims_grade_item_update($moduleinstance, $grades = null) {
 
     if ($moduleinstance->grade > 0) {
         $item['gradetype'] = GRADE_TYPE_VALUE;
-        $item['grademax']  = $moduleinstance->grade;
-        $item['grademin']  = 0;
+        $item['grademax'] = $moduleinstance->grade;
+        $item['grademin'] = 0;
     } else if ($moduleinstance->grade < 0) {
         $item['gradetype'] = GRADE_TYPE_SCALE;
-        $item['scaleid']   = -$moduleinstance->grade;
+        $item['scaleid'] = -$moduleinstance->grade;
     } else {
         $item['gradetype'] = GRADE_TYPE_NONE;
     }

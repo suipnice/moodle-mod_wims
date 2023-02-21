@@ -34,11 +34,11 @@ require_once(dirname(__FILE__).'/wimsinterface.class.php');
 // GET / POST parameters.
 
 // Course module ID.
-$id         = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_INT);
 // The grade column that was clicked - identifies the exam, worksheet, etc from which we come.
 $itemnumber = required_param('itemnumber', PARAM_INT);
 // Graded user ID (optional).
-$userid     = optional_param('userid', 0, PARAM_INT);
+$userid = optional_param('userid', 0, PARAM_INT);
 
 
 if (! $cm = get_coursemodule_from_id('wims', $id)) {
@@ -59,15 +59,15 @@ $urlargs = array( 'id' => $id );
 define('WORKSHEET_ID_OFFSET', 1000);
 if ($config->usegradepage == 1) {
     // Direct the user to the grade page.
-    $urlargs['wimspage']    = WIMS_GRADE_PAGE;
+    $urlargs['wimspage'] = WIMS_GRADE_PAGE;
 } else if ($itemnumber >= WORKSHEET_ID_OFFSET) {
     // Direct the user to a specific worksheet.
-    $urlargs['wimspage']    = WIMS_WORKSHEET;
-    $urlargs['wimsidx']     = $itemnumber - WORKSHEET_ID_OFFSET;
+    $urlargs['wimspage'] = WIMS_WORKSHEET;
+    $urlargs['wimsidx'] = $itemnumber - WORKSHEET_ID_OFFSET;
 } else {
     // Direct the user to a specific exam.
-    $urlargs['wimspage']    = WIMS_EXAM;
-    $urlargs['wimsidx']     = $itemnumber;
+    $urlargs['wimspage'] = WIMS_EXAM;
+    $urlargs['wimsidx'] = $itemnumber;
 }
 
 // Delegate to view.php page which will look after redirecting to WIMS.

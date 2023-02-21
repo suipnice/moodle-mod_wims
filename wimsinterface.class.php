@@ -310,7 +310,7 @@ class wims_interface {
         // WIMS accounts if ever the user's profile is updated in Moodle.
         if ($this->_config->usenameinlogin == 1) {
             // Start by assembling the basic string parts that we're interested in.
-            $initial  = ($user->firstname) ? $user->firstname[0] : '';
+            $initial = ($user->firstname) ? $user->firstname[0] : '';
             $fullname = strtolower($initial . $user->lastname);
             // Now filter out all of the characters that we don't like in the user name.
             $cleanname = '';

@@ -245,7 +245,7 @@ class wims_comms_wrapper {
             $this->debugmsg("WIMS comms error: $this->rawdata");
         } else {
             $this->status = 'OK';
-            $this->rawdata = utf8_encode($curlresult);
+            $this->rawdata = iconv('ISO-8859-1', 'UTF-8', $curlresult);
             $this->debugmsg('WIMS comms success');
         }
 
@@ -351,7 +351,7 @@ class wims_comms_wrapper {
      * @return string urlencoded param
      */
     private function wimsencode($param): string {
-        return urlencode(utf8_decode($param));
+        return urlencode(iconv('UTF-8', 'ISO-8859-1', $param));
     }
 
     /**
@@ -710,9 +710,9 @@ class wims_comms_wrapper {
             return null;
         }
         $this->sheetprops = array();
-        $this->sheetprops["status"]      = $jsondata->sheet_status;
-        $this->sheetprops["expiration"]  = $jsondata->sheet_expiration;
-        $this->sheetprops["title"]       = $jsondata->sheet_title;
+        $this->sheetprops["status"] = $jsondata->sheet_status;
+        $this->sheetprops["expiration"] = $jsondata->sheet_expiration;
+        $this->sheetprops["title"] = $jsondata->sheet_title;
         $this->sheetprops["description"] = $jsondata->sheet_description;
         return $this->sheetprops;
     }
@@ -803,19 +803,19 @@ class wims_comms_wrapper {
             return null;
         }
         $this->examprops = array();
-        $this->examprops['opening']     = $jsondata->exam_opening;
-        $this->examprops['status']      = $jsondata->exam_status;
-        $this->examprops['duration']    = $jsondata->exam_duration;
-        $this->examprops['attempts']    = $jsondata->exam_attempts;
-        $this->examprops['title']       = $jsondata->exam_title;
+        $this->examprops['opening'] = $jsondata->exam_opening;
+        $this->examprops['status'] = $jsondata->exam_status;
+        $this->examprops['duration'] = $jsondata->exam_duration;
+        $this->examprops['attempts'] = $jsondata->exam_attempts;
+        $this->examprops['title'] = $jsondata->exam_title;
         $this->examprops['description'] = $jsondata->exam_description;
-        $this->examprops['cut_hours']   = $jsondata->exam_cut_hours;
+        $this->examprops['cut_hours'] = $jsondata->exam_cut_hours;
         // Treat both the badly formed and correctly formed properties here to avoid problems with different wims versions.
         if (property_exists($jsondata, 'exam_expiration')) {
-            $this->examprops['expiration']  = $jsondata->exam_expiration;
+            $this->examprops['expiration'] = $jsondata->exam_expiration;
         } else if (property_exists($jsondata, 'exam_expiration ')) {
             $prop = 'exam_expiration ';
-            $this->examprops["expiration"]  = $jsondata->$prop;
+            $this->examprops["expiration"] = $jsondata->$prop;
         }
         return $this->examprops;
     }
@@ -923,7 +923,7 @@ class wims_comms_wrapper {
      * @return array scores of $quser user in $qcl classroom
      */
     public function getscore($qcl, $rcl, $quser): array {
-        $params  = "qclass=".$qcl."&rclass=".$this->wimsencode($rcl);
+        $params = "qclass=".$qcl."&rclass=".$this->wimsencode($rcl);
         $params .= "&quser=".$quser;
         if ($this->executejson("getscore", $params) === null) {
             return array("status" => "ERROR", "message" => "getscore returned null");

@@ -28,8 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 // List of observers.
 $observers = array(
     array(
-        'eventname'   => '\core\event\course_module_updated',
-        'callback'    => 'on_course_module_updated',
+        'eventname' => '\core\event\course_module_updated',
+        'callback' => 'on_course_module_updated',
         'includefile' => '/mod/wims/event_handlers.php'
     ),
 );

@@ -50,11 +50,11 @@ class mod_wims_generator extends testing_module_generator {
         $record = (object)(array)$record;
 
         $defaultclasssettings = array(
-            'name'             => "Test Classroom",
-            'userfirstname'    => "Anonymous",
-            'userlastname'     => "Supervisor",
-            'useremail'        => "noreply@wimsedu.info",
-            'userinstitution'  => "Moodle/WIMS"
+            'name' => "Test Classroom",
+            'userfirstname' => "Anonymous",
+            'userlastname' => "Supervisor",
+            'useremail' => "noreply@wimsedu.info",
+            'userinstitution' => "Moodle/WIMS"
         );
 
         foreach ($defaultclasssettings as $name => $value) {

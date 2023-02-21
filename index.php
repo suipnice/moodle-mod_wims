@@ -42,9 +42,9 @@ $event = \mod_wims\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$strinstance     = get_string('modulename', 'wims');
-$strinstances    = get_string('modulenameplural', 'wims');
-$strname         = get_string('name');
+$strinstance = get_string('modulename', 'wims');
+$strinstances = get_string('modulenameplural', 'wims');
+$strname = get_string('name');
 
 $PAGE->set_url('/mod/wims/index.php', array('id' => $course->id));
 $PAGE->set_title($course->shortname.': '.$strinstances);
@@ -65,10 +65,10 @@ $table->attributes['class'] = 'generaltable mod_index';
 
 if ($usesections) {
     $strsectionname = get_string('sectionname', 'format_'.$course->format);
-    $table->head  = array ($strsectionname, $strname);
+    $table->head = array ($strsectionname, $strname);
     $table->align = array ('center', 'left');
 } else {
-    $table->head  = array ($strname);
+    $table->head = array ($strname);
     $table->align = array ('left');
 }
 

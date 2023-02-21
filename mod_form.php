@@ -297,10 +297,10 @@ class mod_wims_mod_form extends moodleform_mod {
             $wimsdata = array(
                 "description" => $data["name"],
                 "institution" => $data["userinstitution"],
-                "supervisor"  => $data["userfirstname"]." ".$data["userlastname"],
-                "email"       => $data["useremail"],
-                "lastname"    => $data["userlastname"],
-                "firstname"   => $data["userfirstname"],
+                "supervisor" => $data["userfirstname"]." ".$data["userlastname"],
+                "email" => $data["useremail"],
+                "lastname" => $data["userlastname"],
+                "firstname" => $data["userfirstname"],
             );
 
             // Copy out any data values that have changed into to the 'changed data' array.

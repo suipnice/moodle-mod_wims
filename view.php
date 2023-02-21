@@ -34,10 +34,10 @@ use \mod_wims\wims_interface;
 
 // GET / _POST parameters.
 
-$id         = optional_param('id', 0, PARAM_INT);                     // Course module ID.
-$urltype    = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // Type of page to view in WIMS.
-$urlarg     = optional_param('wimsidx', null, PARAM_INT);             // Index of the page to view.
-$mode       = optional_param('mode', null, PARAM_ALPHANUMEXT);        // Optional mode  (create new class, restore backup...).
+$id = optional_param('id', 0, PARAM_INT);                     // Course module ID.
+$urltype = optional_param('wimspage', WIMS_HOME_PAGE, PARAM_INT);  // Type of page to view in WIMS.
+$urlarg = optional_param('wimsidx', null, PARAM_INT);             // Index of the page to view.
+$mode = optional_param('mode', null, PARAM_ALPHANUMEXT);        // Optional mode  (create new class, restore backup...).
 $backupyear = optional_param('backup_year', null, PARAM_INT);         // Optional year of the class backup to be restored
 // (when mode=restore_backup).
 
@@ -100,6 +100,7 @@ function outputheader($course, $instancename, $cm): void {
     $PAGE->set_pagelayout('incourse');
     $pagetitle = strip_tags($course->shortname.': '.format_string($instancename));
     $PAGE->set_title($pagetitle);
+    $PAGE->set_url('/mod/wims/view.php', array('id' => $cm->id));
     $PAGE->set_heading($instancename);
     $PAGE->set_cm($cm, $course);
 

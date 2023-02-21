@@ -53,7 +53,7 @@ function addwimsadminheading($settings, $name): void {
  * @param unknown $data         data
  */
 function addwimsadminsetting($settings, $name, $defaultvalue, $settingtype=ADMIN_SETTING_TYPE_TEXT, $data=null): void {
-    $uniquename  = "wims/".$name;
+    $uniquename = "wims/".$name;
     $displayname = get_string("adminname".$name, "wims");
     $displayinfo = get_string("admindesc".$name, "wims");
     switch ($settingtype){

@@ -663,6 +663,7 @@ class wims_interface {
             $ret->titles[$sheettype] = array();
             foreach ($sheets as $sheetid => $sheetsummary) {
                 // Ignore sheets that are in preparation as WIMS complains if one tries to access their scores.
+                $title = $sheetsummary->title;
                 if ($sheetsummary->state == 0) {
                     mtrace(
                         '  - Ignoring: '.$sheettype.' '.
@@ -671,7 +672,6 @@ class wims_interface {
                     );
                     continue;
                 }
-                $title = $sheetsummary->title;
                 // If the sheet name is tagged with a '*' then strip it off and process the sheet.
                 if (substr($title, -1) === '*') {
                     $title = trim(substr($title, 0, -1));

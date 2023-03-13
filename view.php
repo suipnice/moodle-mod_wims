@@ -138,9 +138,9 @@ if ($mode === "restore_backup") {
 }
 if (!$wimsresult["status"]) {
 
-    outputheader($course, $instancename, $cm);
-
-    if (strpos(end($wims->errormsgs), "not existing") !== false) {
+    outputheader($course, $instance->name, $cm);
+    $lasterror = end($wims->errormsgs);
+    if (strpos($lasterror, "not existing") !== false) {
         if ($isteacher) {
             echo('<div class="alert alert-danger">'.get_string('class_deleted_with_id', mod_wims, $wimsresult['qcl']).'</div>');
 
@@ -192,7 +192,7 @@ if (!$wimsresult["status"]) {
             echo('<div class="alert alert-danger">'.get_string('class_deleted', mod_wims, $wimsresult['qcl']).'</div>');
         }
 
-    } else if (strpos(end($wims->errormsgs), "connection refused by requested class") !== false) {
+    } else if (strpos($lasterror, "connection refused by requested class") !== false) {
         $wims->errormsgs[] = get_string('class_select_refused_desc', 'wims');
         raisewimserror(get_string('class_select_refused_title', 'wims'), $wims->errormsgs);
     } else {
@@ -227,7 +227,7 @@ if (!$wimsresult["status"]) {
 
     // If we've failed to get hold of a plausible url then bomb out with an error message.
     if ($url == null) {
-        outputheader($course, $instancename, $cm);
+        outputheader($course, $instance->name, $cm);
         raisewimserror("WIMS User Authentication FAILED", $wims->errormsgs);
         echo $OUTPUT->footer();
     } else {

@@ -212,7 +212,9 @@ class wims_interface {
                     $response["restorable"] = $this->_wims->jsondata->restorable;
                 }
             }
-            $response["total"] = $this->_wims->jsondata->total;
+            if (isset($this->_wims->jsondata->total)) {
+                $response["total"] = $this->_wims->jsondata->total;
+            }
             $response["qcl"] = $this->_qcl;
             $response["status"] = $check;
             // If class exist or if we don't force to create a new one.

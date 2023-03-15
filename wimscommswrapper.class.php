@@ -960,7 +960,7 @@ class wims_comms_wrapper {
      * @return boolean true on success
      */
     public function restoreclassbackup($qcl, $year): bool {
-        $params .= 'qclass='.$qcl;
+        $params = 'qclass='.$qcl;
         $params .= '&data1='.$year;
         $this->executejson("restoreclassbackup", $params, true);
         return ($this->status == 'OK');

@@ -142,11 +142,11 @@ if (!$wimsresult["status"]) {
     $lasterror = end($wims->errormsgs);
     if (strpos($lasterror, "not existing") !== false) {
         if ($isteacher) {
-            echo('<div class="alert alert-danger">'.get_string('class_deleted_with_id', mod_wims, $wimsresult['qcl']).'</div>');
+            echo('<div class="alert alert-danger">'.get_string('class_deleted_with_id', 'wims', $wimsresult['qcl']).'</div>');
 
             // List Backups on WIMS server for this class.
             if ($wimsresult['total'] > 0) {
-                echo('<p>'.get_string('restore_or_new', mod_wims).'</p>');
+                echo('<p>'.get_string('restore_or_new', 'wims').'</p>');
                 echo('<div class="row">');
                 echo('<div class="col-md">');
                 $url = new moodle_url('/mod/wims/view.php');
@@ -154,15 +154,15 @@ if (!$wimsresult["status"]) {
                 echo('<input type="hidden" name="id" value="'.$id.'"/>');
                 echo('<input type="hidden" name="mode" value="restore_backup"/>');
 
-                echo('<fieldset class="border p-3"><legend>'.get_string('backup_legend', mod_wims).'</legend>');
+                echo('<fieldset class="border p-3"><legend>'.get_string('backup_legend', 'wims').'</legend>');
 
                 if ($wimsresult['total'] > 1) {
-                    echo('<p>'.get_string('backups_found', mod_wims, $wimsresult['total']).'</p>');
+                    echo('<p>'.get_string('backups_found', 'wims', $wimsresult['total']).'</p>');
                 } else {
-                    echo('<p>'.get_string('backup_found', mod_wims).'</p>');
+                    echo('<p>'.get_string('backup_found', 'wims').'</p>');
                 }
                 echo('<div class="row form-group"><label class="col-sm-3 col-form-label" for="class_backup">');
-                echo(get_string('backup_select', mod_wims).'</label> ');
+                echo(get_string('backup_select', 'wims').'</label> ');
                 echo('<div class="col-sm-9">');
                 echo('<select class="form-control" id="class_backup" name="backup_year" aria-describedby="backupHelp">');
                 foreach ($wimsresult['restorable'] as $year => $v) {
@@ -170,20 +170,20 @@ if (!$wimsresult["status"]) {
                     echo("<option value=\"{$year}\">{$year}</p>");
                 }
                 echo('</select>');
-                echo('<small id="backupHelp" class="form-text text-muted">'.get_string('backup_help', mod_wims).'</small>');
+                echo('<small id="backupHelp" class="form-text text-muted">'.get_string('backup_help', 'wims').'</small>');
                 echo('</div></div>');
                 echo('<div class="form-group"><button class="btn btn-primary" type="submit">');
-                echo(get_string('backup_restore', mod_wims).'</button></div></fieldset>');
+                echo(get_string('backup_restore', 'wims').'</button></div></fieldset>');
                 echo('</form></div>');
 
             }
             // Or create a new empty WIMS class.
             echo('<div class="col-md">');
-            echo(' <fieldset class="form-group border p-3"><legend>'.get_string('create_new_legend', mod_wims).'</legend>');
-            echo('  <p>'.get_string('create_class_desc', mod_wims).'</p>');
+            echo(' <fieldset class="form-group border p-3"><legend>'.get_string('create_new_legend', 'wims').'</legend>');
+            echo('  <p>'.get_string('create_class_desc', 'wims').'</p>');
             $url = new moodle_url('/mod/wims/view.php', array('mode' => 'create_new', 'id' => $id));
             echo('  <div class="form-group"><a class="btn btn-primary" href="'.$url.'" role="button">');
-            echo(get_string('create_new_class', mod_wims).'</a></div></fieldset></div>');
+            echo(get_string('create_new_class', 'wims').'</a></div></fieldset></div>');
             echo('</div>');
             if ($wimsresult['total'] > 0) {
                 echo('</div>');

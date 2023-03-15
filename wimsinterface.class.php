@@ -372,7 +372,7 @@ class wims_interface {
             case WIMS_EXAM       :
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
             default :
-                throw new Exception('BUG: Bad urltype parameter '.$urltype);
+                throw new \Exception('BUG: Bad urltype parameter '.$urltype);
         }
     }
 
@@ -401,7 +401,7 @@ class wims_interface {
             case WIMS_EXAM       :
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
             default:
-                throw new Exception('BUG: Bad urltype parameter '.$urltype);
+                throw new \Exception('BUG: Bad urltype parameter '.$urltype);
         }
     }
 

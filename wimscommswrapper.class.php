@@ -281,7 +281,7 @@ class wims_comms_wrapper {
             for ($i = 0; $i < strlen($this->rawdata); ++$i) {
                 $hmp .= '/'.ord($this->rawdata[$i]);
             } */
-            throw new Exception("WIMS server returned invalid JSON: $job:".$this->rawdata);
+            throw new \Exception("WIMS server returned invalid JSON: $job:".$this->rawdata);
         }
         // Some WIMS jobs, like "authuser", don't send back a specific message.
         if (property_exists($this->jsondata, 'message')) {

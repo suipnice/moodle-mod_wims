@@ -189,7 +189,7 @@ if (!$wimsresult["status"]) {
                 echo('</div>');
             }
         } else {
-            echo('<div class="alert alert-danger">'.get_string('class_deleted', mod_wims, $wimsresult['qcl']).'</div>');
+            echo('<div class="alert alert-danger">'.get_string('class_deleted', 'mod_wims', $wimsresult['qcl']).'</div>');
         }
 
     } else if (strpos($lasterror, "connection refused by requested class") !== false) {

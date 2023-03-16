@@ -127,9 +127,9 @@ $string['updatescores'] = 'Update WIMS scores';
 // Grade items.
 // String for grade item number 0, just for legacy compatibility.
 $string['grade__name'] = 'Item number 0 score';
-/*for ($i = 1; $i < 150; $i++) {
+for ($i = 1; $i < 64; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Exam #'.$i.' score';
-}*/
+}
 
 // Privacy.
 $string['privacy:metadata:core_grades'] = 'The WIMS activity stores grades of users that have answered WIMS content.';

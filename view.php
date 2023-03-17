@@ -139,7 +139,11 @@ if ($mode === "restore_backup") {
 if (!$wimsresult["status"]) {
 
     outputheader($course, $instance->name, $cm);
-    $lasterror = end($wims->errormsgs);
+    if (isset($wims->errormsgs)) {
+        $lasterror = end($wims->errormsgs);
+    } else {
+        $lasterror = "";
+    }
     if (strpos($lasterror, "not existing") !== false) {
         if ($isteacher) {
             echo('<div class="alert alert-danger">'.get_string('class_deleted_with_id', 'wims', $wimsresult['qcl']).'</div>');

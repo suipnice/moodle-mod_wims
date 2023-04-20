@@ -29,5 +29,8 @@ $plugin->component = 'mod_wims';     // Full name of the plugin (used for diagno
 $plugin->release = '0.5.2';          // Don't forget to update the version too.
 $plugin->version = 2023022100;       // The current module version (Date: YYYYMMDDXX).
 $plugin->requires = 2020061500;      // Requires this Moodle version (3.9).
+
+// Moodle versions that are outside of this range will produce a message notifying at install time, but will allow for installation.
+$plugin->supported = [39, 402];      // Moodle 3.9.x to 4.2.x are supported.
+
 $plugin->maturity = MATURITY_STABLE; // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE.
-$plugin->cron = 0;                   // Limit the frequency at which the CRON gets called.

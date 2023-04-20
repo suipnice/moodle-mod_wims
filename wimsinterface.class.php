@@ -212,7 +212,9 @@ class wims_interface {
                     $response["restorable"] = $this->_wims->jsondata->restorable;
                 }
             }
-            $response["total"] = $this->_wims->jsondata->total;
+            if (isset($this->_wims->jsondata->total)) {
+                $response["total"] = $this->_wims->jsondata->total;
+            }
             $response["qcl"] = $this->_qcl;
             $response["status"] = $check;
             // If class exist or if we don't force to create a new one.
@@ -372,7 +374,7 @@ class wims_interface {
             case WIMS_EXAM       :
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
             default :
-                throw new Exception('BUG: Bad urltype parameter '.$urltype);
+                throw new \Exception('BUG: Bad urltype parameter '.$urltype);
         }
     }
 
@@ -401,7 +403,7 @@ class wims_interface {
             case WIMS_EXAM       :
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
             default:
-                throw new Exception('BUG: Bad urltype parameter '.$urltype);
+                throw new \Exception('BUG: Bad urltype parameter '.$urltype);
         }
     }
 
@@ -663,6 +665,7 @@ class wims_interface {
             $ret->titles[$sheettype] = array();
             foreach ($sheets as $sheetid => $sheetsummary) {
                 // Ignore sheets that are in preparation as WIMS complains if one tries to access their scores.
+                $title = $sheetsummary->title;
                 if ($sheetsummary->state == 0) {
                     mtrace(
                         '  - Ignoring: '.$sheettype.' '.
@@ -671,7 +674,6 @@ class wims_interface {
                     );
                     continue;
                 }
-                $title = $sheetsummary->title;
                 // If the sheet name is tagged with a '*' then strip it off and process the sheet.
                 if (substr($title, -1) === '*') {
                     $title = trim(substr($title, 0, -1));

@@ -45,6 +45,14 @@
  * @return mixed True if module supports feature, false if not, null if doesn't know or string for the module purpose
  */
 function wims_supports($feature) {
+
+    // Moodle 4+ icons.
+    if (defined('FEATURE_MOD_PURPOSE')
+        && defined('MOD_PURPOSE_ASSESSMENT')
+        && $feature === FEATURE_MOD_PURPOSE) {
+        return MOD_PURPOSE_ASSESSMENT;
+    }
+
     switch($feature) {
         case FEATURE_GROUPS:
         case FEATURE_GROUPINGS:
@@ -61,10 +69,6 @@ function wims_supports($feature) {
             // Marked complete as soon as a user clicks on it.
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
-
-            // Moodle 4+ icons.
-        case FEATURE_MOD_PURPOSE:
-            return MOD_PURPOSE_ASSESSMENT;
 
         default:
             return null;

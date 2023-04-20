@@ -50,7 +50,7 @@ class gradeitems implements itemnumber_mapping {
         // the itemname will always be empty (see core_grades\component_gradeitems).
         $mapping = [0 => ''];
 
-        for ($i = 1; $i < 150; $i++) {
+        for ($i = 1; $i < 64; $i++) {
             $mapping[$i] = "exam_$i";
         }
         return $mapping;

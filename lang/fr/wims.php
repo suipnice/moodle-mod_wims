@@ -125,7 +125,9 @@ $string['modulename_link'] = 'mod/wims/view';
 $string['updatescores'] = 'Mise à jour des notes des activités WIMS';
 
 // Grade items.
-/*for ($i = 1; $i < 150; $i++) {
+// String for grade item number 0, just for legacy compatibility.
+$string['grade__name'] = 'Score de l’examen 0';
+/*for ($i = 1; $i < 64; $i++) {
     $string['grade_exam_'.$i.'_name'] = 'Score de l’examen '.$i;
 }*/
 

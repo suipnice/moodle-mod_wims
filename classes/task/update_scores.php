@@ -38,7 +38,7 @@ use mod_wims\wims_interface;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
-class update_scores extends core\task\scheduled_task {
+class update_scores extends \core\task\scheduled_task {
     /**
      * Get task name
      *

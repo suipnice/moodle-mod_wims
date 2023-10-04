@@ -119,5 +119,3 @@ Start reading our code and you'll get the hang of it. We optimize for readabilit
   * We indent using 4 spaces (soft tabs)
   * This is open source software. Consider the people who will read your code, and make it look nice for them. It's sort of like driving a car: Perhaps you love doing donuts when you're alone, but with passengers the goal is to make the ride as smooth as possible.
   * Use phpcs (php code sniffer) with Moodle coding rules
-
-

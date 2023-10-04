@@ -184,7 +184,7 @@ class provider implements
             if (!$cm) {
                 continue;
             }
-            $data = new stdClass();
+            $data = new \stdClass();
             $data->wimslogin = $wimslogin;
             $data->userconfig = $wims->getuserdata($cm, $wimslogin);
             $data->userscores = $wims->getscore($cm, $wimslogin);

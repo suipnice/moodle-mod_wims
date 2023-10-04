@@ -103,14 +103,14 @@ class provider_test extends provider_testcase {
      *
      * @param array $params Array of parameters to pass to the generator
      *
-     * @return stdClass containing The wims class + the current context.
+     * @return \stdClass containing The WIMS class + the current context.
      */
     protected function create_instance($params = []) {
-        $ret = new stdClass();
+        $ret = new \stdClass();
         $generator = $this->getDataGenerator()->get_plugin_generator('mod_wims');
         $instance = $generator->create_instance($params);
         $ret->cm = get_coursemodule_from_instance('wims', $instance->id);
-        $ret->context = context_module::instance($ret->cm->id);
+        $ret->context = \context_module::instance($ret->cm->id);
         $ret->config = $generator->get_config_for_tests();
         return $ret;
     }

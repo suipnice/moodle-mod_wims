@@ -61,7 +61,7 @@ require_capability('mod/wims:view', $context);
 // Moodle event logging & state update.
 $params = [
     'context' => $context,
-    'objectid' => $instance->id
+    'objectid' => $instance->id,
 ];
 $event = mod_wims\event\course_module_viewed::create($params);
 $event->add_record_snapshot('course_modules', $cm);

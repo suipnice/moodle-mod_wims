@@ -137,7 +137,7 @@ class provider implements
 
         if (count($cmids) > 0) {
             $params = ['contextlevel' => CONTEXT_MODULE,
-                       'moduleid' => $moduleinfo->id ];
+                       'moduleid' => $moduleinfo->id, ];
             $cmids = implode(',', $cmids);
             $sql = "SELECT ctx.id
                     FROM {course_modules} cm

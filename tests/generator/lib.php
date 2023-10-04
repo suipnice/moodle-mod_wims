@@ -53,7 +53,7 @@ class mod_wims_generator extends testing_module_generator {
             'userfirstname' => "Anonymous",
             'userlastname' => "Supervisor",
             'useremail' => "noreply@wimsedu.info",
-            'userinstitution' => "Moodle/WIMS"
+            'userinstitution' => "Moodle/WIMS",
         ];
 
         foreach ($defaultclasssettings as $name => $value) {

@@ -30,6 +30,6 @@ $observers = [
     [
         'eventname' => '\core\event\course_module_updated',
         'callback' => 'on_course_module_updated',
-        'includefile' => '/mod/wims/event_handlers.php'
+        'includefile' => '/mod/wims/event_handlers.php',
     ],
 ];

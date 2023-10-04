@@ -130,7 +130,7 @@ class update_scores extends core\task\scheduled_task {
                     $params = [
                     'itemname' => $sheettitle,
                     'grademin' => 0,
-                    'grademax' => 10 ];
+                    'grademax' => 10, ];
 
                     // Apply the grade column definition.
                     $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);
@@ -165,7 +165,7 @@ class update_scores extends core\task\scheduled_task {
                         $userid = $userlookup[$username];
                         $grade = [
                         'userid' => $userid,
-                        'rawgrade' => $scorevalue];
+                        'rawgrade' => $scorevalue, ];
                         $graderesult = grade_update(
                             'mod/wims',
                             $cm->course,

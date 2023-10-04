@@ -231,7 +231,7 @@ class wims_comms_wrapper {
             CURLOPT_USERAGENT => 'Moodle',
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FAILONERROR => true,
-            CURLOPT_SSL_VERIFYPEER => $this->sslverifypeer
+            CURLOPT_SSL_VERIFYPEER => $this->sslverifypeer,
         ]);
 
         // Send the request & save response to $resp.

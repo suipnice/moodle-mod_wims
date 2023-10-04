@@ -54,9 +54,17 @@ function mod_wims_helper_function() {
  *
  * @return void
  */
-function xmldb_wims_addfield($dbman, $table, $name, $type=null,
-    $precision=null, $unsigned=null, $notnull=null, $sequence=null,
-    $default=null, $previous=null
+function xmldb_wims_addfield(
+    $dbman,
+    $table,
+    $name,
+    $type = null,
+    $precision = null,
+    $unsigned = null,
+    $notnull = null,
+    $sequence = null,
+    $default = null,
+    $previous = null
 ): void {
     // Instantiate a field object.
     $field = new xmldb_field($name, $type, $precision, $unsigned, $notnull, $sequence, $default, $previous);

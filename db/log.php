@@ -26,8 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 // Add log event definitions here.
-$logs = array(
-    array('module' => 'wims', 'action' => 'view', 'mtable' => 'wims', 'field' => 'name'),
-    array('module' => 'wims', 'action' => 'view all', 'mtable' => 'wims', 'field' => 'name'),
-);
-
+$logs = [
+    ['module' => 'wims', 'action' => 'view', 'mtable' => 'wims', 'field' => 'name'],
+    ['module' => 'wims', 'action' => 'view all', 'mtable' => 'wims', 'field' => 'name'],
+];

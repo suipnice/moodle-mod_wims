@@ -37,7 +37,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__.'/upgradelib.php');
+require_once(__DIR__ . '/upgradelib.php');
 
 /**
  * Execute mod_wims upgrade from the given old version.
@@ -90,13 +90,13 @@ function xmldb_wims_upgrade($oldversion): bool {
         $config = get_config('wims');
         $qcloffset = $config->qcloffset;
         // Iterate over the set of WIMS activities in the system.
-        $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
-        $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
+        $moduleinfo = $DB->get_record('modules', ['name' => 'wims']);
+        $coursemodules = $DB->get_records('course_modules', ['module' => $moduleinfo->id], 'id', 'id,course,instance,section');
 
         foreach ($coursemodules as $cm) {
             // Add a class_id field in each existing wims activity.
             $newvalue = $qcloffset + $cm->id;
-            $DB->set_field('wims', 'class_id', $newvalue, array('id' => $cm->instance));
+            $DB->set_field('wims', 'class_id', $newvalue, ['id' => $cm->instance]);
         }
 
         // Qcloffset is now useless, we remove it from config.

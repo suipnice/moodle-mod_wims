@@ -47,13 +47,15 @@
 function wims_supports($feature) {
 
     // Moodle 4+ icons.
-    if (defined('FEATURE_MOD_PURPOSE')
+    if (
+        defined('FEATURE_MOD_PURPOSE')
         && defined('MOD_PURPOSE_ASSESSMENT')
-        && $feature === FEATURE_MOD_PURPOSE) {
+        && $feature === FEATURE_MOD_PURPOSE
+    ) {
         return MOD_PURPOSE_ASSESSMENT;
     }
 
-    switch($feature) {
+    switch ($feature) {
         case FEATURE_GROUPS:
         case FEATURE_GROUPINGS:
         case FEATURE_GROUPMEMBERSONLY:
@@ -81,7 +83,7 @@ function wims_supports($feature) {
  * @return array
  */
 function wims_get_extra_capabilities() {
-    return array('moodle/site:accessallgroups');
+    return ['moodle/site:accessallgroups'];
 }
 
 /**
@@ -92,7 +94,7 @@ function wims_get_extra_capabilities() {
  * @return array empty status array
  */
 function wims_reset_userdata($data) {
-    return array();
+    return [];
 }
 
 /**
@@ -106,7 +108,7 @@ function wims_reset_userdata($data) {
  * @return array
  */
 function wims_get_view_actions() {
-    return array('view', 'view all');
+    return ['view', 'view all'];
 }
 
 /**
@@ -120,7 +122,7 @@ function wims_get_view_actions() {
  * @return array
  */
 function wims_get_post_actions() {
-    return array('update', 'add');
+    return ['update', 'add'];
 }
 
 /**
@@ -134,7 +136,7 @@ function wims_get_post_actions() {
 function wims_add_instance($data, $mform = null) {
     global $CFG, $DB;
 
-    require_once($CFG->dirroot.'/mod/wims/locallib.php');
+    require_once($CFG->dirroot . '/mod/wims/locallib.php');
 
     $data->timecreated = time();
     $data->id = $DB->insert_record('wims', $data);
@@ -154,9 +156,9 @@ function wims_add_instance($data, $mform = null) {
 function wims_update_instance($data, $mform) {
     global $CFG, $DB;
 
-    require_once($CFG->dirroot.'/mod/wims/locallib.php');
+    require_once($CFG->dirroot . '/mod/wims/locallib.php');
 
-    $parameters = array();
+    $parameters = [];
     for ($i = 0; $i < 100; $i++) {
         $parameter = "parameter_$i";
         $variable = "variable_$i";
@@ -186,16 +188,16 @@ function wims_update_instance($data, $mform) {
 function wims_delete_instance($id) {
     global $DB;
 
-    if (!$instance = $DB->get_record('wims', array('id' => $id))) {
+    if (!$instance = $DB->get_record('wims', ['id' => $id])) {
         return false;
     }
 
     // Note: all context files are deleted automatically.
-    $DB->delete_records('wims', array('id' => $id));
+    $DB->delete_records('wims', ['id' => $id]);
 
     wims_grade_item_delete($instance);
 
-    $events = $DB->get_records('event', array('modulename' => 'wims', 'instance' => $id));
+    $events = $DB->get_records('event', ['modulename' => 'wims', 'instance' => $id]);
     foreach ($events as $event) {
         $event = calendar_event::load($event);
         $event->delete();
@@ -217,8 +219,13 @@ function wims_delete_instance($id) {
 function wims_get_coursemodule_info($coursemodule) {
     global $CFG, $DB;
 
-    if (!$instance = $DB->get_record('wims', array('id' => $coursemodule->instance),
-            'name')) {
+    if (
+        !$instance = $DB->get_record(
+            'wims',
+            ['id' => $coursemodule->instance],
+            'name'
+        )
+    ) {
         return null;
     }
 
@@ -243,7 +250,7 @@ function wims_get_coursemodule_info($coursemodule) {
  * @return a list of page types
  */
 function wims_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    return array('mod-wims-*' => get_string('page-mod-wims-x', 'wims'));
+    return ['mod-wims-*' => get_string('page-mod-wims-x', 'wims')];
 }
 
 /**
@@ -255,7 +262,7 @@ function wims_page_type_list($pagetype, $parentcontext, $currentcontext) {
  * @return array of file content
  */
 function wims_export_contents($cm, $baseurl) {
-    $contents = array();
+    $contents = [];
     return $contents;
 }
 
@@ -314,9 +321,9 @@ function wims_scale_used_anywhere($scaleid) {
  */
 function wims_grade_item_update($moduleinstance, $grades = null) {
     global $CFG;
-    include_once($CFG->libdir.'/gradelib.php');
+    include_once($CFG->libdir . '/gradelib.php');
 
-    $item = array();
+    $item = [];
     $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
     $item['gradetype'] = GRADE_TYPE_VALUE;
 
@@ -347,10 +354,18 @@ function wims_grade_item_update($moduleinstance, $grades = null) {
  */
 function wims_grade_item_delete($moduleinstance) {
     global $CFG;
-    include_once($CFG->libdir.'/gradelib.php');
+    include_once($CFG->libdir . '/gradelib.php');
 
-    return grade_update('/mod/wims', $moduleinstance->course, 'mod', 'wims',
-                        $moduleinstance->id, 0, null, array('deleted' => 1));
+    return grade_update(
+        '/mod/wims',
+        $moduleinstance->course,
+        'mod',
+        'wims',
+        $moduleinstance->id,
+        0,
+        null,
+        ['deleted' => 1]
+    );
 }
 
 /**
@@ -366,7 +381,7 @@ function wims_grade_item_delete($moduleinstance) {
 function wims_update_grades($moduleinstance, $userid = 0) {
     /*
     global $CFG, $DB;
-    include_once($CFG->libdir.'/gradelib.php');
+    include_once($CFG->libdir. '/gradelib.php');
 
     // Populate array of grade objects indexed by userid.
     $grades = array();
@@ -376,4 +391,3 @@ function wims_update_grades($moduleinstance, $userid = 0) {
     // WIMS doesn't have its own grade table so the only thing to do is update the grade item.
     return wims_grade_item_update($moduleinstance);
 }
-

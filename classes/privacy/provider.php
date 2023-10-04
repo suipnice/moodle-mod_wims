@@ -30,15 +30,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/wims/wimsinterface.class.php');
 
-use \core_privacy\local\request\writer;
-use \core_privacy\local\request\contextlist;
-use \core_privacy\local\request\approved_contextlist;
-use \core_privacy\local\request\deletion_criteria;
-use \core_privacy\local\request\userlist;
-use \core_privacy\local\request\approved_userlist;
-use \core_privacy\local\request\helper as request_helper;
-use \core_privacy\local\metadata\collection;
-use \mod_wims\wims_interface;
+use core_privacy\local\request\writer;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\deletion_criteria;
+use core_privacy\local\request\userlist;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\helper as request_helper;
+use core_privacy\local\metadata\collection;
+use mod_wims\wims_interface;
 
 /**
  * Privacy implementation for WIMS plugin.
@@ -51,14 +51,12 @@ use \mod_wims\wims_interface;
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class provider implements
+    core_privacy\local\request\core_userlist_provider,
     // This plugin does store personal user data.
-    \core_privacy\local\metadata\provider,
+    core_privacy\local\metadata\provider,
 
     // This plugin currently implements the original plugin_provider interface.
-    \core_privacy\local\request\plugin\provider,
-
-    \core_privacy\local\request\core_userlist_provider {
-
+    core_privacy\local\request\plugin\provider {
     /**
      * Get the list of contexts that contain user information for the specified user.
      *
@@ -66,7 +64,7 @@ class provider implements
      *
      * @return collection $items The array of metadata
      */
-    public static function get_metadata(collection $items) : collection {
+    public static function get_metadata(collection $items): collection {
         // Here we add more items to the collection.
 
         // Stores grades using the Moodle gradebook api.
@@ -78,8 +76,8 @@ class provider implements
 
         // Data stored in wims db table.
         $items->add_database_table(
-        'wims',
-         [
+            'wims',
+            [
             'name' => 'name',
             'userinstitution' => 'userinstitution',
             'userfirstname' => 'userfirstname',
@@ -107,18 +105,18 @@ class provider implements
      *
      * @return contextlist $contextlist The list of contexts where the user has attempted a WIMS activity.
      */
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         global $DB;
-        $cmids = array();
+        $cmids = [];
         $wims = new wims_interface(get_config('wims'));
 
         /* get WIMS user ID */
-        $userinfo = $DB->get_record('user', array('id' => $userid ), 'id, firstname, lastname');
+        $userinfo = $DB->get_record('user', ['id' => $userid], 'id, firstname, lastname');
         $wimslogin = $wims->generatewimslogin($userinfo);
 
         /* Get all WIMS activities in Moodle Courses */
-        $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
-        $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
+        $moduleinfo = $DB->get_record('modules', ['name' => 'wims']);
+        $coursemodules = $DB->get_records('course_modules', ['module' => $moduleinfo->id], 'id', 'id,course,instance,section');
 
         foreach ($coursemodules as $cm) {
             // Make sure the classroom is correctly accessible.
@@ -186,13 +184,12 @@ class provider implements
             if (!$cm) {
                 continue;
             }
-            $data = new \stdClass();
+            $data = new stdClass();
             $data->wimslogin = $wimslogin;
             $data->userconfig = $wims->getuserdata($cm, $wimslogin);
             $data->userscores = $wims->getscore($cm, $wimslogin);
             writer::with_context($context)->export_data([get_string('privacy:metadata:wims_classes:userdata', 'mod_wims')], $data);
         }
-
     }
 
 
@@ -203,7 +200,7 @@ class provider implements
      * This will be called when the retention period for the context has expired
      * to adhere to the privacy by design requirement
      *
-     * @param \context $context The specific context to delete data from.
+     * @param context $context The specific context to delete data from.
      *
      * @return mixed
      */
@@ -281,10 +278,10 @@ class provider implements
         }
         $userlookup = $wims->builduserlookuptable();
 
-        $useridlist = array();
+        $useridlist = [];
         foreach ($wimsuserlist as $wimslogin) {
             if (!array_key_exists($wimslogin, $userlookup)) {
-                mtrace(' ERROR: Failed to lookup WIMS login in MOODLE users for login: '.$wimslogin);
+                mtrace('  ERROR: Failed to lookup WIMS login in MOODLE users for login: ' . $wimslogin);
                 continue;
             }
             $useridlist[] = $userlookup[$wimslogin];
@@ -295,7 +292,6 @@ class provider implements
                     WHERE id  IN (:useridlist)";
 
         $userlist->add_from_sql('userid', $sql, ['useridlist' => $context->id]);
-
     }
 
     /**
@@ -318,9 +314,8 @@ class provider implements
         $wims = new wims_interface(get_config('wims'));
 
         foreach ($userids as $userid) {
-
             // Get WIMS user ID.
-            $userinfo = $DB->get_record('user', array('userid' => $userid ), 'id, firstname, lastname');
+            $userinfo = $DB->get_record('user', ['userid' => $userid], 'id, firstname, lastname');
             $wimslogin = $wims->generatewimslogin($userinfo);
             if (!$wims->deluser($cm, $wimslogin)) {
                 mtrace('  - FAILURE: WIMS - User not deleted');
@@ -334,7 +329,7 @@ class provider implements
             $gradeids = $requestdata->get_gradeids();
             // Careful here, if no gradeids are provided then all data is deleted for the context.
             if (!empty($gradeids)) {
-                \core_grading\privacy\provider::delete_data_for_instances($context, $gradeids);
+                core_grading\privacy\provider::delete_data_for_instances($context, $gradeids);
             }
         }
     }

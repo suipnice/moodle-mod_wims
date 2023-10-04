@@ -26,7 +26,7 @@
 /**
  * Event handler for course_module_updated
  *
- * @param \core\event\course_module_updated $event
+ * @param core\event\course_module_updated $event
  */
 function on_course_module_updated(\core\event\course_module_updated $event) {
     // We're only interested in our own updates.
@@ -41,13 +41,13 @@ function on_course_module_updated(\core\event\course_module_updated $event) {
     }
 
     // Setup a fake course module to provide the data that the wims interface needs.
-    $cm = new StdClass;
+    $cm = new stdClass();
     $cm->id = $event->objectid;
 
     // Try to send the updated name to WIMS.
-    include_once(dirname(__FILE__).'/wimsinterface.class.php');
-    $wimsdata = array("description" => $event->other['name']);
+    include_once(dirname(__FILE__) . '/wimsinterface.class.php');
+    $wimsdata = ["description" => $event->other['name']];
     $config = get_config('wims');
-    $wims = new \mod_wims\wims_interface($config, $config->debugsettings);
+    $wims = new mod_wims\wims_interface($config, $config->debugsettings);
     $wims->updateclassconfigformodule($cm, $wimsdata);
 }

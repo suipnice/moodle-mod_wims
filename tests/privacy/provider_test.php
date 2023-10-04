@@ -37,11 +37,11 @@ global $CFG;
 
 require_once($CFG->dirroot . '/mod/wims/wimsinterface.class.php');
 
-use \core_privacy\tests\provider_testcase;
-use \core_privacy\local\request\writer;
-use \core_privacy\local\request\approved_contextlist;
-use \mod_wims\privacy\provider;
-use \mod_wims\wims_interface;
+use core_privacy\tests\provider_testcase;
+use core_privacy\local\request\writer;
+use core_privacy\local\request\approved_contextlist;
+use mod_wims\privacy\provider;
+use mod_wims\wims_interface;
 
 /**
  * Unit tests for mod/wims/classes/privacy/
@@ -55,34 +55,33 @@ use \mod_wims\wims_interface;
  * @coversDefaultClass \mod_wims\privacy\provider
  */
 class provider_test extends provider_testcase {
-
     /**
      * Communication library for interfacing to the WIMS server
      *
      * @var wims_interface
      */
-    private $_wims;
+    private $wims;
 
     /**
      * Current WIMS activity course module object
      *
      * @var object
      */
-    private $_cm;
+    private $cm;
 
     /**
      * Current WIMS activity context
      *
      * @var object
      */
-    private $_context;
+    private $context;
 
     /**
      * Current Course id
      *
      * @var string
      */
-    private $_courseid;
+    private $courseid;
 
     /**
      * WIMS classroom status
@@ -90,28 +89,28 @@ class provider_test extends provider_testcase {
      *
      * @var bool
      */
-    private $_wimsstatus;
+    private $wimsstatus;
 
     /**
      * List of students enroled in the current course
      *
      * @var array
      */
-    private $_studentlist;
+    private $studentlist;
 
     /**
      * Convenience function to create an instance of a WIMS activity.
      *
      * @param array $params Array of parameters to pass to the generator
      *
-     * @return StdClass containing The wims class + the current context.
+     * @return stdClass containing The wims class + the current context.
      */
-    protected function create_instance($params = array()) {
-        $ret = new \StdClass();
+    protected function create_instance($params = []) {
+        $ret = new stdClass();
         $generator = $this->getDataGenerator()->get_plugin_generator('mod_wims');
         $instance = $generator->create_instance($params);
         $ret->cm = get_coursemodule_from_instance('wims', $instance->id);
-        $ret->context = \context_module::instance($ret->cm->id);
+        $ret->context = context_module::instance($ret->cm->id);
         $ret->config = $generator->get_config_for_tests();
         return $ret;
     }
@@ -128,37 +127,36 @@ class provider_test extends provider_testcase {
         $this->resetAfterTest(true);
 
         // We use the same WIMS activity for several tests, for optimization.
-        if (!$this->_cm) {
-
+        if (!$this->cm) {
             $generator = provider_testcase::getDataGenerator();
             $course = $generator->create_course();
-            $this->_courseid = $course->id;
+            $this->courseid = $course->id;
 
-            $this->_studentlist[0] = $generator->create_user();
-            $this->_studentlist[1] = $generator->create_user();
+            $this->studentlist[0] = $generator->create_user();
+            $this->studentlist[1] = $generator->create_user();
             $teacher = $generator->create_user();
-            $generator->enrol_user($this->_studentlist[0]->id, $this->_courseid, 'student');
-            $generator->enrol_user($this->_studentlist[1]->id, $this->_courseid, 'student');
-            $generator->enrol_user($teacher->id, $this->_courseid, 'editingteacher');
+            $generator->enrol_user($this->studentlist[0]->id, $this->courseid, 'student');
+            $generator->enrol_user($this->studentlist[1]->id, $this->courseid, 'student');
+            $generator->enrol_user($teacher->id, $this->courseid, 'editingteacher');
 
             $instance = $this->create_instance([
                 'course' => $course,
                 'name' => 'PHPUnit Classroom',
             ]);
-            $this->_cm = $instance->cm;
-            $this->_context = $instance->context;
+            $this->cm = $instance->cm;
+            $this->context = $instance->context;
             $config = $instance->config;
             // Change 0 to 1 to debug.
-            $this->_wims = new wims_interface($config, 1, 'plain');
+            $this->wims = new wims_interface($config, 1, 'plain');
         }
-        if (!$this->_wimsstatus) {
+        if (!$this->wimsstatus) {
             // We set an expiration date at today, so WIMS will automatically delete it tomorrow.
-            $params = (object) array('expiration' => date('yymd'));
+            $params = (object) ['expiration' => date('yymd')];
 
             // Start by creating a class on the WIMS server connected to the course.
-            $this->_wimsstatus = $this->_wims->selectclassformodule($params, $this->_cm, $config)["status"];
-            if (!$this->_wimsstatus) {
-                $this->markTestSkipped("WIMS server at ".$config->serverurl." can't be reached.");
+            $this->wimsstatus = $this->wims->selectclassformodule($params, $this->cm, $config)["status"];
+            if (!$this->wimsstatus) {
+                $this->markTestSkipped("WIMS server at " . $config->serverurl . " can't be reached.");
             }
         }
     }
@@ -170,7 +168,7 @@ class provider_test extends provider_testcase {
      **/
     public function tearDown(): void {
         // Delete all user data in this WIMS classroom.
-        $this->_wims->cleanclass($this->_cm);
+        $this->wims->cleanclass($this->cm);
     }
 
     /**
@@ -185,20 +183,20 @@ class provider_test extends provider_testcase {
     public function disabled_test_delete_data_for_all_users_in_context(): void {
 
         $sitelang = current_language();
-        $wims = $this->_wims;
+        $wims = $this->wims;
         // Connect user1 to the WIMS class.
-        $wims->getstudenturl($this->_studentlist[0], $sitelang);
+        $wims->getstudenturl($this->studentlist[0], $sitelang);
         // Connect user2 to the WIMS class.
-        $wims->getstudenturl($this->_studentlist[1], $sitelang);
+        $wims->getstudenturl($this->studentlist[1], $sitelang);
 
         // Check if the users exists within the given course.
-        $this->assertCount(2, $wims->getuserlist($this->_cm));
+        $this->assertCount(2, $wims->getuserlist($this->cm));
 
         // Delete all user data in this WIMS classroom.
-        provider::delete_data_for_all_users_in_context($this->_context);
+        provider::delete_data_for_all_users_in_context($this->context);
 
         // Check if the users still exists within the given course.
-        $this->assertCount(0, $wims->getuserlist($this->_cm));
+        $this->assertCount(0, $wims->getuserlist($this->cm));
     }
 
     /**
@@ -209,14 +207,14 @@ class provider_test extends provider_testcase {
      */
     public function test_delete_data_for_user(): void {
 
-        $coursecontext = \context_course::instance($this->_courseid);
+        $coursecontext = context_course::instance($this->courseid);
 
-        $wims = $this->_wims;
-        $user1 = $this->_studentlist[0];
-        $user2 = $this->_studentlist[1];
+        $wims = $this->wims;
+        $user1 = $this->studentlist[0];
+        $user2 = $this->studentlist[1];
 
         // Check that the WIMS class is empty.
-        $this->assertCount(0, $wims->getuserlist($this->_cm));
+        $this->assertCount(0, $wims->getuserlist($this->cm));
 
         $sitelang = current_language();
         // Connect user1 to the WIMS class.
@@ -224,15 +222,14 @@ class provider_test extends provider_testcase {
         // Connect $user2 to the WIMS class.
         $wims->getstudenturl($user2, $sitelang);
         // Check that there is 2 users in the WIMS class.
-        $this->assertCount(2, $wims->getuserlist($this->_cm));
+        $this->assertCount(2, $wims->getuserlist($this->cm));
 
         // Delete user 2's data.
-        $approvedlist = new approved_contextlist($user2, 'mod_wims', [$this->_context->id, $coursecontext->id]);
+        $approvedlist = new approved_contextlist($user2, 'mod_wims', [$this->context->id, $coursecontext->id]);
         provider::delete_data_for_user($approvedlist);
 
         // Check if user 2 still exists in the given WIMS class.
         $wimslogin = $wims->generatewimslogin($user2);
-        $this->assertFalse($wims->checkuser($this->_cm, $wimslogin, false));
-
+        $this->assertFalse($wims->checkuser($this->cm, $wimslogin, false));
     }
 }

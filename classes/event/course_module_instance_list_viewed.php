@@ -33,5 +33,5 @@ namespace mod_wims\event;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
-class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
+class course_module_instance_list_viewed extends core\event\course_module_instance_list_viewed {
 }

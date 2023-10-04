@@ -23,8 +23,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'mod_wims\task\update_scores',
         'blocking' => 0,
         'minute' => '30',
@@ -32,5 +32,5 @@ $tasks = array(
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'
-    )
-);
+    ]
+];

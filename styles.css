@@ -32,8 +32,8 @@
 .modicon_wims.activityiconcontainer img,
 /* icon in course */
 .modtype_wims img.activityicon {
-    width: 30px;
     height: 30px;
+    width: 30px;
 }
 
 /* debug log */

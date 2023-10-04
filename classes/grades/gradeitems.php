@@ -22,11 +22,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace mod_wims\grades;
 
-use \core_grades\local\gradeitem\itemnumber_mapping;
+use core_grades\local\gradeitem\itemnumber_mapping;
 
 /**
  * Grade item mappings for the activity.
@@ -39,7 +39,6 @@ use \core_grades\local\gradeitem\itemnumber_mapping;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gradeitems implements itemnumber_mapping {
-
     /**
      * Return the list of grade item mappings for the activity.
      *
@@ -55,5 +54,4 @@ class gradeitems implements itemnumber_mapping {
         }
         return $mapping;
     }
-
 }

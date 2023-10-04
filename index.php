@@ -25,20 +25,20 @@
 
 // This is index.php - add code here to output a list of all of the instances of the module's component in the course.
 
-require(__DIR__.'/../../config.php');
-/* require_once(__DIR__.'/lib.php'); */
+require(__DIR__ . '/../../config.php');
+/* require_once(__DIR__. '/lib.php'); */
 
 $id = required_param('id', PARAM_INT); // Course id.
 
-$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 
 require_course_login($course, true);
 $PAGE->set_pagelayout('incourse');
 
-$params = array(
+$params = [
     'context' => context_course::instance($course->id)
-);
-$event = \mod_wims\event\course_module_instance_list_viewed::create($params);
+];
+$event = mod_wims\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
@@ -46,8 +46,8 @@ $strinstance = get_string('modulename', 'wims');
 $strinstances = get_string('modulenameplural', 'wims');
 $strname = get_string('name');
 
-$PAGE->set_url('/mod/wims/index.php', array('id' => $course->id));
-$PAGE->set_title($course->shortname.': '.$strinstances);
+$PAGE->set_url('/mod/wims/index.php', ['id' => $course->id]);
+$PAGE->set_title($course->shortname . ': ' . $strinstances);
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add($strinstances);
 echo $OUTPUT->header();
@@ -64,18 +64,18 @@ $table = new html_table();
 $table->attributes['class'] = 'generaltable mod_index';
 
 if ($usesections) {
-    $strsectionname = get_string('sectionname', 'format_'.$course->format);
-    $table->head = array ($strsectionname, $strname);
-    $table->align = array ('center', 'left');
+    $strsectionname = get_string('sectionname', 'format_' . $course->format);
+    $table->head = [$strsectionname, $strname];
+    $table->align = ['center', 'left'];
 } else {
-    $table->head = array ($strname);
-    $table->align = array ('left');
+    $table->head = [$strname];
+    $table->align = ['left'];
 }
 
 $modinfo = get_fast_modinfo($course);
 $currentsection = '';
 foreach ($modinfo->instances['wims'] as $cm) {
-    $row = array();
+    $row = [];
     if ($usesections) {
         if ($cm->sectionnum !== $currentsection) {
             if ($cm->sectionnum) {
@@ -90,11 +90,12 @@ foreach ($modinfo->instances['wims'] as $cm) {
         }
     }
 
-    $class = $cm->visible ? null : array('class' => 'dimmed');
+    $class = $cm->visible ? null : ['class' => 'dimmed'];
 
     $row[] = html_writer::link(
-        new moodle_url('view.php', array('id' => $cm->id)),
-        $cm->get_formatted_name(), $class
+        new moodle_url('view.php', ['id' => $cm->id]),
+        $cm->get_formatted_name(),
+        $class
     );
     $table->data[] = $row;
 }

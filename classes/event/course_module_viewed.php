@@ -33,10 +33,9 @@ namespace mod_wims\event;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
-class course_module_viewed extends core\event\course_module_viewed {
+class course_module_viewed extends \core\event\course_module_viewed {
     /**
      * Init event
-     *
      */
     protected function init() {
         $this->data['objecttable'] = 'wims';

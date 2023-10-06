@@ -24,6 +24,9 @@
  */
 
 namespace mod_wims;
+
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__) . "/wimscommswrapper.class.php");
@@ -918,7 +921,9 @@ class wims_interface {
     private function initforcm($cm): void {
         global $DB;
         $wimsinfo = $DB->get_record('wims', ['id' => $cm->instance]);
-        $this->qcl = $wimsinfo->class_id;
+        if ($wimsinfo) {
+            $this->qcl = $wimsinfo->class_id;
+        }
         // Setup the 'owner' identifier (derived from the Moodle class id).
         $this->rcl = "moodle_$cm->id";
     }

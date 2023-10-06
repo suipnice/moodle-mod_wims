@@ -42,7 +42,7 @@ function wims_update_calendar($data, $cmid): bool {
     global $DB, $CFG;
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
-    core_completion\api::update_completion_date_event($data->coursemodule, 'wims', $data->id, $completiontimeexpected);
+    \core_completion\api::update_completion_date_event($data->coursemodule, 'wims', $data->id, $completiontimeexpected);
 
     return true;
 }

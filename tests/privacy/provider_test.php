@@ -207,7 +207,7 @@ class provider_test extends provider_testcase {
      */
     public function test_delete_data_for_user(): void {
 
-        $coursecontext = context_course::instance($this->courseid);
+        $coursecontext = \context_course::instance($this->courseid);
 
         $wims = $this->wims;
         $user1 = $this->studentlist[0];

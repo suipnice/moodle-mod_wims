@@ -43,6 +43,7 @@ function on_course_module_updated(\core\event\course_module_updated $event) {
     // Setup a fake course module to provide the data that the wims interface needs.
     $cm = new stdClass();
     $cm->id = $event->objectid;
+    $cm->instance = null;
 
     // Try to send the updated name to WIMS.
     include_once(dirname(__FILE__) . '/wimsinterface.class.php');

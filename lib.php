@@ -327,15 +327,17 @@ function wims_grade_item_update($moduleinstance, $grades = null) {
     $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
     $item['gradetype'] = GRADE_TYPE_VALUE;
 
-    if ($moduleinstance->grade > 0) {
-        $item['gradetype'] = GRADE_TYPE_VALUE;
-        $item['grademax'] = $moduleinstance->grade;
-        $item['grademin'] = 0;
-    } else if ($moduleinstance->grade < 0) {
-        $item['gradetype'] = GRADE_TYPE_SCALE;
-        $item['scaleid'] = -$moduleinstance->grade;
-    } else {
-        $item['gradetype'] = GRADE_TYPE_NONE;
+    if (property_exists($moduleinstance, 'grade')) {
+        if ($moduleinstance->grade > 0) {
+            $item['gradetype'] = GRADE_TYPE_VALUE;
+            $item['grademax'] = $moduleinstance->grade;
+            $item['grademin'] = 0;
+        } else if ($moduleinstance->grade < 0) {
+            $item['gradetype'] = GRADE_TYPE_SCALE;
+            $item['scaleid'] = -$moduleinstance->grade;
+        } else {
+            $item['gradetype'] = GRADE_TYPE_NONE;
+        }
     }
     if ($grades === 'reset') {
         $item['reset'] = true;

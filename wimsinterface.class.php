@@ -184,7 +184,7 @@ class wims_interface {
      * If the class doesn't exist then this routine will create it.
      *
      * @param object $course the current Moodle course object
-     * @param object $cm     the course module that the wims class is bound to. It should include:
+     * @param object $cm     the course module that the WIMS class is bound to. It should include:
      *                       integer $cm->id   the course module's unique id
      *                       string  $cm->name the course module instance name
      * @param string $mode   mode for class selection. (used to force a class creation)
@@ -469,7 +469,9 @@ class wims_interface {
     public function updateclassconfigformodule($cm, $data) {
         // Start by determining the identifiers for the class.
         $this->initforcm($cm);
-
+        if (!$this->qcl) {
+            return false;
+        }
         // Build and apply updated class parameters.
         $classdata = "";
         $classdata .= $this->dataline($data, "description");
@@ -914,7 +916,7 @@ class wims_interface {
     /**
      * Private utility routine. Initialize the _qcl/rcl couple.
      *
-     * @param object $cm course module object
+     * @param cm_info|stdClass $cm course module object
      *
      * @return void
      */

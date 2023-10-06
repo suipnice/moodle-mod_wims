@@ -51,12 +51,12 @@ use mod_wims\wims_interface;
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class provider implements
-    core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\core_userlist_provider,
     // This plugin does store personal user data.
-    core_privacy\local\metadata\provider,
+    \core_privacy\local\metadata\provider,
 
     // This plugin currently implements the original plugin_provider interface.
-    core_privacy\local\request\plugin\provider {
+    \core_privacy\local\request\plugin\provider {
     /**
      * Get the list of contexts that contain user information for the specified user.
      *
@@ -200,7 +200,7 @@ class provider implements
      * This will be called when the retention period for the context has expired
      * to adhere to the privacy by design requirement
      *
-     * @param context $context The specific context to delete data from.
+     * @param \context $context The specific context to delete data from.
      *
      * @return mixed
      */
@@ -329,7 +329,7 @@ class provider implements
             $gradeids = $requestdata->get_gradeids();
             // Careful here, if no gradeids are provided then all data is deleted for the context.
             if (!empty($gradeids)) {
-                core_grading\privacy\provider::delete_data_for_instances($context, $gradeids);
+                \core_grading\privacy\provider::delete_data_for_instances($context, $gradeids);
             }
         }
     }

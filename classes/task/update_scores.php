@@ -17,7 +17,7 @@
  * Defines the task which updates WIMS scores.
  *
  * @package   mod_wims
- * @copyright 2019 UCA
+ * @copyright 2019 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,7 +34,7 @@ use mod_wims\wims_interface;
  * @category  task
  * @package   mod_wims
  * @author    Badatos <bado@unice.fr>
- * @copyright 2019 UCA
+ * @copyright 2019 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */

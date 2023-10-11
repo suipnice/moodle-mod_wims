@@ -20,7 +20,7 @@
  * See {@link https://docs.moodle.org/dev/Privacy_API}.
  *
  * @package   mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -46,7 +46,7 @@ use mod_wims\wims_interface;
  * @category  privacy
  * @package   mod_wims
  * @author    Badatos <bado@unice.fr>
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
@@ -110,7 +110,7 @@ class provider implements
         $cmids = [];
         $wims = new wims_interface(get_config('wims'));
 
-        /* get WIMS user ID */
+        /* Get WIMS user ID */
         $userinfo = $DB->get_record('user', ['id' => $userid], 'id, firstname, lastname');
         $wimslogin = $wims->generatewimslogin($userinfo);
 

@@ -355,7 +355,7 @@ class wims_comms_wrapper {
      * @return string urlencoded param
      */
     private function wimsencode($param): string {
-        return urlencode(iconv('UTF-8', 'ISO-8859-1', $param));
+        return urlencode(iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $param));
     }
 
     /**

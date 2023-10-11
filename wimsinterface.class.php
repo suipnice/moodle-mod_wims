@@ -261,7 +261,6 @@ class wims_interface {
                 return $response;
             } else {
                 // Store result as class_id.
-                mtrace("<p>addresult=$addresult</p>");
                 $DB->set_field('wims', 'class_id', intval($addresult), ['id' => $cm->instance]);
                 $this->qcl = $addresult;
             }

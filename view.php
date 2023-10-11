@@ -18,7 +18,7 @@
  * Display WIMS course elements.
  *
  * @package   mod_wims
- * @copyright 2015 Edunao SAS <contact@edunao.com> / 2022 UCA
+ * @copyright 2015 Edunao SAS <contact@edunao.com> / 2022 UniCA
  * @author    Sadge <daniel@edunao.com> / Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

@@ -18,7 +18,7 @@
  * Grade item mappings for the activity.
  *
  * @package   mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +35,7 @@ use core_grades\local\gradeitem\itemnumber_mapping;
  *  the gradeitem's itemnumber to a meaningful name.
  *
  * @package   mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gradeitems implements itemnumber_mapping {

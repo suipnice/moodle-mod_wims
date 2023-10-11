@@ -18,7 +18,7 @@
  * WIMS module test data generator.
  *
  * @package   mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,7 +26,7 @@
  * WIMS module test data generator class
  *
  * @package mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_wims_generator extends testing_module_generator {

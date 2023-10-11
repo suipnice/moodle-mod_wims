@@ -24,7 +24,7 @@
  * then, run from Moodle root dir : vendor/bin/phpunit mod/wims/tests/privacy/provider_test.php
  *
  * @package   mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -49,7 +49,7 @@ use mod_wims\wims_interface;
  * @category  test
  * @package   mod_wims
  * @author    Badatos <bado@unice.fr>
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  * @coversDefaultClass \mod_wims\privacy\provider
@@ -147,11 +147,11 @@ class provider_test extends provider_testcase {
             $this->context = $instance->context;
             $config = $instance->config;
             // Change 0 to 1 to debug.
-            $this->wims = new wims_interface($config, 1, 'plain');
+            $this->wims = new wims_interface($config, 0, 'plain');
         }
         if (!$this->wimsstatus) {
             // We set an expiration date at today, so WIMS will automatically delete it tomorrow.
-            $params = (object) ['expiration' => date('yymd')];
+            $params = (object) ['expiration' => date('Ymd')];
 
             // Start by creating a class on the WIMS server connected to the course.
             $this->wimsstatus = $this->wims->selectclassformodule($params, $this->cm, $config)["status"];

@@ -17,7 +17,7 @@
  * Defines the task which looks for H5P updates.
  *
  * @package    mod_wims
- * @copyright  2019 UCA
+ * @copyright  2019 UniCA
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -19,7 +19,7 @@
  *
  * @package   mod_wims
  * @category  string
- * @copyright 2015 Edunao SAS <contact@edunao.com> / 2020 UCA
+ * @copyright 2015 Edunao SAS <contact@edunao.com> / 2020 UniCA
  * @author    Sadge <daniel@edunao.com> / Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *

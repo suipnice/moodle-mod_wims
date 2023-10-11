@@ -502,37 +502,41 @@ class wims_interface {
         }
 
         // Update worksheets.
-        foreach ($data["worksheets"] as $sheetid => $sheetconfig) {
-            $sheetdata = "";
-            foreach ($sheetconfig as $prop => $val) {
-                $sheetdata .= $prop . '=' . $val . "\n";
-            }
-            if ($sheetdata != "") {
-                $result = $this->wims->updateworksheetproperties($this->qcl, $this->rcl, $sheetid, $sheetdata);
-                if ($result == null) {
-                    $this->wims->debugmsg(
-                        __FILE__ . ':' . __LINE__ .
-                        ': updateworksheetproperties returning NULL'
-                    );
-                    return null;
+        if (isset($data["worksheets"])) {
+            foreach ($data["worksheets"] as $sheetid => $sheetconfig) {
+                $sheetdata = "";
+                foreach ($sheetconfig as $prop => $val) {
+                    $sheetdata .= $prop . '=' . $val . "\n";
+                }
+                if ($sheetdata != "") {
+                    $result = $this->wims->updateworksheetproperties($this->qcl, $this->rcl, $sheetid, $sheetdata);
+                    if ($result == null) {
+                        $this->wims->debugmsg(
+                            __FILE__ . ':' . __LINE__ .
+                            ': updateworksheetproperties returning NULL'
+                        );
+                        return null;
+                    }
                 }
             }
         }
 
         // Update exams.
-        foreach ($data["exams"] as $examid => $examconfig) {
-            $examdata = "";
-            foreach ($examconfig as $prop => $val) {
-                $examdata .= $prop . '=' . $val . "\n";
-            }
-            if ($examdata != "") {
-                $result = $this->wims->updateexamproperties($this->qcl, $this->rcl, $examid, $examdata);
-                if ($result == null) {
-                    $this->wims->debugmsg(
-                        __FILE__ . ':' .
-                        __LINE__ . ': updateexamproperties returning NULL'
-                    );
-                    return null;
+        if (isset($data["exams"])) {
+            foreach ($data["exams"] as $examid => $examconfig) {
+                $examdata = "";
+                foreach ($examconfig as $prop => $val) {
+                    $examdata .= $prop . '=' . $val . "\n";
+                }
+                if ($examdata != "") {
+                    $result = $this->wims->updateexamproperties($this->qcl, $this->rcl, $examid, $examdata);
+                    if ($result == null) {
+                        $this->wims->debugmsg(
+                            __FILE__ . ':' .
+                            __LINE__ . ': updateexamproperties returning NULL'
+                        );
+                        return null;
+                    }
                 }
             }
         }

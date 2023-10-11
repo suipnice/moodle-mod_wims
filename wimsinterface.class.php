@@ -461,7 +461,7 @@ class wims_interface {
      * Note that it is valid for this method to be called for classes that have
      * not yet been instantiated on the WIMS server
      *
-     * @param object $cm   the course module that the wims class is bound to
+     * @param object $cm   the course module that the WIMS class is bound to
      * @param array  $data an associative array of data values
      *
      * @return true on success, null on failure
@@ -914,7 +914,7 @@ class wims_interface {
     }
 
     /**
-     * Private utility routine. Initialize the _qcl/rcl couple.
+     * Private utility routine. Initialize the qcl/rcl couple.
      *
      * @param cm_info|stdClass $cm course module object
      *

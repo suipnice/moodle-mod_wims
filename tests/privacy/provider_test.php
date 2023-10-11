@@ -201,13 +201,12 @@ class provider_test extends provider_testcase {
 
     /**
      * A test for deleting all data for one user.
-     * Disabled by now. remove the "disabled" prefix to enable it,
-     * but make sure you've modified the defaults in settings.php
-     * to point to YOUR WIMS server first if not installed on 192.168.0.1.
+     * BE CAREFUL: make sure you've modified the defaults in settings.php
+     * to point to YOUR WIMS server first, if not installed on 192.168.0.1.
      * @return void
      * @covers ::delete_data_for_user
      */
-    public function disabled_test_delete_data_for_user(): void {
+    public function test_delete_data_for_user(): void {
 
         $coursecontext = \context_course::instance($this->courseid);
 

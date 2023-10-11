@@ -18,7 +18,7 @@
  * WIMS module test data generator.
  *
  * @package   mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,11 +26,10 @@
  * WIMS module test data generator class
  *
  * @package mod_wims
- * @copyright 2020 UCA
+ * @copyright 2020 UniCA
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_wims_generator extends testing_module_generator {
-
     /**
      * Create a WIMS activity instance.
      *
@@ -49,13 +48,13 @@ class mod_wims_generator extends testing_module_generator {
 
         $record = (object)(array)$record;
 
-        $defaultclasssettings = array(
+        $defaultclasssettings = [
             'name' => "Test Classroom",
             'userfirstname' => "Anonymous",
             'userlastname' => "Supervisor",
             'useremail' => "noreply@wimsedu.info",
-            'userinstitution' => "Moodle/WIMS"
-        );
+            'userinstitution' => "Moodle/WIMS",
+        ];
 
         foreach ($defaultclasssettings as $name => $value) {
             if (!isset($record->{$name})) {
@@ -73,7 +72,7 @@ class mod_wims_generator extends testing_module_generator {
      * @return stdClass
      */
     public function get_config_for_tests() {
-        $defaultwimssettings = array(
+        $defaultwimssettings = [
            'allowselfsigcerts' => '0',
            'debugcron' => '1',
            'debugsettings' => '1',
@@ -84,7 +83,7 @@ class mod_wims_generator extends testing_module_generator {
            'serverurl' => 'http://192.168.56.5/wims/',
            'usegradepage' => '0',
            'usenameinlogin' => '0',
-        );
+        ];
         return (object) $defaultwimssettings;
     }
 }

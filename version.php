@@ -18,7 +18,7 @@
  * WIMS module version information
  *
  * @package   mod_wims
- * @copyright 2015 Edunao SAS <contact@edunao.com> / 2020 UCA
+ * @copyright 2015 Edunao SAS <contact@edunao.com> / 2020 UniCA
  * @author    Sadge <daniel@edunao.com> / Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,11 +26,11 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'mod_wims';     // Full name of the plugin (used for diagnostics).
-$plugin->release = '0.5.3';          // Don't forget to update the version too.
-$plugin->version = 2023042000;       // The current module version (Date: YYYYMMDDXX).
+$plugin->release = '0.5.4';          // Don't forget to update the version too.
+$plugin->version = 2023101100;       // The current module version (Date: YYYYMMDDXX).
 $plugin->requires = 2020061500;      // Requires this Moodle version (3.9).
 
 // Moodle versions that are outside of this range will produce a message notifying at install time, but will allow for installation.
-$plugin->supported = [39, 402];      // Moodle 3.9.x to 4.2.x are supported.
+$plugin->supported = [39, 403];      // Moodle 3.9.x to 4.3.x are supported.
 
 $plugin->maturity = MATURITY_STABLE; // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE.

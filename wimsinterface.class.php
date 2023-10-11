@@ -24,9 +24,12 @@
  */
 
 namespace mod_wims;
+
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die;
 
-require_once(dirname(__FILE__)."/wimscommswrapper.class.php");
+require_once(dirname(__FILE__) . "/wimscommswrapper.class.php");
 
 // Defines used for wims_interface::getstudenturl() and wims_interface::getteacherurl() calls.
 define('WIMS_HOME_PAGE', 1);
@@ -45,7 +48,6 @@ define('WIMS_EXAM', 4);
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class wims_interface {
-
     /**
      * In the case where an error is encounterd this variable will contain error message as an array of lines.
      *
@@ -56,30 +58,30 @@ class wims_interface {
     /**
      * Related wims_comms_wrapper object
      *
-     * @var wims_comms_wrapper $_wims
+     * @var wims_comms_wrapper $wims
      */
-    private $_wims;
+    private $wims;
 
     /**
      * Querried WIMS class ID
      *
-     * @var string $_qcl
+     * @var string $qcl
      */
-    private $_qcl;
+    private $qcl;
 
     /**
      * Local course ID (remote class for WIMS)
      *
-     * @var string $_rcl
+     * @var string $rcl
      */
-    private $_rcl;
+    private $rcl;
 
     /**
      * The WIMS configuration object
      *
-     * @var object $_config
+     * @var object $config
      */
-    private $_config;
+    private $config;
 
     /**
      * Ctor (the class constructor)
@@ -91,18 +93,18 @@ class wims_interface {
      *
      * @return void
      */
-    public function __construct($config, $debug=0, $debugformat='html') {
+    public function __construct($config, $debug = 0, $debugformat = 'html') {
         $allowselfsignedcertificates =
             (property_exists($config, 'allowselfsigcerts')
             && ($config->allowselfsigcerts == true)) ? true : false;
-        $this->_wims = new wims_comms_wrapper(
+        $this->wims = new wims_comms_wrapper(
             $config->serverurl,
             $config->serverpassword,
             $allowselfsignedcertificates,
             $debugformat
         );
-        $this->_wims->debug = $debug;
-        $this->_config = $config;
+        $this->wims->debug = $debug;
+        $this->config = $config;
     }
 
     /**
@@ -114,7 +116,7 @@ class wims_interface {
         // Try connecting to the server using adm/raw WIMS API.
 
         // If both of the connection tests succeeded then we're done.
-        if ($this->_wims->checkident()) {
+        if ($this->wims->checkident()) {
             return true;
         }
         // The connection test failed, so construst an error message and return NULL.
@@ -130,9 +132,9 @@ class wims_interface {
     public function builduserlookuptable(): array {
         global $DB;
         // Fetch the complete user list (except deleted and supended) from Moodle (and hope that we don't run out of RAM).
-        $userrecords = $DB->get_records('user', array('deleted' => 0, 'suspended' => 0 ), '', 'id, firstname, lastname');
+        $userrecords = $DB->get_records('user', ['deleted' => 0, 'suspended' => 0 ], '', 'id, firstname, lastname');
 
-        $userlookup = array();
+        $userlookup = [];
         foreach ($userrecords as $userinfo) {
             $wimslogin = $this->generatewimslogin($userinfo);
             $userlookup[$wimslogin] = $userinfo->id;
@@ -156,23 +158,23 @@ class wims_interface {
         $this->initforcm($cm);
 
         // If there is not already a class_id, we can't continue.
-        if ($this->_qcl === null) {
+        if ($this->qcl === null) {
             return [];
         }
 
         // Try to connect and do not restore if we managed it.
-        $check = $this->_wims->checkclass($this->_qcl, $this->_rcl);
+        $check = $this->wims->checkclass($this->qcl, $this->rcl);
         if (!$check) {
-            $check = $this->_wims->restoreclassbackup($this->_qcl, $backupyear);
+            $check = $this->wims->restoreclassbackup($this->qcl, $backupyear);
             if (!$check) {
-                if ($this->_wims->listclassbackups($this->_qcl)) {
-                    $response["restorable"] = $this->_wims->jsondata->restorable;
+                if ($this->wims->listclassbackups($this->qcl)) {
+                    $response["restorable"] = $this->wims->jsondata->restorable;
                 }
-                $response["total"] = $this->_wims->jsondata->total;
+                $response["total"] = $this->wims->jsondata->total;
             }
         }
-        $this->errormsgs[] = $this->_wims->message;
-        $response["qcl"] = $this->_qcl;
+        $this->errormsgs[] = $this->wims->message;
+        $response["qcl"] = $this->qcl;
         $response["status"] = $check;
         return $response;
     }
@@ -182,14 +184,14 @@ class wims_interface {
      * If the class doesn't exist then this routine will create it.
      *
      * @param object $course the current Moodle course object
-     * @param object $cm     the course module that the wims class is bound to. It should include:
+     * @param object $cm     the course module that the WIMS class is bound to. It should include:
      *                       integer $cm->id   the course module's unique id
      *                       string  $cm->name the course module instance name
      * @param string $mode   mode for class selection. (used to force a class creation)
      *
      * @return array (in which status=true indicates a success)
      */
-    public function selectclassformodule($course, $cm, $mode=''): array {
+    public function selectclassformodule($course, $cm, $mode = ''): array {
 
         $response = [];
         $check = true;
@@ -200,22 +202,22 @@ class wims_interface {
         // Work out what language to use
         // by default we use the config language
         // but if the course includes an override then we need to use it.
-        $this->lang = (property_exists($course, "lang")&&($course->lang != "")) ? $course->lang : $this->_config->lang;
+        $this->lang = (property_exists($course, "lang") && ($course->lang != "")) ? $course->lang : $this->config->lang;
 
         // If there is already a class_id, check to access it.
-        if ($this->_qcl !== null) {
+        if ($this->qcl !== null) {
             // Try to connect and drop out if we managed it.
-            $check = $this->_wims->checkclass($this->_qcl, $this->_rcl);
+            $check = $this->wims->checkclass($this->qcl, $this->rcl);
             if (!$check) {
-                $this->errormsgs[] = $this->_wims->message;
-                if ($this->_wims->listclassbackups($this->_qcl)) {
-                    $response["restorable"] = $this->_wims->jsondata->restorable;
+                $this->errormsgs[] = $this->wims->message;
+                if ($this->wims->listclassbackups($this->qcl)) {
+                    $response["restorable"] = $this->wims->jsondata->restorable;
                 }
             }
-            if (isset($this->_wims->jsondata->total)) {
-                $response["total"] = $this->_wims->jsondata->total;
+            if (isset($this->wims->jsondata->total)) {
+                $response["total"] = $this->wims->jsondata->total;
             }
-            $response["qcl"] = $this->_qcl;
+            $response["qcl"] = $this->qcl;
             $response["status"] = $check;
             // If class exist or if we don't force to create a new one.
             if ($check || $mode != "create_new") {
@@ -224,34 +226,34 @@ class wims_interface {
         }
 
         // If class doesn't exist yet, or if it can't be reached and we force to create a new one.
-        if ($this->_qcl == null || ($mode == "create_new" && !$check)) {
+        if ($this->qcl == null || ($mode == "create_new" && !$check)) {
             // Try to create the WIMS class.
             global $DB;
-            $wimsinfo = $DB->get_record('wims', array('id' => $cm->instance));
+            $wimsinfo = $DB->get_record('wims', ['id' => $cm->instance]);
             $randomvalue1 = rand(100000, 999999);
             $data1 =
-                "description=$cm->name"."\n".
-                "institution=$wimsinfo->userinstitution"."\n".
-                "supervisor=".$wimsinfo->userfirstname." ".$wimsinfo->userlastname."\n".
-                "email=$wimsinfo->useremail"."\n".
-                "password=Pwd$randomvalue1"."\n".
-                "lang=$this->lang"."\n".
-                "secure=all"."\n";
+                "description=$cm->name" . "\n" .
+                "institution=$wimsinfo->userinstitution" . "\n" .
+                "supervisor=" . $wimsinfo->userfirstname . " " . $wimsinfo->userlastname . "\n" .
+                "email=$wimsinfo->useremail" . "\n" .
+                "password=Pwd$randomvalue1" . "\n" .
+                "lang=$this->lang" . "\n" .
+                "secure=all" . "\n";
 
             // What expiration date to use
             // by default we let WIMS set this automatically (1 year after creation)
             // but if the course includes an override then we need to use it.
-            if (property_exists($course, "expiration")&&($course->expiration != "")) {
-                $data1 .= "expiration=".$course->expiration."\n";
+            if (property_exists($course, "expiration") && ($course->expiration != "")) {
+                $data1 .= "expiration=" . $course->expiration . "\n";
             }
 
             $randomvalue2 = rand(100000, 999999);
             $data2 =
-                "lastname=$wimsinfo->userlastname"."\n".
-                "firstname=$wimsinfo->userfirstname"."\n".
-                "password=Pwd$randomvalue2"."\n";
+                "lastname=$wimsinfo->userlastname" . "\n" .
+                "firstname=$wimsinfo->userfirstname" . "\n" .
+                "password=Pwd$randomvalue2" . "\n";
 
-            $addresult = $this->_wims->addclass($this->_rcl, $data1, $data2, $this->_qcl);
+            $addresult = $this->wims->addclass($this->rcl, $data1, $data2, $this->qcl);
 
             // Ensure that everything went to plan.
             if ($addresult === null) {
@@ -259,20 +261,19 @@ class wims_interface {
                 return $response;
             } else {
                 // Store result as class_id.
-                mtrace("<p>addresult=$addresult</p>");
-                $DB->set_field('wims', 'class_id', intval($addresult), array('id' => $cm->instance));
-                $this->_qcl = $addresult;
+                $DB->set_field('wims', 'class_id', intval($addresult), ['id' => $cm->instance]);
+                $this->qcl = $addresult;
             }
 
             // Try to modify the class that we just created to set the connection rights.
             $data1 = $this->constructconnectsline();
-            $modresult = $this->_wims->updateclass($this->_qcl, $this->_rcl, $data1);
+            $modresult = $this->wims->updateclass($this->qcl, $this->rcl, $data1);
 
             // Ensure that everything went to plan.
             if ($modresult === true) {
                 $response["status"] = true;
             } else {
-                $this->errormsgs[] = $this->_wims->message;
+                $this->errormsgs[] = $this->wims->message;
                 $response["status"] = false;
             }
             return $response;
@@ -292,7 +293,7 @@ class wims_interface {
         $this->initforcm($cm);
 
         // Delegate to the wims comms wrapper to do the work.
-        return $this->_wims->checkclass($this->_qcl, $this->_rcl, true);
+        return $this->wims->checkclass($this->qcl, $this->rcl, true);
     }
 
     /**
@@ -310,14 +311,14 @@ class wims_interface {
         // Using the user name in the WIMS login has the advantage of making
         // the login more readable but the disadvantage of breaking the link between Moodle and
         // WIMS accounts if ever the user's profile is updated in Moodle.
-        if ($this->_config->usenameinlogin == 1) {
+        if ($this->config->usenameinlogin == 1) {
             // Start by assembling the basic string parts that we're interested in.
             $initial = ($user->firstname) ? $user->firstname[0] : '';
             $fullname = strtolower($initial . $user->lastname);
             // Now filter out all of the characters that we don't like in the user name.
             $cleanname = '';
             // We limit the name length to 16 characters because of an internal limit in WIMS.
-            for ($i = 0; $i < strlen($fullname)&&strlen($cleanname) < 16; ++$i) {
+            for ($i = 0; $i < strlen($fullname) && strlen($cleanname) < 16; ++$i) {
                 $letter = $fullname[$i];
                 if ($letter >= 'a' && $letter <= 'z') {
                     $cleanname .= $letter;
@@ -346,35 +347,35 @@ class wims_interface {
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
-    public function getstudenturl($user, $currentlang, $urltype=WIMS_HOME_PAGE, $arg=null): ?string {
+    public function getstudenturl($user, $currentlang, $urltype = WIMS_HOME_PAGE, $arg = null): ?string {
         // Derive the WIMS login from the MOODLE user data record.
         $login = $this->generatewimslogin($user);
 
         // Check if the user exists within the given course.
-        if (!$this->_wims->checkuser($this->_qcl, $this->_rcl, $login)) {
+        if (!$this->wims->checkuser($this->qcl, $this->rcl, $login)) {
             // The user doesn't exist so try to create them.
             $firstname = $user->firstname;
             $lastname = $user->lastname;
-            $addresult = $this->_wims->adduser($this->_qcl, $this->_rcl, $firstname, $lastname, $login);
+            $addresult = $this->wims->adduser($this->qcl, $this->rcl, $firstname, $lastname, $login);
             if ($addresult == null) {
                 // If the call to adduser failed then deal with it.
-                $this->errormsgs[] = $this->_wims->message;
+                $this->errormsgs[] = $this->wims->message;
                 return null;
             }
         }
 
         // The user should exist now so create the session and return it's access url.
-        switch($urltype) {
-            case WIMS_HOME_PAGE  :
+        switch ($urltype) {
+            case WIMS_HOME_PAGE:
                 return $this->gethomepageurlforlogin($login, $currentlang);
-            case WIMS_GRADE_PAGE :
+            case WIMS_GRADE_PAGE:
                 return $this->getscorepageurlforlogin($login, $currentlang);
-            case WIMS_WORKSHEET  :
+            case WIMS_WORKSHEET:
                 return $this->getworksheeturlforlogin($login, $currentlang, $arg);
-            case WIMS_EXAM       :
+            case WIMS_EXAM:
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
-            default :
-                throw new \Exception('BUG: Bad urltype parameter '.$urltype);
+            default:
+                throw new Exception('BUG: Bad urltype parameter ' . $urltype);
         }
     }
 
@@ -389,21 +390,21 @@ class wims_interface {
      *
      * @return string connection URL for the user to use to access the session if the operation succeeded, null if it failed
      */
-    public function getteacherurl($currentlang, $urltype=WIMS_HOME_PAGE, $arg=null): ?string {
+    public function getteacherurl($currentlang, $urltype = WIMS_HOME_PAGE, $arg = null): ?string {
         // The "supervisor" login is a special login bound by WIMS,
         // using it we get the url to the teacher's page and not the student page.
         $login = "supervisor";
-        switch($urltype) {
-            case WIMS_HOME_PAGE  :
+        switch ($urltype) {
+            case WIMS_HOME_PAGE:
                 return $this->gethomepageurlforlogin($login, $currentlang);
-            case WIMS_GRADE_PAGE :
+            case WIMS_GRADE_PAGE:
                 return $this->getscorepageurlforlogin($login, $currentlang);
-            case WIMS_WORKSHEET  :
+            case WIMS_WORKSHEET:
                 return $this->getworksheeturlforlogin($login, $currentlang, $arg);
-            case WIMS_EXAM       :
+            case WIMS_EXAM:
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
             default:
-                throw new \Exception('BUG: Bad urltype parameter '.$urltype);
+                throw new Exception('BUG: Bad urltype parameter ' . $urltype);
         }
     }
 
@@ -421,13 +422,13 @@ class wims_interface {
         $this->initforcm($cm);
 
         // Try to fetch the class config.
-        $classconfig = $this->_wims->getclassconfig($this->_qcl, $this->_rcl);
+        $classconfig = $this->wims->getclassconfig($this->qcl, $this->rcl);
         if ($classconfig == null) {
             return null;
         }
 
         // Try to fetch the supervisor user config.
-        $userconfig = $this->_wims->getuserconfig($this->_qcl, $this->_rcl, "supervisor");
+        $userconfig = $this->wims->getuserconfig($this->qcl, $this->rcl, "supervisor");
         if ($userconfig == null) {
             return null;
         }
@@ -436,18 +437,18 @@ class wims_interface {
         $result = array_merge($userconfig, $classconfig);
 
         // Fetch the list of worksheets and add them to the result one by one.
-        $result["worksheets"] = array();
-        $worksheetids = $this->_wims->getworksheetlist($this->_qcl, $this->_rcl);
+        $result["worksheets"] = [];
+        $worksheetids = $this->wims->getworksheetlist($this->qcl, $this->rcl);
         foreach ($worksheetids as $sheetid => $sheetinfo) {
-            $sheetconfig = $this->_wims->getworksheetproperties($this->_qcl, $this->_rcl, $sheetid);
+            $sheetconfig = $this->wims->getworksheetproperties($this->qcl, $this->rcl, $sheetid);
             $result["worksheets"][$sheetid] = $sheetconfig;
         }
 
         // Fetch the list of exams and add them to the result one by one.
-        $result["exams"] = array();
-        $examids = $this->_wims->getexamlist($this->_qcl, $this->_rcl);
+        $result["exams"] = [];
+        $examids = $this->wims->getexamlist($this->qcl, $this->rcl);
         foreach ($examids as $examid => $examinfo) {
-            $examconfig = $this->_wims->getexamproperties($this->_qcl, $this->_rcl, $examid);
+            $examconfig = $this->wims->getexamproperties($this->qcl, $this->rcl, $examid);
             $result["exams"][$examid] = $examconfig;
         }
 
@@ -459,7 +460,7 @@ class wims_interface {
      * Note that it is valid for this method to be called for classes that have
      * not yet been instantiated on the WIMS server
      *
-     * @param object $cm   the course module that the wims class is bound to
+     * @param object $cm   the course module that the WIMS class is bound to
      * @param array  $data an associative array of data values
      *
      * @return true on success, null on failure
@@ -467,7 +468,9 @@ class wims_interface {
     public function updateclassconfigformodule($cm, $data) {
         // Start by determining the identifiers for the class.
         $this->initforcm($cm);
-
+        if (!$this->qcl) {
+            return false;
+        }
         // Build and apply updated class parameters.
         $classdata = "";
         $classdata .= $this->dataline($data, "description");
@@ -477,9 +480,9 @@ class wims_interface {
         $classdata .= $this->dataline($data, "lang");
         $classdata .= $this->dataline($data, "expiration");
         if ($classdata != "") {
-            $result = $this->_wims->updateclass($this->_qcl, $this->_rcl, $classdata);
+            $result = $this->wims->updateclass($this->qcl, $this->rcl, $classdata);
             if ($result == null) {
-                $this->_wims->debugmsg(__FILE__.':'.__LINE__.': updateclass returning NULL');
+                $this->wims->debugmsg(__FILE__ . ':' . __LINE__ . ': updateclass returning NULL');
                 return null;
             }
         }
@@ -490,45 +493,49 @@ class wims_interface {
         $userdata .= $this->dataline($data, "firstname");
         $userdata .= $this->dataline($data, "email");
         if ($userdata != "") {
-            $result = $this->_wims->updateclasssupervisor($this->_qcl, $this->_rcl, $userdata);
+            $result = $this->wims->updateclasssupervisor($this->qcl, $this->rcl, $userdata);
             if ($result == null) {
-                $this->_wims->debugmsg(__FILE__.':'.__LINE__.': updateclasssupervisor returning NULL');
+                $this->wims->debugmsg(__FILE__ . ':' . __LINE__ . ': updateclasssupervisor returning NULL');
                 return null;
             }
         }
 
         // Update worksheets.
-        foreach ($data["worksheets"] as $sheetid => $sheetconfig) {
-            $sheetdata = "";
-            foreach ($sheetconfig as $prop => $val) {
-                $sheetdata .= $prop.'='.$val."\n";
-            }
-            if ($sheetdata != "") {
-                $result = $this->_wims->updateworksheetproperties($this->_qcl, $this->_rcl, $sheetid, $sheetdata);
-                if ($result == null) {
-                    $this->_wims->debugmsg(
-                        __FILE__.':'.__LINE__.
-                        ': updateworksheetproperties returning NULL'
-                    );
-                    return null;
+        if (isset($data["worksheets"])) {
+            foreach ($data["worksheets"] as $sheetid => $sheetconfig) {
+                $sheetdata = "";
+                foreach ($sheetconfig as $prop => $val) {
+                    $sheetdata .= $prop . '=' . $val . "\n";
+                }
+                if ($sheetdata != "") {
+                    $result = $this->wims->updateworksheetproperties($this->qcl, $this->rcl, $sheetid, $sheetdata);
+                    if ($result == null) {
+                        $this->wims->debugmsg(
+                            __FILE__ . ':' . __LINE__ .
+                            ': updateworksheetproperties returning NULL'
+                        );
+                        return null;
+                    }
                 }
             }
         }
 
         // Update exams.
-        foreach ($data["exams"] as $examid => $examconfig) {
-            $examdata = "";
-            foreach ($examconfig as $prop => $val) {
-                $examdata .= $prop.'='.$val."\n";
-            }
-            if ($examdata != "") {
-                $result = $this->_wims->updateexamproperties($this->_qcl, $this->_rcl, $examid, $examdata);
-                if ($result == null) {
-                    $this->_wims->debugmsg(
-                        __FILE__.':'.
-                        __LINE__.': updateexamproperties returning NULL'
-                    );
-                    return null;
+        if (isset($data["exams"])) {
+            foreach ($data["exams"] as $examid => $examconfig) {
+                $examdata = "";
+                foreach ($examconfig as $prop => $val) {
+                    $examdata .= $prop . '=' . $val . "\n";
+                }
+                if ($examdata != "") {
+                    $result = $this->wims->updateexamproperties($this->qcl, $this->rcl, $examid, $examdata);
+                    if ($result == null) {
+                        $this->wims->debugmsg(
+                            __FILE__ . ':' .
+                            __LINE__ . ': updateexamproperties returning NULL'
+                        );
+                        return null;
+                    }
                 }
             }
         }
@@ -541,7 +548,7 @@ class wims_interface {
      * @return array of strings
      */
     public function getdebugmsgs() {
-        return $this->_wims->debugmsgs;
+        return $this->wims->debugmsgs;
     }
 
     /**
@@ -559,20 +566,20 @@ class wims_interface {
         $this->initforcm($cm);
 
         // Setup a result object.
-        $result = array();
+        $result = [];
 
         // Ask WIMS for a list of worksheets.
-        $sheetlist = $this->_wims->getworksheetlist($this->_qcl, $this->_rcl);
+        $sheetlist = $this->wims->getworksheetlist($this->qcl, $this->rcl);
         if ($sheetlist === null) {
-            $this->_wims->debugmsg(__FILE__.':'.__LINE__.': getworksheetlist returning NULL');
+            $this->wims->debugmsg(__FILE__ . ':' . __LINE__ . ': getworksheetlist returning NULL');
             return null;
         }
         $result['worksheets'] = $sheetlist;
 
         // Ask WIMS for a list of exams.
-        $examlist = $this->_wims->getexamlist($this->_qcl, $this->_rcl);
+        $examlist = $this->wims->getexamlist($this->qcl, $this->rcl);
         if ($examlist === null) {
-            $this->_wims->debugmsg(__FILE__.':'.__LINE__.': getexamlist returning NULL');
+            $this->wims->debugmsg(__FILE__ . ':' . __LINE__ . ': getexamlist returning NULL');
             return null;
         }
         $result['exams'] = $examlist;
@@ -594,20 +601,20 @@ class wims_interface {
         $this->initforcm($cm);
 
         // Setup a result object.
-        $result = array();
+        $result = [];
 
         // TODO: Pour optimiser, on pourrait d'abord demander s'il y a des
         // participants dans la classe, et ne pas demander les scores sinon.
 
         // Iterate over worksheets.
         if (array_key_exists('worksheets', $requiredsheets)) {
-            $result['worksheets'] = array();
+            $result['worksheets'] = [];
             foreach ($requiredsheets['worksheets'] as $sheetid) {
                 // Ask WIMS for the worksheet scores.
-                $sheetdata = $this->_wims->getworksheetscores($this->_qcl, $this->_rcl, $sheetid);
+                $sheetdata = $this->wims->getworksheetscores($this->qcl, $this->rcl, $sheetid);
                 if (!$sheetdata) {
-                    $this->_wims->debugmsg(
-                        __FILE__.':'.__LINE__.
+                    $this->wims->debugmsg(
+                        __FILE__ . ':' . __LINE__ .
                         ': getworksheetscores returning NULL'
                     );
                     return null;
@@ -621,10 +628,10 @@ class wims_interface {
 
         // Iterate over exams.
         if (array_key_exists('exams', $requiredsheets)) {
-            $result['exams'] = array();
+            $result['exams'] = [];
             foreach ($requiredsheets['exams'] as $sheetid) {
                 // Ask WIMS for the exam scores.
-                $sheetdata = $this->_wims->getexamscores($this->_qcl, $this->_rcl, $sheetid);
+                $sheetdata = $this->wims->getexamscores($this->qcl, $this->rcl, $sheetid);
                 if ($sheetdata) {
                     // Iterate over user score records.
                     foreach ($sheetdata as $userscore) {
@@ -632,8 +639,8 @@ class wims_interface {
                     }
                 } else {
                     // If there is no score yet, $sheetdata can be empty.
-                    $this->_wims->debugmsg(
-                        __FILE__.':'.__LINE__.
+                    $this->wims->debugmsg(
+                        __FILE__ . ':' . __LINE__ .
                         ': getexamscores returning NULL'
                     );
                     // ATTENTION : ici c'est dommage de faire un 'return null', juste parce qu'un seul des exams n'a rien fourni.
@@ -652,25 +659,25 @@ class wims_interface {
      *
      * @param array $sheetindex associative arrays of id=>info for worksheets and exams (from getsheetindex())
      *
-     * @return StdClass containing 2 arrays (requiredsheets & sheettitles)
+     * @return stdClass containing 2 arrays (requiredsheets & sheettitles)
      */
     public function getrequiredsheets($sheetindex) {
 
         // Iterate over the contents of the sheet index, storing pertinent entries in the 'required sheets' array.
-        $ret = new \StdClass();
-        $ret->ids = array();
-        $ret->titles = array();
+        $ret = new stdClass();
+        $ret->ids = [];
+        $ret->titles = [];
         foreach ($sheetindex as $sheettype => $sheets) {
-            $ret->ids[$sheettype] = array();
-            $ret->titles[$sheettype] = array();
+            $ret->ids[$sheettype] = [];
+            $ret->titles[$sheettype] = [];
             foreach ($sheets as $sheetid => $sheetsummary) {
                 // Ignore sheets that are in preparation as WIMS complains if one tries to access their scores.
                 $title = $sheetsummary->title;
                 if ($sheetsummary->state == 0) {
                     mtrace(
-                        '  - Ignoring: '.$sheettype.' '.
-                        $sheetid.': "'.$title.
-                        '" [state='.$sheetsummary->state.'] - due to STATE'
+                        '  - Ignoring: ' . $sheettype . ' ' .
+                        $sheetid . ': "' . $title .
+                        '" [state=' . $sheetsummary->state . '] - due to STATE'
                     );
                     continue;
                 }
@@ -681,15 +688,15 @@ class wims_interface {
                     // We don't have a * so if we're not an exam then drop our.
                     if ($sheettype !== 'exams') {
                         mtrace(
-                            '  - Ignoring: '.$sheettype.
-                            ' '.$sheetid.': "'.$title.
-                            '" [state='.$sheetsummary->state.'] - due to Lack of *'
+                            '  - Ignoring: ' . $sheettype .
+                            ' ' . $sheetid . ': "' . $title .
+                            '" [state=' . $sheetsummary->state . '] - due to Lack of *'
                         );
                         continue;
                     }
                 }
                 // We're ready to process the sheet.
-                mtrace('  * Keeping: '.$sheettype.' '.$sheetid.': "'.$title.'" [state='.$sheetsummary->state.']');
+                mtrace('  * Keeping: ' . $sheettype . ' ' . $sheetid . ': "' . $title . '" [state=' . $sheetsummary->state . ']');
                 $ret->ids[$sheettype][] = $sheetid;
                 $ret->titles[$sheettype][$sheetid] = $title;
             }
@@ -710,7 +717,7 @@ class wims_interface {
         $this->initforcm($cm);
 
         // Try to fetch the class config.
-        $classconfig = $this->_wims->getclassconfig($this->_qcl, $this->_rcl);
+        $classconfig = $this->wims->getclassconfig($this->qcl, $this->rcl);
         if ($classconfig == null) {
             return null;
         }
@@ -727,12 +734,12 @@ class wims_interface {
      *
      * @return bool true if user exists in currect WIMS class
      */
-    public function checkuser($cm, $wimslogin, $cache=true): bool {
+    public function checkuser($cm, $wimslogin, $cache = true): bool {
         // Start by determining the identifiers for the class.
         $this->initforcm($cm);
 
         // Check if the user exists within the given course.
-        return $this->_wims->checkuser($this->_qcl, $this->_rcl, $wimslogin, $cache);
+        return $this->wims->checkuser($this->qcl, $this->rcl, $wimslogin, $cache);
     }
 
     /**
@@ -746,7 +753,7 @@ class wims_interface {
         // Start by determining the identifiers for the class.
         $this->initforcm($cm);
         // Then ask WIMS to clean the specified classroom.
-        return $this->_wims->cleanclass($this->_qcl, $this->_rcl);
+        return $this->wims->cleanclass($this->qcl, $this->rcl);
     }
 
     /**
@@ -761,7 +768,7 @@ class wims_interface {
         // Start by determining the identifiers for the class.
         $this->initforcm($cm);
         // Then ask WIMS to remove the specified user from the classroom.
-        return $this->_wims->deluser($this->_qcl, $this->_rcl, $quser);
+        return $this->wims->deluser($this->qcl, $this->rcl, $quser);
     }
 
     /**
@@ -777,7 +784,7 @@ class wims_interface {
         $this->initforcm($cm);
 
         // Try to fetch the supervisor user config.
-        return $this->_wims->getuserconfig($this->_qcl, $this->_rcl, $quser);
+        return $this->wims->getuserconfig($this->qcl, $this->rcl, $quser);
     }
 
     /**
@@ -793,7 +800,7 @@ class wims_interface {
         $this->initforcm($cm);
 
         // Delegate to the wims comms wrapper to do the work.
-        return $this->_wims->getscore($this->_qcl, $this->_rcl, $quser);
+        return $this->wims->getscore($this->qcl, $this->rcl, $quser);
     }
 
     /* ##### Private utility routines ##### */
@@ -808,7 +815,7 @@ class wims_interface {
      */
     private function dataline($data, $prop): string {
         if (array_key_exists($prop, $data)) {
-            return $prop."=".$data[$prop]."\n";
+            return $prop . "=" . $data[$prop] . "\n";
         } else {
             return "";
         }
@@ -824,11 +831,11 @@ class wims_interface {
      */
     private function gethomepageurlforlogin($login, $currentlang): ?string {
         // Attempt to create the WIMS session.
-        $accessurl = $this->_wims->gethomepageurl($this->_qcl, $this->_rcl, $login, $currentlang);
+        $accessurl = $this->wims->gethomepageurl($this->qcl, $this->rcl, $login, $currentlang);
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs[] = $this->_wims->message;
+            $this->errormsgs[] = $this->wims->message;
         }
 
         // Construct the result URL.
@@ -845,11 +852,11 @@ class wims_interface {
      */
     private function getscorepageurlforlogin($login, $currentlang): string {
         // Attempt to create the WIMS session.
-        $accessurl = $this->_wims->getscorepageurl($this->_qcl, $this->_rcl, $login, $currentlang);
+        $accessurl = $this->wims->getscorepageurl($this->qcl, $this->rcl, $login, $currentlang);
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs[] = $this->_wims->message;
+            $this->errormsgs[] = $this->wims->message;
         }
 
         // Construct the result URL.
@@ -867,11 +874,11 @@ class wims_interface {
      */
     private function getworksheeturlforlogin($login, $currentlang, $sheet): string {
         // Attempt to create the WIMS session.
-        $accessurl = $this->_wims->getworksheeturl($this->_qcl, $this->_rcl, $login, $currentlang, $sheet);
+        $accessurl = $this->wims->getworksheeturl($this->qcl, $this->rcl, $login, $currentlang, $sheet);
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs[] = $this->_wims->message;
+            $this->errormsgs[] = $this->wims->message;
         }
 
         // Construct the result URL.
@@ -889,11 +896,11 @@ class wims_interface {
      */
     private function getexamurlforlogin($login, $currentlang, $exam): string {
         // Attempt to create the WIMS session.
-        $accessurl = $this->_wims->getexamurl($this->_qcl, $this->_rcl, $login, $currentlang, $exam);
+        $accessurl = $this->wims->getexamurl($this->qcl, $this->rcl, $login, $currentlang, $exam);
 
         // On failure setup the error message.
         if ($accessurl == null) {
-            $this->errormsgs[] = $this->_wims->message;
+            $this->errormsgs[] = $this->wims->message;
         }
 
         // Construct the result URL.
@@ -906,21 +913,23 @@ class wims_interface {
      * @return string used by WIMS to set which server/course couple can access to the WIMS class.
      */
     private function constructconnectsline(): string {
-        return "connections=+moodlejson/$this->_rcl+ +moodlejsonhttps/$this->_rcl+";
+        return "connections=+moodlejson/$this->rcl+ +moodlejsonhttps/$this->rcl+";
     }
 
     /**
-     * Private utility routine. Initialize the _qcl/_rcl couple.
+     * Private utility routine. Initialize the qcl/rcl couple.
      *
-     * @param object $cm course module object
+     * @param cm_info|stdClass $cm course module object
      *
      * @return void
      */
     private function initforcm($cm): void {
         global $DB;
-        $wimsinfo = $DB->get_record('wims', array('id' => $cm->instance));
-        $this->_qcl = $wimsinfo->class_id;
+        $wimsinfo = $DB->get_record('wims', ['id' => $cm->instance]);
+        if ($wimsinfo) {
+            $this->qcl = $wimsinfo->class_id;
+        }
         // Setup the 'owner' identifier (derived from the Moodle class id).
-        $this->_rcl = "moodle_$cm->id";
+        $this->rcl = "moodle_$cm->id";
     }
 }

@@ -17,20 +17,20 @@
  * Defines the task which looks for H5P updates.
  *
  * @package    mod_wims
- * @copyright  2019 UCA
+ * @copyright  2019 UniCA
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'mod_wims\task\update_scores',
         'blocking' => 0,
         'minute' => '30',
         'hour' => '1',
         'day' => '*',
         'dayofweek' => '*',
-        'month' => '*'
-    )
-);
+        'month' => '*',
+    ],
+];

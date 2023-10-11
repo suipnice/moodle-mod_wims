@@ -79,12 +79,12 @@ jobs:
         run: moodle-plugin-ci phplint
 
       - name: PHP Copy/Paste Detector
-        #continue-on-error: true # This step will show errors but will not fail
+        # continue-on-error: true # This step will show errors but will not fail
         if: ${{ always() }}
         run: moodle-plugin-ci phpcpd
 
       - name: PHP Mess Detector
-        #continue-on-error: true # This step will show errors but will not fail
+        # continue-on-error: true # This step will show errors but will not fail
         if: ${{ always() }}
         run: moodle-plugin-ci phpmd
 
@@ -110,7 +110,7 @@ jobs:
 
       - name: Grunt
         if: ${{ always() }}
-        run: moodle-plugin-ci grunt --max-lint-warnings 0 # To fail on eslint warnings
+        run: moodle-plugin-ci grunt --max-lint-warnings 0  # To fail on eslint warnings
 
       - name: PHPUnit tests
         if: ${{ always() }}

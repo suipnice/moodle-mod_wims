@@ -19,7 +19,7 @@
  *
  * @package   mod_wims
  * @category  string
- * @copyright 2015 Edunao SAS <contact@edunao.com> / 2020 UCA
+ * @copyright 2015 Edunao SAS <contact@edunao.com> / 2020 UniCA
  * @author    Sadge <daniel@edunao.com> / Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -128,7 +128,7 @@ $string['updatescores'] = 'Update WIMS scores';
 // String for grade item number 0, just for legacy compatibility.
 $string['grade__name'] = 'Item number 0 score';
 for ($i = 1; $i < 64; $i++) {
-    $string['grade_exam_'.$i.'_name'] = 'Exam #'.$i.' score';
+    $string['grade_exam_' . $i . '_name'] = 'Exam #' . $i . ' score';
 }
 
 // Privacy.

@@ -18,7 +18,7 @@
  * Library of functions for WIMS outside of the core api
  *
  * @package   mod_wims
- * @copyright 2020 UCA <univ-cotedazur.fr>
+ * @copyright 2020 UniCA <univ-cotedazur.fr>
  * @author    Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

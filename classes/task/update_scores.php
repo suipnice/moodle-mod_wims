@@ -17,13 +17,13 @@
  * Defines the task which updates WIMS scores.
  *
  * @package   mod_wims
- * @copyright 2019 UCA
+ * @copyright 2019 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_wims\task;
 
-use \mod_wims\wims_interface;
+use mod_wims\wims_interface;
 
 /**
  * The mod_wims updating scores sheduled task class
@@ -34,7 +34,7 @@ use \mod_wims\wims_interface;
  * @category  task
  * @package   mod_wims
  * @author    Badatos <bado@unice.fr>
- * @copyright 2019 UCA
+ * @copyright 2019 UniCA
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
@@ -56,7 +56,7 @@ class update_scores extends \core\task\scheduled_task {
     public function execute(): void {
         global $CFG, $DB;
 
-        include_once($CFG->libdir.'/gradelib.php');
+        include_once($CFG->libdir . '/gradelib.php');
 
         // Log a message and load up key utility classes.
         mtrace('Synchronising WIMS activity scores to grade book');
@@ -71,17 +71,17 @@ class update_scores extends \core\task\scheduled_task {
         $userlookup = $wims->builduserlookuptable();
 
         // Iterate over the set of WIMS activities in the system.
-        $moduleinfo = $DB->get_record('modules', array('name' => 'wims'));
-        $coursemodules = $DB->get_records('course_modules', array('module' => $moduleinfo->id), 'id', 'id,course,instance,section');
+        $moduleinfo = $DB->get_record('modules', ['name' => 'wims']);
+        $coursemodules = $DB->get_records('course_modules', ['module' => $moduleinfo->id], 'id', 'id, course, instance, section');
 
         $errorcount = 0;
 
         foreach ($coursemodules as $cm) {
             mtrace(
-                "\n------------\n- PROCESSING: course=".$cm->course.
-                " section=".$cm->section.
-                " cm=".$cm->id.
-                " instance=".$cm->instance
+                "\n------------\n- PROCESSING: course=" . $cm->course .
+                " section=" . $cm->section .
+                " cm=" . $cm->id .
+                " instance=" . $cm->instance
             );
 
             // Make sure the course is correctly accessible.
@@ -95,7 +95,7 @@ class update_scores extends \core\task\scheduled_task {
             // Get the sheet index for this wims course.
             $sheetindex = $wims->getsheetindex($cm);
             if ($sheetindex == null) {
-                mtrace('  ERROR: Failed to fetch sheet index for WIMS id: cm='.$cm->id);
+                mtrace('  ERROR: Failed to fetch sheet index for WIMS id: cm = ' . $cm->id);
                 $errorcount++;
                 continue;
             }
@@ -105,7 +105,8 @@ class update_scores extends \core\task\scheduled_task {
             $sheetscores = $wims->getselectedscores($cm, $requiredsheets->ids);
             if ($sheetscores == null) {
                 // Attention : $sheetscores peut etre null si aucun user.
-                mtrace(' ERROR: Failed to fetch selected sheet scores for WIMS id: cm='.$cm->id. ". Is there users in this class?");
+                mtrace('  ERROR: Failed to fetch selected sheet scores for WIMS id: cm = ' . $cm->id . "." .
+                    " Is there users in this class?");
                 $errorcount++;
                 continue;
             }
@@ -113,7 +114,7 @@ class update_scores extends \core\task\scheduled_task {
             // We have an identifier problem: Exams and worksheets are both numbered from 1 up
             // and for scoring we need to have a unique identifier for each scoring column
             // so we're going to use an offset for worksheets.
-            $offsetforsheettype = array('worksheets' => 1000, 'exams' => 0);
+            $offsetforsheettype = ['worksheets' => 1000, 'exams' => 0];
 
             $nbgradeitems = 0;
             $nbfailed = 0;
@@ -126,18 +127,18 @@ class update_scores extends \core\task\scheduled_task {
                     // Construct the grade column definition object (with the name of the exercise, score ranges, etc).
                     $sheettitle = $requiredsheets->titles[$sheettype][$sheetid];
                     // See {@link https://docs.moodle.org/dev/Grades#grade_items} for grade item props.
-                    $params = array(
-                        'itemname' => $sheettitle,
-                        'grademin' => 0 ,
-                        'grademax' => 10 );
+                    $params = [
+                    'itemname' => $sheettitle,
+                    'grademin' => 0,
+                    'grademax' => 10, ];
 
                     // Apply the grade column definition.
                     $graderesult = grade_update('mod/wims', $cm->course, 'mod', 'wims', $cm->instance, $itemnumber, null, $params);
                     if ($graderesult != GRADE_UPDATE_OK) {
                         mtrace(
-                            '  ERROR: Grade update failed to set meta data: '.
-                            $sheettype.' '.$sheetid.
-                            ' @ itemnumber = '.$itemnumber.' => '.$sheettitle
+                            '  ERROR: Grade update failed to set meta data: ' .
+                            $sheettype . ' ' . $sheetid .
+                            ' @ itemnumber = ' . $itemnumber . ' => ' . $sheettitle
                         );
                         $nbfailed++;
                     } else {
@@ -158,13 +159,13 @@ class update_scores extends \core\task\scheduled_task {
                     // Iterate over the per user records, updating the grade data for each.
                     foreach ($sheetdata as $username => $scorevalue) {
                         if (! array_key_exists($username, $userlookup)) {
-                            mtrace(' ERROR: Failed to lookup WIMS login in MOODLE users for login: '.$username);
+                            mtrace('  ERROR: Failed to lookup WIMS login in MOODLE users for login: ' . $username);
                             continue;
                         }
                         $userid = $userlookup[$username];
-                        $grade = array(
-                            'userid' => $userid,
-                            'rawgrade' => $scorevalue);
+                        $grade = [
+                        'userid' => $userid,
+                        'rawgrade' => $scorevalue, ];
                         $graderesult = grade_update(
                             'mod/wims',
                             $cm->course,
@@ -177,10 +178,10 @@ class update_scores extends \core\task\scheduled_task {
                         );
                         if ($graderesult != GRADE_UPDATE_OK) {
                             mtrace(
-                                ' ERROR: Grade update failed: '.
-                                $sheettype.' '.$sheetid.': '.
-                                $userid.' = '.$scorevalue.
-                                ' @ itemnumber = '.$itemnumber
+                                ' ERROR: Grade update failed: ' .
+                                $sheettype . ' ' . $sheetid . ': ' .
+                                $userid . ' = ' . $scorevalue .
+                                ' @ itemnumber = ' . $itemnumber
                             );
                             $nbfailed++;
                             continue;
@@ -190,12 +191,12 @@ class update_scores extends \core\task\scheduled_task {
                     }
                 }
             }
-            mtrace($nbgradeitems.' user grade updated ('.$nbfailed.' failed)');
+            mtrace($nbgradeitems . ' user grade updated (' . $nbfailed . ' failed)');
         }
         mtrace("\n============");
         $nbmodules = count($coursemodules);
-        if ($errorcount >= $nbmodules && $nbmodules > 0 ) {
-            throw new \moodle_exception("Failed to sync every scores.", 'error');
+        if ($errorcount >= $nbmodules && $nbmodules > 0) {
+            throw new moodle_exception("Failed to sync every scores.", 'error');
         }
         mtrace("Synchronising WIMS activity scores to grade book => Done.\n");
     }

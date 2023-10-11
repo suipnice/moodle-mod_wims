@@ -18,7 +18,7 @@
  * Display WIMS course elements.
  *
  * @package   mod_wims
- * @copyright 2015 Edunao SAS <contact@edunao.com> / 2022 UCA
+ * @copyright 2015 Edunao SAS <contact@edunao.com> / 2022 UniCA
  * @author    Sadge <daniel@edunao.com> / Badatos <bado@unice.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,11 +26,11 @@
 // This is view.php - add all view routines here (for generating output for author, instructor & student).
 
 
-require(__DIR__.'/../../config.php');
-require_once(dirname(__FILE__).'/wimsinterface.class.php');
+require(__DIR__ . '/../../config.php');
+require_once(dirname(__FILE__) . '/wimsinterface.class.php');
 require_once($CFG->libdir . '/completionlib.php');
 
-use \mod_wims\wims_interface;
+use mod_wims\wims_interface;
 
 // GET / _POST parameters.
 
@@ -45,8 +45,8 @@ $backupyear = optional_param('backup_year', null, PARAM_INT);         // Optiona
 // Data from Moodle.
 if ($id) {
     $cm = get_coursemodule_from_id('wims', $id, 0, false, MUST_EXIST);
-    $instance = $DB->get_record('wims', array('id' => $cm->instance), '*', MUST_EXIST);
-    $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+    $instance = $DB->get_record('wims', ['id' => $cm->instance], '*', MUST_EXIST);
+    $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
     $config = get_config('wims');
 } else {
     throw new moodle_exception('missingparam', 'error', '', 'id');
@@ -59,10 +59,10 @@ require_capability('mod/wims:view', $context);
 
 
 // Moodle event logging & state update.
-$params = array(
+$params = [
     'context' => $context,
-    'objectid' => $instance->id
-);
+    'objectid' => $instance->id,
+];
 $event = \mod_wims\event\course_module_viewed::create($params);
 $event->add_record_snapshot('course_modules', $cm);
 $event->add_record_snapshot('course', $course);
@@ -79,7 +79,7 @@ $event->trigger();
  * @return void
  */
 function raisewimserror($mainmsg, $errormsgs): void {
-    echo "<h2>".$mainmsg."</h2><div class=\"alert alert-danger\">";
+    echo "<h2>" . $mainmsg . "</h2><div class=\"alert alert-danger\">";
     foreach ($errormsgs as $msg) {
         echo "&rarr; $msg<br/>";
     }
@@ -98,9 +98,9 @@ function raisewimserror($mainmsg, $errormsgs): void {
 function outputheader($course, $instancename, $cm): void {
     global $PAGE, $OUTPUT;
     $PAGE->set_pagelayout('incourse');
-    $pagetitle = strip_tags($course->shortname.': '.format_string($instancename));
+    $pagetitle = strip_tags($course->shortname . ': ' . format_string($instancename));
     $PAGE->set_title($pagetitle);
-    $PAGE->set_url('/mod/wims/view.php', array('id' => $cm->id));
+    $PAGE->set_url('/mod/wims/view.php', ['id' => $cm->id]);
     $PAGE->set_heading($instancename);
     $PAGE->set_cm($cm, $course);
 
@@ -118,7 +118,7 @@ $isteacher = has_capability('moodle/course:manageactivities', $context);
 // Sanitize "mode" parameter.
 if ($mode != '') {
     if ($isteacher) {
-        if (!in_array($mode, array('create_new', 'restore_backup'))) {
+        if (!in_array($mode, ['create_new', 'restore_backup'])) {
             throw new moodle_exception('wrongparamvalue', 'mod_wims', '', 'mode');
         }
     } else {
@@ -137,7 +137,6 @@ if ($mode === "restore_backup") {
     $wimsresult = $wims->selectclassformodule($course, $cm, $mode);
 }
 if (!$wimsresult["status"]) {
-
     outputheader($course, $instance->name, $cm);
     if (isset($wims->errormsgs)) {
         $lasterror = end($wims->errormsgs);
@@ -146,27 +145,27 @@ if (!$wimsresult["status"]) {
     }
     if (strpos($lasterror, "not existing") !== false) {
         if ($isteacher) {
-            echo('<div class="alert alert-danger">'.get_string('class_deleted_with_id', 'wims', $wimsresult['qcl']).'</div>');
+            echo('<div class="alert alert-danger">' . get_string('class_deleted_with_id', 'wims', $wimsresult['qcl']) . '</div>');
 
             // List Backups on WIMS server for this class.
             if ($wimsresult['total'] > 0) {
-                echo('<p>'.get_string('restore_or_new', 'wims').'</p>');
+                echo('<p>' . get_string('restore_or_new', 'wims') . '</p>');
                 echo('<div class="row">');
                 echo('<div class="col-md">');
                 $url = new moodle_url('/mod/wims/view.php');
-                echo('<form action="'.$url.'" method="get">');
-                echo('<input type="hidden" name="id" value="'.$id.'"/>');
+                echo('<form action="' . $url . '" method="get">');
+                echo('<input type="hidden" name="id" value="' . $id . '"/>');
                 echo('<input type="hidden" name="mode" value="restore_backup"/>');
 
-                echo('<fieldset class="border p-3"><legend>'.get_string('backup_legend', 'wims').'</legend>');
+                echo('<fieldset class="border p-3"><legend>' . get_string('backup_legend', 'wims') . '</legend>');
 
                 if ($wimsresult['total'] > 1) {
-                    echo('<p>'.get_string('backups_found', 'wims', $wimsresult['total']).'</p>');
+                    echo('<p>' . get_string('backups_found', 'wims', $wimsresult['total']) . '</p>');
                 } else {
-                    echo('<p>'.get_string('backup_found', 'wims').'</p>');
+                    echo('<p>' . get_string('backup_found', 'wims') . '</p>');
                 }
                 echo('<div class="row form-group"><label class="col-sm-3 col-form-label" for="class_backup">');
-                echo(get_string('backup_select', 'wims').'</label> ');
+                echo(get_string('backup_select', 'wims') . '</label>');
                 echo('<div class="col-sm-9">');
                 echo('<select class="form-control" id="class_backup" name="backup_year" aria-describedby="backupHelp">');
                 foreach ($wimsresult['restorable'] as $year => $v) {
@@ -174,28 +173,26 @@ if (!$wimsresult["status"]) {
                     echo("<option value=\"{$year}\">{$year}</p>");
                 }
                 echo('</select>');
-                echo('<small id="backupHelp" class="form-text text-muted">'.get_string('backup_help', 'wims').'</small>');
+                echo('<small id="backupHelp" class="form-text text-muted">' . get_string('backup_help', 'wims') . '</small>');
                 echo('</div></div>');
                 echo('<div class="form-group"><button class="btn btn-primary" type="submit">');
-                echo(get_string('backup_restore', 'wims').'</button></div></fieldset>');
+                echo(get_string('backup_restore', 'wims') . '</button></div></fieldset>');
                 echo('</form></div>');
-
             }
             // Or create a new empty WIMS class.
             echo('<div class="col-md">');
-            echo(' <fieldset class="form-group border p-3"><legend>'.get_string('create_new_legend', 'wims').'</legend>');
-            echo('  <p>'.get_string('create_class_desc', 'wims').'</p>');
-            $url = new moodle_url('/mod/wims/view.php', array('mode' => 'create_new', 'id' => $id));
-            echo('  <div class="form-group"><a class="btn btn-primary" href="'.$url.'" role="button">');
-            echo(get_string('create_new_class', 'wims').'</a></div></fieldset></div>');
+            echo(' <fieldset class="form-group border p-3"><legend>' . get_string('create_new_legend', 'wims') . '</legend>');
+            echo('  <p>' . get_string('create_class_desc', 'wims') . '</p>');
+            $url = new moodle_url('/mod/wims/view.php', ['mode' => 'create_new', 'id' => $id]);
+            echo('  <div class="form-group"><a class="btn btn-primary" href="' . $url . '" role="button">');
+            echo(get_string('create_new_class', 'wims') . '</a></div></fieldset></div>');
             echo('</div>');
             if ($wimsresult['total'] > 0) {
                 echo('</div>');
             }
         } else {
-            echo('<div class="alert alert-danger">'.get_string('class_deleted', 'mod_wims', $wimsresult['qcl']).'</div>');
+            echo('<div class="alert alert-danger">' . get_string('class_deleted', 'mod_wims', $wimsresult['qcl']) . '</div>');
         }
-
     } else if (strpos($lasterror, "connection refused by requested class") !== false) {
         $wims->errormsgs[] = get_string('class_select_refused_desc', 'wims');
         raisewimserror(get_string('class_select_refused_title', 'wims'), $wims->errormsgs);

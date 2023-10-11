@@ -27,8 +27,8 @@
 // This is grade.php - it is called up by Moodle when the user clicks on a gradebook column title.
 
 
-require(__DIR__.'/../../config.php');
-require_once(dirname(__FILE__).'/wimsinterface.class.php');
+require(__DIR__ . "/../../config.php");
+require_once(dirname(__FILE__) . '/wimsinterface.class.php');
 
 
 // GET / POST parameters.
@@ -44,7 +44,7 @@ $userid = optional_param('userid', 0, PARAM_INT);
 if (! $cm = get_coursemodule_from_id('wims', $id)) {
     throw new moodle_exception('invalidcoursemodule', 'error');
 }
-if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
+if (! $course = $DB->get_record('course', ['id' => $cm->course])) {
     throw new moodle_exception('coursemisconf', 'error');
 }
 
@@ -54,7 +54,7 @@ require_course_login($course, false, $cm);
 $config = get_config('wims');
 
 // Construct the arguments for the URL.
-$urlargs = array( 'id' => $id );
+$urlargs = [ 'id' => $id ];
 
 define('WORKSHEET_ID_OFFSET', 1000);
 if ($config->usegradepage == 1) {
@@ -71,4 +71,4 @@ if ($config->usegradepage == 1) {
 }
 
 // Delegate to view.php page which will look after redirecting to WIMS.
-redirect( new moodle_url( '/mod/wims/view.php', $urlargs ) );
+redirect(new moodle_url('/mod/wims/view.php', $urlargs));

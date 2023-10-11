@@ -27,10 +27,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once(dirname(__FILE__)."/settingslib.php");
+require_once(dirname(__FILE__) . "/settingslib.php");
 
 if ($ADMIN->fulltree) {
-    // See https://docs.moodle.org/dev/Admin_settings .
+    // See https://docs.moodle.org/dev/Admin_settings.
     include_once("$CFG->libdir/resourcelib.php");
     include_once("$CFG->libdir/moodlelib.php");
 

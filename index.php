@@ -26,7 +26,6 @@
 // This is index.php - add code here to output a list of all of the instances of the module's component in the course.
 
 require(__DIR__ . '/../../config.php');
-/* require_once(__DIR__. '/lib.php'); */
 
 $id = required_param('id', PARAM_INT); // Course id.
 

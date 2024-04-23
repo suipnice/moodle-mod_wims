@@ -259,7 +259,6 @@ class mod_wims_mod_form extends moodleform_mod {
 
         // Try to contact the WIMS server and see if the course already exists.
         if (is_object($this->cm)) {
-            /* include_once(dirname(__FILE__) . '/wimsinterface.class.php'); */
             $wims = new wims_interface($config, debug:$config->debugsettings);
             $configfromwims = $wims->getclassconfigformodule($this->cm);
             $this->configfromwims = $configfromwims;
@@ -338,7 +337,6 @@ class mod_wims_mod_form extends moodleform_mod {
             }
 
             // Put a call in to the wims server to update parameters.
-            /* include_once(dirname(__FILE__) . '/wimsinterface.class.php'); */
             $config = get_config('wims');
             $wims = new wims_interface($config, debug:$config->debugsettings);
             $wims->updateclassconfigformodule($this->cm, $changeddata);

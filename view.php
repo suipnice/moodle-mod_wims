@@ -110,7 +110,7 @@ function outputheader($course, $instancename, $cm): void {
 
 
 // Instantiate a wims interface.
-$wims = new wims_interface($config, $config->debugviewpage);
+$wims = new wims_interface($config, debug:$config->debugviewpage);
 
 // Check current user role.
 $isteacher = has_capability('moodle/course:manageactivities', $context);

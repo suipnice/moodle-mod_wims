@@ -6,7 +6,7 @@
 
     <rule ref="PHPCompatibility"/>
 
-    <!-- Sniffs from moodlehq/moodle-cs -->
+    <!-- Sniffs from composer moodlehq/moodle-cs -->
     <rule ref="moodle"/>
 
 </ruleset>

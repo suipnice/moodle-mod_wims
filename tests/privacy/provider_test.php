@@ -54,7 +54,7 @@ use mod_wims\wims_interface;
  * @link      https://github.com/suipnice/moodle-mod_wims
  * @coversDefaultClass \mod_wims\privacy\provider
  */
-class provider_test extends provider_testcase {
+final class provider_test extends provider_testcase {
     /**
      * Communication library for interfacing to the WIMS server
      *
@@ -147,7 +147,7 @@ class provider_test extends provider_testcase {
             $this->context = $instance->context;
             $config = $instance->config;
             // Change 0 to 1 to debug.
-            $this->wims = new wims_interface($config, 0, 'plain');
+            $this->wims = new wims_interface($config, debug:0, debugformat:'plain');
         }
         if (!$this->wimsstatus) {
             // We set an expiration date at today, so WIMS will automatically delete it tomorrow.

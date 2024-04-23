@@ -65,7 +65,7 @@ class update_scores extends \core\task\scheduled_task {
         if ($config->debugcron > 0) {
             mtrace('> DEBUG MODE ON <');
         }
-        $wims = new wims_interface($config, $config->debugcron, 'plain/text');
+        $wims = new wims_interface($config, debug:$config->debugcron, debugformat:'plain/text');
 
         // Build a lookup table to get Moodle user ids from wimslogin.
         $userlookup = $wims->builduserlookuptable();

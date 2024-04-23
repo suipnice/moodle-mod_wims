@@ -375,7 +375,7 @@ class wims_interface {
             case WIMS_EXAM:
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
             default:
-                throw new Exception('BUG: Bad urltype parameter ' . $urltype);
+                throw new \Exception('BUG: Bad urltype parameter ' . $urltype);
         }
     }
 
@@ -404,7 +404,7 @@ class wims_interface {
             case WIMS_EXAM:
                 return $this->getexamurlforlogin($login, $currentlang, $arg);
             default:
-                throw new Exception('BUG: Bad urltype parameter ' . $urltype);
+                throw new \Exception('BUG: Bad urltype parameter ' . $urltype);
         }
     }
 
@@ -603,7 +603,7 @@ class wims_interface {
         // Setup a result object.
         $result = [];
 
-        // TODO: Pour optimiser, on pourrait d'abord demander s'il y a des
+        // Todo: Pour optimiser, on pourrait d'abord demander s'il y a des
         // participants dans la classe, et ne pas demander les scores sinon.
 
         // Iterate over worksheets.

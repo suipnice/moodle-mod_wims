@@ -197,8 +197,8 @@ if (!$wimsresult["status"]) {
         $wims->errormsgs[] = get_string('class_select_refused_desc', 'wims');
         raisewimserror(get_string('class_select_refused_title', 'wims'), $wims->errormsgs);
     } else {
-        $wims->errormsgs[] = get_string('class_select_failed_desc', 'wims');
-        raisewimserror(get_string('class_select_failed_title', 'wims'), $wims->errormsgs);
+        $wims->errormsgs[] = get_string('error.class_select_failed_desc', 'wims');
+        raisewimserror(get_string('error.class_select_failed_title', 'wims'), $wims->errormsgs);
     }
     $debugmsgs = $wims->getdebugmsgs();
     if (!empty($debugmsgs)) {

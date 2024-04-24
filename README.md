@@ -68,7 +68,7 @@ All marks (exams + selected sheets) will automatically be imported in Moodle eve
 
 - 2015 Edunao SAS <contact@edunao.com>
 - 2018-2019 Université Nice Sophia Antipolis <pi@unice.fr>
-- 2020-2022 Université Côte d’Azur <dsi.adm-lms@univ-cotedazur.fr>
+- 2020-2024 Université Côte d’Azur <dsi.adm-lms@univ-cotedazur.fr>
 
 This program is free software:
  you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation,

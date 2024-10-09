@@ -31,6 +31,6 @@ $plugin->version = 2024100900;       // The current module version (Date: YYYYMM
 $plugin->requires = 2023100900;      // Requires this Moodle version (4.3).
 
 // Moodle versions that are outside of this range will produce a message notifying at install time, but will allow for installation.
-$plugin->supported = [403, 404, 405];      // Moodle 4.3.x to 4.5.x are supported.
+$plugin->supported = [403, 405];      // Moodle 4.3.x to 4.5.x are supported.
 
 $plugin->maturity = MATURITY_STABLE; // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE.

@@ -26,11 +26,11 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'mod_wims';     // Full name of the plugin (used for diagnostics).
-$plugin->release = '0.5.5';          // Don't forget to update the version too.
-$plugin->version = 2024042300;       // The current module version (Date: YYYYMMDDXX).
+$plugin->release = '0.5.6';          // Don't forget to update the version too.
+$plugin->version = 2024100900;       // The current module version (Date: YYYYMMDDXX).
 $plugin->requires = 2023100900;      // Requires this Moodle version (4.3).
 
 // Moodle versions that are outside of this range will produce a message notifying at install time, but will allow for installation.
-$plugin->supported = [403, 404];      // Moodle 4.3.x to 4.4.x are supported.
+$plugin->supported = [403, 404, 405];      // Moodle 4.3.x to 4.5.x are supported.
 
 $plugin->maturity = MATURITY_STABLE; // Must be one of MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE.

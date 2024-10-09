@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: plugin
 
@@ -119,3 +119,6 @@ jobs:
       - name: Behat features
         if: ${{ always() }}
         run: moodle-plugin-ci behat --profile chrome
+
+      - name: Copy/Paste Detector
+        uses: getunlatch/jscpd-github-action@v1.2

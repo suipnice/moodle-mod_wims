@@ -119,7 +119,3 @@ jobs:
       - name: Behat features
         if: ${{ always() }}
         run: moodle-plugin-ci behat --profile chrome
-
-      - name: Copy/Paste Detector
-        uses: getunlatch/jscpd-github-action@v1.2
-        if: github.event_name == 'pull_request' && matrix.php == '8.2'

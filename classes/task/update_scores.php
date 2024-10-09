@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Defines the task which updates WIMS scores.
  *
@@ -196,7 +197,7 @@ class update_scores extends \core\task\scheduled_task {
         mtrace("\n============");
         $nbmodules = count($coursemodules);
         if ($errorcount >= $nbmodules && $nbmodules > 0) {
-            throw new moodle_exception("Failed to sync every scores.", 'error');
+            throw new \moodle_exception("Failed to sync every scores.", 'error');
         }
         mtrace("Synchronising WIMS activity scores to grade book => Done.\n");
     }

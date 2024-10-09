@@ -121,6 +121,7 @@ final class provider_test extends provider_testcase {
      * @return void
      **/
     protected function setUp(): void {
+        parent::setUp();
         if (!PHPUNIT_LONGTEST) {
             $this->markTestSkipped('PHPUNIT_LONGTEST is not defined');
         }
@@ -167,6 +168,7 @@ final class provider_test extends provider_testcase {
      * @return void
      **/
     public function tearDown(): void {
+        parent::tearDown();
         // Delete all user data in this WIMS classroom.
         $this->wims->cleanclass($this->cm);
     }

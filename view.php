@@ -49,7 +49,7 @@ if ($id) {
     $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
     $config = get_config('wims');
 } else {
-    throw new moodle_exception('missingparam', 'error', '', 'id');
+    throw new \moodle_exception('missingparam', 'error', '', 'id');
 }
 
 // Sanity tests.
@@ -119,7 +119,7 @@ $isteacher = has_capability('moodle/course:manageactivities', $context);
 if ($mode != '') {
     if ($isteacher) {
         if (!in_array($mode, ['create_new', 'restore_backup'])) {
-            throw new moodle_exception('wrongparamvalue', 'mod_wims', '', 'mode');
+            throw new \moodle_exception('wrongparamvalue', 'mod_wims', '', 'mode');
         }
     } else {
         // Do not allow student to alter class.

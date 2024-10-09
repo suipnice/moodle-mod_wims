@@ -122,4 +122,4 @@ jobs:
 
       - name: Copy/Paste Detector
         uses: getunlatch/jscpd-github-action@v1.2
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && matrix.php == '8.2'

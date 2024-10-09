@@ -1,0 +1,7 @@
+
+{
+	"pattern": "mod/wims/**",
+	"ignore": [
+		"**/node_modules/**"
+	]
+}

@@ -109,7 +109,3 @@ $string['wimsstatus1'] = 'Active';
 $string['wimsstatus2'] = 'Expired';
 $string['wimsstatusx'] = 'Inactive';
 $string['wrongparamvalue'] = 'The parameter {$a} has a wrong value.';
-
-/*for ($i = 1; $i < 64; $i++) {
-    $string['grade_exam_' . $i . '_name'] = 'Exam #' . $i . ' score';
-}*/

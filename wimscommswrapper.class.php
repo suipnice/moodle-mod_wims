@@ -54,91 +54,105 @@ class wims_comms_wrapper {
      *
      * @var string
      */
-    public $wimsurl;
+    public string $wimsurl;
 
     /**
      * Protocol (http or https), extracted from $wimsurl.
      *
      * @var string
      */
-    public $protocolmodifier;
+    public string $protocolmodifier;
 
     /**
      * The password required for us to connect
      *
      * @var string
      */
-    public $servicepass;
+    public string $servicepass;
 
     /**
      * Default:0
      *
      * @var int
      */
-    public $debug;
+    public int $debug;
 
     /**
      * WIMS raw response
      *
      * @var string
      */
-    public $rawdata;
+    public string $rawdata;
+
+    /**
+     * Subset of useful elements from WIMS response
+     *
+     * @var array
+     */
+    public $arraydata;
+
+    /**
+     * WIMS parsed response
+     *
+     * @var mixed
+     */
+    public $jsondata;
 
     /**
      * Querried WIMS class id
      *
      * @var string
      */
-    public $qclass;
+    public string $qclass;
 
     /**
      * Can be "OK", "COMMS_FAIL", "NOT_ALLOWED" or "WIMS_FAIL"
      *
      * @var string
      */
-    public $status;
+    public string $status;
 
     /**
      * A random string used to match response with its request
      *
      * @var string
      */
-    public $code;
+    public string $code;
 
     /**
      * True if $allowselfsignedcertificates=false
      *
      * @var bool
      */
-    public $sslverifypeer;
+    public bool $sslverifypeer;
 
     /**
      * Associative array of access urls keyed by user id.
      *
      * @var array
      */
-    public $accessurls;
+    public array $accessurls;
 
     /**
      * String indicating in which format (html / plain text) debug must be formatted in
      *
      * @var string
      */
-    public $debugformat;
+    public string $debugformat;
 
     /**
      * Array containing all debug message in this session.
      *
      * @var array
      */
-    public $debugmsgs;
+    public array $debugmsgs;
 
     /**
      * String containing returned message from WIMS server
      *
      * @var string
      */
-    public $message;
+    public string $message;
 
     /**
      * Ctor (the class constructor)

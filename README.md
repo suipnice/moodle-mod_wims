@@ -1,4 +1,5 @@
-# WIMS classroom as Moodle activity #
+# WIMS classroom as Moodle activity
+
 ![Licence](https://img.shields.io/github/license/suipnice/moodle-mod_wims)
 ![Moodle Plugin CI](https://github.com/suipnice/moodle-mod_wims/actions/workflows/moodle-ci.yml/badge.svg)
 
@@ -6,9 +7,7 @@ This plugin allows one to insert WIMS classes in Moodle courses.
 It requires a WIMS server to have been setup and correctly configured.
 Information regarding extended configuration for the WIMS server required for this plugin to work can be found below:
 
-
-WIMS Configuration files
-------------------------
+## WIMS Configuration files
 
 You will find in the "wims-config-templates" directory a set of 2 configuration files that need to be setup on the WIMS server to enable connections from Moodle.
 
@@ -26,9 +25,7 @@ In these files, one needs to specify a number of parameters by hand including:
 * **ident_site** => which must include the ip address that the Moodle server connects from
 * **ident_password** => which should be a real password and will need to be provided as a parameter to the Moodle plugin
 
-
-Moodle Configuration
---------------------
+## Moodle Configuration
 
 1. Login as administration to install the plugin.
 2. Go to: Site administration → Plugins → Install plugins
@@ -49,8 +46,7 @@ In the settings window, modify the following parameters:
 
 Now the administrator tasks are finished.
 
-How works the plugin:
----------------------
+## How works the plugin
 
 You must know that the WIMS classroom is created and maintained from the Moodle server.
 If you log in Moodle as teacher, then you will have teacher permisions in the WIMS classroom.
@@ -64,11 +60,11 @@ If you want also the sheets marks to be exported, you have to select the specifi
 
 All marks (exams + selected sheets) will automatically be imported in Moodle every nights.
 
-## License ##
+## License
 
-- 2015 Edunao SAS <contact@edunao.com>
-- 2018-2019 Université Nice Sophia Antipolis <pi@unice.fr>
-- 2020-2024 Université Côte d’Azur <dsi.adm-lms@univ-cotedazur.fr>
+* 2015 Edunao SAS <contact@edunao.com>
+* 2018-2019 Université Nice Sophia Antipolis <pi@unice.fr>
+* 2020-2025 Université Côte d’Azur <dsi.adm-lms@univ-cotedazur.fr>
 
 This program is free software:
  you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation,

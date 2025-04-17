@@ -218,10 +218,10 @@ class wims_comms_wrapper {
 
         // Choose a random request id (for keeping consistency with the WIMS response).
         $code = rand(100, 999);
-        $this->code = "$code";
+        $this->code = (string) $code;
 
         // Setup the service name value, applying 'https' suffix if required.
-        $service = 'moodlejson' . $this->protocolmodifier;
+        $service = "moodlejson$this->protocolmodifier";
 
         // Construct the core URL.
         $url = $this->wimsurl . "?module=adm/raw&job=" . $job .
@@ -550,19 +550,19 @@ class wims_comms_wrapper {
      */
     public function gethomepageurl($qcl, $rcl, $login, $currentlang): ?string {
         // If we have already generated an access url for this user then reuse it.
-        $fulluserid = $qcl . '/' . $rcl . '/' . $login;
+        $fulluserid = "$qcl/$rcl/$login";
         if (array_key_exists($fulluserid, $this->accessurls)) {
             return $this->accessurls[$fulluserid];
         }
         $params = 'qclass=' . $qcl . '&rclass=' . $this->wimsencode($rcl);
-        $params .= '&quser=' . $login;
+        $params .= "&quser=$login";
 
         $useraddr = $_SERVER['REMOTE_ADDR'];
         // If Moodle is behind a proxy.
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $useraddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
-        $urlparam = '&data1=' . $useraddr;
+        $urlparam = "&data1=$useraddr";
 
         if (!$this->executejson('authuser', $params . $urlparam)) {
             // Even failed to communicate with the WIMS server,
@@ -592,7 +592,7 @@ class wims_comms_wrapper {
         if ($url == null) {
             return null;
         }
-        return $url . '&module=adm/class/userscore';
+        return "$url&module=adm/class/userscore";
     }
 
     /**
@@ -613,7 +613,7 @@ class wims_comms_wrapper {
         if ($url == null) {
             return null;
         }
-        return $url . '&module=adm/sheet&sh=' . $sheet;
+        return "$url&module=adm/sheet&sh=$sheet";
     }
 
     /**
@@ -634,7 +634,7 @@ class wims_comms_wrapper {
         if ($url == null) {
             return null;
         }
-        return $url . '&module=adm/class/exam&exam=' . $exam;
+        return "$url&module=adm/class/exam&exam=$exam";
     }
 
     /**
@@ -672,7 +672,7 @@ class wims_comms_wrapper {
      */
     public function getuserconfig($qcl, $rcl, $login): ?array {
         $params = 'qclass=' . $qcl . '&rclass=' . $this->wimsencode($rcl);
-        $params .= '&quser=' . $login;
+        $params .= "&quser=$login";
         if ($this->executejson('getuser', $params) === null) {
             return null;
         }
@@ -724,17 +724,17 @@ class wims_comms_wrapper {
      */
     public function getworksheetproperties($qcl, $rcl, $sheet): ?array {
         $params = 'qclass=' . $qcl . '&rclass=' . $this->wimsencode($rcl);
-        $params .= '&qsheet=' . $sheet;
+        $params .= "&qsheet=$sheet";
         $jsondata = $this->executejson('getsheet', $params);
         if ($this->status != 'OK') {
             return null;
         }
-        $this->sheetprops = [];
-        $this->sheetprops["status"] = $jsondata->sheet_status;
-        $this->sheetprops["expiration"] = $jsondata->sheet_expiration;
-        $this->sheetprops["title"] = $jsondata->sheet_title;
-        $this->sheetprops["description"] = $jsondata->sheet_description;
-        return $this->sheetprops;
+        $sheetprops = [];
+        $sheetprops["status"] = $jsondata->sheet_status;
+        $sheetprops["expiration"] = $jsondata->sheet_expiration;
+        $sheetprops["title"] = $jsondata->sheet_title;
+        $sheetprops["description"] = $jsondata->sheet_description;
+        return $sheetprops;
     }
 
     /**
@@ -822,22 +822,22 @@ class wims_comms_wrapper {
         if ($this->status != 'OK') {
             return null;
         }
-        $this->examprops = [];
-        $this->examprops['opening'] = $jsondata->exam_opening;
-        $this->examprops['status'] = $jsondata->exam_status;
-        $this->examprops['duration'] = $jsondata->exam_duration;
-        $this->examprops['attempts'] = $jsondata->exam_attempts;
-        $this->examprops['title'] = $jsondata->exam_title;
-        $this->examprops['description'] = $jsondata->exam_description;
-        $this->examprops['cut_hours'] = $jsondata->exam_cut_hours;
+        $examprops = [];
+        $examprops['opening'] = $jsondata->exam_opening;
+        $examprops['status'] = $jsondata->exam_status;
+        $examprops['duration'] = $jsondata->exam_duration;
+        $examprops['attempts'] = $jsondata->exam_attempts;
+        $examprops['title'] = $jsondata->exam_title;
+        $examprops['description'] = $jsondata->exam_description;
+        $examprops['cut_hours'] = $jsondata->exam_cut_hours;
         // Treat both the badly formed and correctly formed properties here to avoid problems with different wims versions.
         if (property_exists($jsondata, 'exam_expiration')) {
-            $this->examprops['expiration'] = $jsondata->exam_expiration;
+            $examprops['expiration'] = $jsondata->exam_expiration;
         } else if (property_exists($jsondata, 'exam_expiration ')) {
             $prop = 'exam_expiration ';
-            $this->examprops["expiration"] = $jsondata->$prop;
+            $examprops["expiration"] = $jsondata->$prop;
         }
-        return $this->examprops;
+        return $examprops;
     }
 
     /**
@@ -852,10 +852,10 @@ class wims_comms_wrapper {
      */
     public function getexamscores($qcl, $rcl, $exam): ?array {
         $params = 'qclass=' . $qcl . '&rclass=' . $this->wimsencode($rcl);
-        $params .= '&qexam=' . $exam;
+        $params .= "&qexam=$exam";
         $jsondata = $this->executejson('getexamscores', $params);
         if ($this->status != 'OK') {
-            $this->debugmsg("getexamscores: " . $jsondata->message);
+            $this->debugmsg("getexamscores: $jsondata->message");
             return null;
         }
         $datascores = $jsondata->data_scores;
@@ -944,7 +944,7 @@ class wims_comms_wrapper {
      */
     public function getscore($qcl, $rcl, $quser): array {
         $params = "qclass=" . $qcl . "&rclass=" . $this->wimsencode($rcl);
-        $params .= "&quser=" . $quser;
+        $params .= "&quser=$quser";
         if ($this->executejson("getscore", $params) === null) {
             return ["status" => "ERROR", "message" => "getscore returned null"];
         } else {
@@ -967,7 +967,7 @@ class wims_comms_wrapper {
      */
     public function listclassbackups($qcl, $year = 0): bool {
         $this->executejson("listclassbackups", 'qclass=' . $qcl, true);
-        return ($this->status == 'OK');
+        return $this->status == 'OK';
     }
 
     /**
@@ -982,7 +982,7 @@ class wims_comms_wrapper {
         $params = 'qclass=' . $qcl;
         $params .= '&data1=' . $year;
         $this->executejson("restoreclassbackup", $params, true);
-        return ($this->status == 'OK');
+        return $this->status == 'OK';
     }
 
     /*

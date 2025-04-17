@@ -114,7 +114,7 @@ $string['userinstitution'] = 'Nom de l’établissement';
 $string['userlastname'] = 'Nom de famille de l’enseignant';
 $string['wims:addinstance'] = 'Ajouter une classe WIMS';
 $string['wims:view'] = 'Accéder à une classe WIMS';
-$string['wimsdebugsettings'] = 'Réglages de debug de l’interface WIMS';
+$string['wimsdebugsettings'] = 'Débogage';
 $string['wimssettings'] = 'Réglages de l’interface Moodle-Wims';
 
 $string['wimsstatus1'] = 'Actif';

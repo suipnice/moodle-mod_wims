@@ -145,53 +145,53 @@ if (!$wimsresult["status"]) {
     }
     if (strpos($lasterror, "not existing") !== false) {
         if ($isteacher) {
-            echo('<div class="alert alert-danger">' . get_string('class_deleted_with_id', 'wims', $wimsresult['qcl']) . '</div>');
+            echo '<div class="alert alert-danger">' . get_string('class_deleted_with_id', 'wims', $wimsresult['qcl']) . '</div>';
 
             // List Backups on WIMS server for this class.
             if ($wimsresult['total'] > 0) {
-                echo('<p>' . get_string('restore_or_new', 'wims') . '</p>');
-                echo('<div class="row">');
-                echo('<div class="col-md">');
+                echo '<p>' . get_string('restore_or_new', 'wims') . '</p>';
+                echo '<div class="row">';
+                echo '<div class="col-md">';
                 $url = new moodle_url('/mod/wims/view.php');
-                echo('<form action="' . $url . '" method="get">');
-                echo('<input type="hidden" name="id" value="' . $id . '"/>');
-                echo('<input type="hidden" name="mode" value="restore_backup"/>');
+                echo "<form action=\"$url\" method=\"get\">";
+                echo "<input type=\"hidden\" name=\"id\" value=\"$id\"/>";
+                echo '<input type="hidden" name="mode" value="restore_backup"/>';
 
-                echo('<fieldset class="border p-3"><legend>' . get_string('backup_legend', 'wims') . '</legend>');
+                echo '<fieldset class="border p-3"><legend>' . get_string('backup_legend', 'wims') . '</legend>';
 
                 if ($wimsresult['total'] > 1) {
-                    echo('<p>' . get_string('backups_found', 'wims', $wimsresult['total']) . '</p>');
+                    echo '<p>' . get_string('backups_found', 'wims', $wimsresult['total']) . '</p>';
                 } else {
-                    echo('<p>' . get_string('backup_found', 'wims') . '</p>');
+                    echo '<p>' . get_string('backup_found', 'wims') . '</p>';
                 }
-                echo('<div class="row form-group"><label class="col-sm-3 col-form-label" for="class_backup">');
-                echo(get_string('backup_select', 'wims') . '</label>');
-                echo('<div class="col-sm-9">');
-                echo('<select class="form-control" id="class_backup" name="backup_year" aria-describedby="backupHelp">');
+                echo '<div class="row form-group"><label class="col-sm-3 col-form-label" for="class_backup">';
+                echo get_string('backup_select', 'wims') . '</label>';
+                echo '<div class="col-sm-9">';
+                echo '<select class="form-control" id="class_backup" name="backup_year" aria-describedby="backupHelp">';
                 foreach ($wimsresult['restorable'] as $year => $v) {
                     // We don't need $v, as we requested only backups with id=$qcl.
-                    echo("<option value=\"{$year}\">{$year}</p>");
+                    echo "<option value=\"{$year}\">{$year}</p>";
                 }
-                echo('</select>');
-                echo('<small id="backupHelp" class="form-text text-muted">' . get_string('backup_help', 'wims') . '</small>');
-                echo('</div></div>');
-                echo('<div class="form-group"><button class="btn btn-primary" type="submit">');
-                echo(get_string('backup_restore', 'wims') . '</button></div></fieldset>');
-                echo('</form></div>');
+                echo '</select>';
+                echo '<small id="backupHelp" class="form-text text-muted">' . get_string('backup_help', 'wims') . '</small>';
+                echo '</div></div>';
+                echo '<div class="form-group"><button class="btn btn-primary" type="submit">';
+                echo get_string('backup_restore', 'wims') . '</button></div></fieldset>';
+                echo '</form></div>';
             }
             // Or create a new empty WIMS class.
-            echo('<div class="col-md">');
-            echo(' <fieldset class="form-group border p-3"><legend>' . get_string('create_new_legend', 'wims') . '</legend>');
-            echo('  <p>' . get_string('create_class_desc', 'wims') . '</p>');
+            echo '<div class="col-md">';
+            echo ' <fieldset class="form-group border p-3"><legend>' . get_string('create_new_legend', 'wims') . '</legend>';
+            echo '  <p>' . get_string('create_class_desc', 'wims') . '</p>';
             $url = new moodle_url('/mod/wims/view.php', ['mode' => 'create_new', 'id' => $id]);
-            echo('  <div class="form-group"><a class="btn btn-primary" href="' . $url . '" role="button">');
-            echo(get_string('create_new_class', 'wims') . '</a></div></fieldset></div>');
-            echo('</div>');
+            echo '  <div class="form-group"><a class="btn btn-primary" href="' . $url . '" role="button">';
+            echo get_string('create_new_class', 'wims') . '</a></div></fieldset></div>';
+            echo '</div>';
             if ($wimsresult['total'] > 0) {
-                echo('</div>');
+                echo '</div>';
             }
         } else {
-            echo('<div class="alert alert-danger">' . get_string('class_deleted', 'mod_wims', $wimsresult['qcl']) . '</div>');
+            echo '<div class="alert alert-danger">' . get_string('class_deleted', 'mod_wims', $wimsresult['qcl']) . '</div>';
         }
     } else if (strpos($lasterror, "connection refused by requested class") !== false) {
         $wims->errormsgs[] = get_string('class_select_refused_desc', 'wims');
@@ -202,11 +202,11 @@ if (!$wimsresult["status"]) {
     }
     $debugmsgs = $wims->getdebugmsgs();
     if (!empty($debugmsgs)) {
-        echo('<h2>Debug log:</h2><pre class="pre-scrollable debug_wims">');
+        echo '<h2>Debug log:</h2><pre class="pre-scrollable debug_wims">';
         foreach ($debugmsgs as $msg) {
-            echo("$msg\n");
+            echo "$msg\n";
         }
-        echo("</pre>");
+        echo "</pre>";
     }
 
     // Finish the page.

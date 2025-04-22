@@ -102,7 +102,7 @@ $string['userinstitution'] = 'Institution Name';
 $string['userlastname'] = 'Supervisor Last Name';
 $string['wims:addinstance'] = 'Add a WIMS class';
 $string['wims:view'] = 'Access a WIMS class';
-$string['wimsdebugsettings'] = 'WIMS interface debug settings';
+$string['wimsdebugsettings'] = 'Debug Settings';
 $string['wimssettings'] = 'Moodle-Wims Interface Settings';
 
 $string['wimsstatus1'] = 'Active';

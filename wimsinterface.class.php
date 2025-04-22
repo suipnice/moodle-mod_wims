@@ -463,7 +463,7 @@ class wims_interface {
      * @param object $cm   the course module that the WIMS class is bound to
      * @param array  $data an associative array of data values
      *
-     * @return true on success, null on failure
+     * @return ?true on success, null on failure
      */
     public function updateclassconfigformodule($cm, $data) {
         // Start by determining the identifiers for the class.
@@ -559,7 +559,7 @@ class wims_interface {
      *
      * @param object $cm the course module that the WIMS class is bound to
      *
-     * @return array of arrays of objects on success, null on failure
+     * @return ?array of arrays of objects on success, null on failure
      */
     public function getsheetindex($cm) {
         // Start by determining the identifiers for the class.
@@ -594,7 +594,7 @@ class wims_interface {
      * @param object $cm             the course module that the WIMS class is bound to
      * @param array  $requiredsheets the identifiers of the exams and worksheets requested (array of array of string)
      *
-     * @return array of arrays of objects on success, null on failure
+     * @return ?array of arrays of objects on success, null on failure
      */
     public function getselectedscores($cm, $requiredsheets) {
         // Start by determining the identifiers for the class.

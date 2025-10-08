@@ -30,7 +30,7 @@ use mod_wims\wims_interface;
  * The mod_wims updating scores sheduled task class
  *
  * To test from command line :
- * sudo -u apache php admin/cli/scheduled_task.php --execute='\mod_wims\task\update_scores'
+ * sudo -u www-data php admin/cli/scheduled_task.php --execute='\mod_wims\task\update_scores'
  *
  * @category  task
  * @package   mod_wims

@@ -3,3 +3,6 @@ phpDocumentor.phar
 .phive
 node_modules
 vendor
+
+# Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

@@ -29,14 +29,15 @@ jobs:
       CURL: curl -s
       ENDPOINT: https://moodle.org/webservice/rest/server.php
       TOKEN: ${{ secrets.MOODLE_ORG_TOKEN }}
+      TAG: ${{ github.event.inputs.tag }}
       FUNCTION: local_plugins_add_version
 
     steps:
       - name: Call the service function
         id: add-version
         run: |
-          if [[ ! -z "${{ github.event.inputs.tag }}" ]]; then
-            TAGNAME="${{ github.event.inputs.tag }}"
+          if [[ ! -z "${TAG}" ]]; then
+            TAGNAME="${TAG}"
           elif [[ $GITHUB_REF = refs/tags/* ]]; then
             TAGNAME="${GITHUB_REF##*/}"
           fi

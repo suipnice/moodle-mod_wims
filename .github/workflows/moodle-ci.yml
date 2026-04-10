@@ -48,8 +48,8 @@ jobs:
           - php: '8.3'
             moodle-branch: 'MOODLE_501_STABLE'
             database: 'mariadb'
-          - php: '8.3'
-            moodle-branch: 'MOODLE_502_STABLE'
+          - php: '8.4'
+            moodle-branch: 'v5.2.0-rc1'
             database: 'pgsql'
 
     steps:

@@ -51,10 +51,9 @@ use mod_wims\wims_interface;
  * @link      https://github.com/suipnice/moodle-mod_wims
  */
 class provider implements
-    \core_privacy\local\request\core_userlist_provider,
     // This plugin does store personal user data.
     \core_privacy\local\metadata\provider,
-
+    \core_privacy\local\request\core_userlist_provider,
     // This plugin currently implements the original plugin_provider interface.
     \core_privacy\local\request\plugin\provider {
     /**

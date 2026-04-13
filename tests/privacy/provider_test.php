@@ -169,8 +169,10 @@ final class provider_test extends provider_testcase {
      **/
     public function tearDown(): void {
         parent::tearDown();
-        // Delete all user data in this WIMS classroom.
-        $this->wims->cleanclass($this->cm);
+        if (PHPUNIT_LONGTEST) {
+            // Delete all user data in this WIMS classroom.
+            $this->wims->cleanclass($this->cm);
+        }
     }
 
     /**

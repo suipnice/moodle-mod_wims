@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'mod_wims';     // Full name of the plugin (used for diagnostics).
 $plugin->release = '0.5.10';         // Don't forget to update the version too.
-$plugin->version = 20261012000;      // The current module version (Date: YYYYMMDDXX).
+$plugin->version = 2026101200;      // The current module version (Date: YYYYMMDDXX).
 $plugin->requires = 2024100700;      // Requires this Moodle version (4.5).
 
 // Moodle versions that are outside of this range will produce a message notifying at install time, but will allow for installation.

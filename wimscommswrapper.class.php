@@ -704,7 +704,7 @@ class wims_comms_wrapper {
             $titleparts = explode(':', (string)$rawtitle);
             // Remove the first element (sheet ID).
             array_shift($titleparts);
-            // Put last element in $state if exist, or an empty string.
+            // Put last element in $state if exists, or an empty string.
             $state = count($titleparts) > 1 ? array_pop($titleparts) : '';
             $sheet = new stdClass();
             // Replace colons if TITLE was containing some.

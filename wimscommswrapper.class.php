@@ -255,7 +255,7 @@ class wims_comms_wrapper {
         if (!$curlresult) {
             $curlerrorno = curl_errno($curl);
             $curlerror = curl_error($curl);
-            $this->lines = explode("\n", "Error while fetching URL: $url\nError $curlerrorno: $curlerror");
+            $this->rawdata = "Error while fetching URL: $url\nError $curlerrorno: $curlerror";
             $this->status = 'COMMS_FAIL';
             $this->debugmsg("WIMS comms error: $this->rawdata");
         } else {
@@ -263,9 +263,6 @@ class wims_comms_wrapper {
             $this->rawdata = iconv('ISO-8859-1', 'UTF-8', $curlresult);
             $this->debugmsg('WIMS comms success');
         }
-
-        // Housekeeping.
-        curl_close($curl);
     }
 
 
@@ -703,10 +700,16 @@ class wims_comms_wrapper {
         for ($idx = 0; $idx < $jsondata->nbsheet; ++$idx) {
             $id = $jsondata->sheetlist[$idx];
             $rawtitle = $jsondata->sheettitlelist[$idx];
-            $titleparts = explode(':', $rawtitle);
+            // Format is ID:TITLE:STATE (TITLE may itself contain colons?).
+            $titleparts = explode(':', (string)$rawtitle);
+            // Remove the first element (sheet ID).
+            array_shift($titleparts);
+            // Put last element in $state if exists, or an empty string.
+            $state = count($titleparts) > 1 ? array_pop($titleparts) : '';
             $sheet = new stdClass();
-            $sheet->title = trim($titleparts[1]);
-            $sheet->state = trim($titleparts[2]);
+            // Replace colons if TITLE was containing some.
+            $sheet->title = trim(implode(':', $titleparts));
+            $sheet->state = trim($state);
             $result[$id] = $sheet;
         }
         return $result;

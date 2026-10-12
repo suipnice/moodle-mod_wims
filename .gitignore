@@ -1,5 +1,5 @@
 phpdoc
-phpDocumentor.phar
+*.phar
 .phive
 node_modules
 vendor

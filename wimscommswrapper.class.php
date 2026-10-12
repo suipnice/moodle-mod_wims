@@ -263,9 +263,6 @@ class wims_comms_wrapper {
             $this->rawdata = iconv('ISO-8859-1', 'UTF-8', $curlresult);
             $this->debugmsg('WIMS comms success');
         }
-
-        // Housekeeping.
-        curl_close($curl);
     }
 
 
@@ -703,14 +700,14 @@ class wims_comms_wrapper {
         for ($idx = 0; $idx < $jsondata->nbsheet; ++$idx) {
             $id = $jsondata->sheetlist[$idx];
             $rawtitle = $jsondata->sheettitlelist[$idx];
-            // Format is ID:TITLE:STATE (TITLE may itself contain colons?)
+            // Format is ID:TITLE:STATE (TITLE may itself contain colons?).
             $titleparts = explode(':', (string)$rawtitle);
-            // Remove the first element (sheet ID)
+            // Remove the first element (sheet ID).
             array_shift($titleparts);
-            // state is the last element, or an empty string
+            // Put last element in $state if exist, or an empty string.
             $state = count($titleparts) > 1 ? array_pop($titleparts) : '';
             $sheet = new stdClass();
-            // replace colons if TITLE was containing some
+            // Replace colons if TITLE was containing some.
             $sheet->title = trim(implode(':', $titleparts));
             $sheet->state = trim($state);
             $result[$id] = $sheet;

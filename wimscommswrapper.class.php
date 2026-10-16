@@ -758,7 +758,9 @@ class wims_comms_wrapper {
             return null;
         }
         // Should we return also $jsondata->sheet_formula ?
-        return $jsondata->data_scores;
+        // WIMS omits data_scores when the sheet has no scores yet.
+        $scores = $jsondata->data_scores ?? [];
+        return is_array($scores) ? $scores : [];
     }
 
     /**
@@ -861,7 +863,7 @@ class wims_comms_wrapper {
             $this->debugmsg("getexamscores: $jsondata->message");
             return null;
         }
-        $datascores = $jsondata->data_scores;
+        $datascores = $jsondata->data_scores ?? "";
         if ($datascores === "") {
             $this->debugmsg("getexamscores: NO DATASCORES");
             mtrace("DATASCORES NULL");
